@@ -1,9 +1,9 @@
 -- {{{ Header
 --
--- Awesome configuration file, using awesome 3.3.3 on Arch GNU/Linux.
+-- Awesome configuration file, using awesome 3.4-git on Arch GNU/Linux.
 --   * Adrian C. <anrxc_at_sysphere_org>
 
--- Updated on: Aug 27, 04:27:20 CEST 2009
+-- Updated on: Sep  5, 20:38:55 CEST 2009
 -- Screenshot: http://sysphere.org/gallery/snapshots
 
 -- FAQ: 
@@ -31,7 +31,8 @@
 
 -- {{{ Libraries
 require("awful")
-require("beautiful")
+require("awful.rules")
+require("awful.autofocus")
 -- User libraries
 require("vicious")
 require("teardrop")
@@ -48,7 +49,7 @@ altkey = "Mod1"      -- Alt_L
 modkey = "Mod4"      -- Super_L
 
 -- Window titlebars
-use_titlebar = false -- True for floaters (arrange hook)
+use_titlebar = false -- True for floaters (manage signal)
 
 -- Window management layouts
 layouts = {
@@ -58,42 +59,12 @@ layouts = {
     awful.layout.suit.tile.top,        -- 4
     awful.layout.suit.fair,            -- 5
     awful.layout.suit.fair.horizontal, -- 6
+--  awful.layout.suit.spiral,          -- /
+--  awful.layout.suit.spiral.dwindle,  -- /
     awful.layout.suit.max,             -- 7
 --  awful.layout.suit.max.fullscreen,  -- /
     awful.layout.suit.magnifier,       -- 8
     awful.layout.suit.floating         -- 9
-}
-
--- Application specific behaviour
-apprules = {
---    cls = class, ins = instance, name, scr = screen, tag, float
-    { cls = "Gajim.py",          scr = 1,              tag = 5 },
-    { cls = "Knode",             scr = 1,              tag = 8 },
-    { cls = "Akregator",         scr = 1,              tag = 8 },
-    { cls = "Amarok",            scr = 1,              tag = 9 },
-    { cls = "Amarokapp",         scr = 1,              tag = 9 },
-    { cls = "Gimp",              scr = 1,              tag = 9 },
-    { name = "Alpine",           scr = 1,              tag = 4 },
-    { ins = "uTorrent.exe",      scr = screen.count(), tag = 9 },
-    { cls = "Emacs",             scr = screen.count(), tag = 2 },
-    { cls = "Firefox",           scr = screen.count(), tag = 3 },
-    { cls = "Firefox",           ins = "Download",     float = true },
-    { cls = "Firefox",           ins = "Places",       float = true },
-    { cls = "Firefox",           ins = "Greasemonkey", float = true },
-    { cls = "Firefox",           ins = "Extension",    float = true },
-    { cls = "Firefox",           ins = "Scrapbook",    float = true },
-    { cls = "Emacs",             ins = "_Remember_",   float = true },
-    { cls = "Xmag",              ins = "xmag",         float = true },
-    { cls = "Xmessage",          ins = "xmessage",     float = true },
-    { cls = "ROX-Filer",         float = true },
-    { cls = "Ark",               float = true },
-    { cls = "Kgpg",              float = true },
-    { cls = "Kmix",              float = true },
-    { cls = "Geeqie",            float = true },
-    { cls = "Smplayer",          float = true },
-    { cls = "xine",              float = true },
-    { name = "VLC media player", float = true },
-    { name = "pinentry-gtk-2",   float = true },
 }
 -- }}}
 
@@ -108,8 +79,8 @@ tags.settings = {
     { name = "web",   layout = layouts[1]  },
     { name = "mail",  layout = layouts[7]  },
     { name = "im",    layout = layouts[1], mwfact = 0.13 },
-    { name = "6",     layout = layouts[9]  },
-    { name = "7",     layout = layouts[9]  },
+    { name = "6",     layout = layouts[9], hide = true },
+    { name = "7",     layout = layouts[9], hide = true },
     { name = "rss",   layout = layouts[8]  },
     { name = "media", layout = layouts[9]  }
 }
@@ -118,10 +89,11 @@ tags.settings = {
 for s = 1, screen.count() do
     tags[s] = {}
     for i, v in ipairs(tags.settings) do
-        tags[s][i] = tag(v.name)
+        tags[s][i] = tag({ name = v.name })
         tags[s][i].screen = s
         awful.tag.setproperty(tags[s][i], "layout", v.layout)
         awful.tag.setproperty(tags[s][i], "mwfact", v.mwfact)
+        awful.tag.setproperty(tags[s][i], "hide",   v.hide)
     end
     tags[s][1].selected = true
 end
@@ -133,184 +105,176 @@ end
 -- {{{ Widgets configuration
 --
 -- {{{ Reusable separators
-myspacer         = widget({ type = "textbox", name = "myspacer", align = "right" })
-myseparator      = widget({ type = "textbox", name = "myseparator", align = "right" })
-myspacer.text    = " "
-myseparator.text = "|"
+spacer         = widget({ type = "textbox", name = "spacer" })
+separator      = widget({ type = "textbox", name = "separator" })
+spacer.text    = " "
+separator.text = "|"
 -- }}}
 
 -- {{{ CPU usage graph and temperature
 -- Widget icon
-mycpuicon        = widget({ type = "imagebox", name = "mycpuicon", align = "right" })
-mycpuicon.image  = image(beautiful.widget_cpu)
+cpuicon        = widget({ type = "imagebox", name = "cpuicon" })
+cpuicon.image  = image(beautiful.widget_cpu)
 -- Initialize widgets
-mythermalwidget  = widget({ type = "textbox", name = "mythermalwidget", align = "right" })
-mycpuwidget      = widget({ type = "graph", name = "mycpuwidget", align = "right" })
+thermalwidget  = widget({ type = "textbox", name = "thermalwidget" })
+cpuwidget      = awful.widget.graph({ layout = awful.widget.layout.horizontal.rightleft })
 -- CPU graph properties
-mycpuwidget.width        = 50
-mycpuwidget.height       = 0.90
-mycpuwidget.grow         = "left"
-mycpuwidget.bg           = beautiful.fg_off_widget
-mycpuwidget.border_color = beautiful.border_widget
-mycpuwidget:plot_properties_set("cpu", {
-    fg        = beautiful.fg_widget,
-    fg_center = beautiful.fg_center_widget,
-    fg_end    = beautiful.fg_end_widget,
-    vertical_gradient = false })
+cpuwidget:set_width(50)
+cpuwidget:set_scale(false)
+cpuwidget:set_max_value(100)
+cpuwidget:set_background_color(beautiful.fg_off_widget)
+cpuwidget:set_border_color(beautiful.border_widget)
+cpuwidget:set_color(beautiful.fg_end_widget)
+cpuwidget:set_gradient_colors({
+    beautiful.fg_end_widget,
+    beautiful.fg_center_widget,
+    beautiful.fg_widget })
 -- Register widgets
-vicious.register(mycpuwidget, vicious.widgets.cpu, "$1", 2, "cpu")
-vicious.register(mythermalwidget, vicious.widgets.thermal, "$1°C", 60, nil, "TZS0")
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1", 2)
+vicious.register(thermalwidget, vicious.widgets.thermal, "$1°C", 60, "TZS0")
 -- }}}
 
 -- {{{ Battery percentage and state indicator
 -- Widget icon
-mybaticon       = widget({ type = "imagebox", name = "mybaticon", align = "right" })
-mybaticon.image = image(beautiful.widget_bat)
+baticon       = widget({ type = "imagebox", name = "baticon" })
+baticon.image = image(beautiful.widget_bat)
 -- Initialize widget
-mybatwidget     = widget({ type = "textbox", name = "mybatwidget", align = "right" })
+batwidget     = widget({ type = "textbox", name = "batwidget" })
 -- Register widget
-vicious.register(mybatwidget, vicious.widgets.bat, "$1$2%", 60, nil, "BAT0")
+vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 60, "BAT0")
 -- }}}
 
 -- {{{ Memory usage bar
 -- Widget icon
-mymemicon       = widget({ type = "imagebox", name = "mymemicon", align = "right" })
-mymemicon.image = image(beautiful.widget_mem)
+memicon       = widget({ type = "imagebox", name = "memicon" })
+memicon.image = image(beautiful.widget_mem)
 -- Initialize widget
-mymemwidget     = widget({ type = "progressbar", name = "mymemwidget", align = "right" })
+memwidget     = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft })
 -- MEM progressbar properties
-mymemwidget.width          = 10
-mymemwidget.height         = 0.9
-mymemwidget.gap            = 0
-mymemwidget.border_padding = 1
-mymemwidget.border_width   = 0
-mymemwidget.ticks_count    = 4
-mymemwidget.ticks_gap      = 1
-mymemwidget.vertical       = true
-mymemwidget:bar_properties_set("mem", {
-    bg        = beautiful.bg_widget,
-    fg        = beautiful.fg_widget,
-    fg_center = beautiful.fg_center_widget,
-    fg_end    = beautiful.fg_end_widget,
-    fg_off    = beautiful.fg_off_widget,
-    min_value = 0,
-    max_value = 100 })
+memwidget:set_width(8)
+memwidget:set_height(10)
+memwidget:set_vertical(true)
+memwidget:set_background_color(beautiful.fg_off_widget)
+memwidget:set_border_color(nil)
+memwidget:set_color(beautiful.fg_widget)
+memwidget:set_gradient_colors({
+    beautiful.fg_widget,
+    beautiful.fg_center_widget,
+    beautiful.fg_end_widget })
+awful.widget.layout.margins[memwidget.widget] = { top = 2, bottom = 2 }
 -- Register widget
-vicious.register(mymemwidget, vicious.widgets.mem, "$1", 60, "mem")
+vicious.register(memwidget, vicious.widgets.mem, "$1", 60)
 -- }}}
 
 -- {{{ File system usage bars
 -- Widget icon
-myfsicon       = widget({ type = "imagebox", name = "myfsicon", align = "right" })
-myfsicon.image = image(beautiful.widget_fs)
--- Initialize widget
-myfswidget     = widget({ type = "progressbar", name = "myfswidget", align = "right" })
+fsicon       = widget({ type = "imagebox", name = "fsicon" })
+fsicon.image = image(beautiful.widget_fs)
+-- Initialize widgets
+fswidget = {
+    ["root"]    = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
+    ["home"]    = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
+    ["storage"] = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
+    ["backup"]  = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
+    -- Configure widgets
+    margins = {
+        top = 1, bottom = 1
+    },
+    settings = {
+        width = 5, height = 12, vertical = true
+    },
+    colors = {
+        border    = beautiful.border_widget,
+        bg        = beautiful.fg_off_widget,
+        fg        = beautiful.fg_widget,
+        fg_center = beautiful.fg_center_widget,
+        fg_end    = beautiful.fg_end_widget
+}}
 -- FS progressbar properties
-myfswidget.width          = 20
-myfswidget.height         = 0.9
-myfswidget.gap            = 1
-myfswidget.border_padding = 1
-myfswidget.border_width   = 0
-myfswidget.ticks_count    = 4
-myfswidget.ticks_gap      = 1
-myfswidget.vertical       = true
-myfswidget:bar_properties_set("rootfs", {
-    bg        = beautiful.bg_widget,
-    fg        = beautiful.fg_widget,
-    fg_center = beautiful.fg_center_widget,
-    fg_end    = beautiful.fg_end_widget,
-    fg_off    = beautiful.fg_off_widget,
-    min_value = 0,
-    max_value = 100 })
-myfswidget:bar_properties_set("homefs", {
-    bg        = beautiful.bg_widget,
-    fg        = beautiful.fg_widget,
-    fg_center = beautiful.fg_center_widget,
-    fg_end    = beautiful.fg_end_widget,
-    fg_off    = beautiful.fg_off_widget,
-    min_value = 0,
-    max_value = 100 })
-myfswidget:bar_properties_set("storagefs", {
-    bg        = beautiful.bg_widget,
-    fg        = beautiful.fg_widget,
-    fg_center = beautiful.fg_center_widget,
-    fg_end    = beautiful.fg_end_widget,
-    fg_off    = beautiful.fg_off_widget,
-    min_value = 0,
-    max_value = 100 })
-myfswidget:bar_properties_set("backupfs", {
-    bg        = beautiful.bg_widget,
-    fg        = beautiful.fg_widget,
-    fg_center = beautiful.fg_center_widget,
-    fg_end    = beautiful.fg_end_widget,
-    fg_off    = beautiful.fg_off_widget,
-    min_value = 0,
-    max_value = 100 })
+for _, w in pairs(fswidget) do
+    if w.widget ~= nil then
+        w:set_width(fswidget.settings.width)
+        w:set_height(fswidget.settings.height)
+        w:set_vertical(fswidget.settings.vertical)
+        w:set_background_color(fswidget.colors.bg)
+        w:set_border_color(fswidget.colors.border)
+        w:set_color(fswidget.colors.fg)
+        w:set_gradient_colors({
+            fswidget.colors.fg,
+            fswidget.colors.fg_center,
+            fswidget.colors.fg_end
+        })
+        awful.widget.layout.margins[w.widget] = fswidget.margins
+        -- Register buttons
+        w.widget:buttons(awful.util.table.join(
+            awful.button({ }, 1, function () awful.util.spawn("rox", false) end)
+        ))
+    end
+end
 -- Register widgets
-vicious.register(myfswidget, vicious.widgets.fs, "${/ usep}",            240, "rootfs")
-vicious.register(myfswidget, vicious.widgets.fs, "${/home usep}",        240, "homefs")
-vicious.register(myfswidget, vicious.widgets.fs, "${/mnt/storage usep}", 240, "storagefs")
-vicious.register(myfswidget, vicious.widgets.fs, "${/mnt/backup usep}",  240, "backupfs")
--- Register buttons
-myfswidget:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () awful.util.spawn("rox", false) end)))
+vicious.register(fswidget["root"],    vicious.widgets.fs, "${/ usep}",            240)
+vicious.register(fswidget["home"],    vicious.widgets.fs, "${/home usep}",        240)
+vicious.register(fswidget["storage"], vicious.widgets.fs, "${/mnt/storage usep}", 240)
+vicious.register(fswidget["backup"],  vicious.widgets.fs, "${/mnt/backup usep}",  240)
 -- }}}
 
 -- {{{ Network usage statistics
 -- Widget icons
-myneticon         = widget({ type = "imagebox", name = "myneticon", align = "right" })
-myneticonup       = widget({ type = "imagebox", name = "myneticonup", align = "right" })
-myneticon.image   = image(beautiful.widget_net)
-myneticonup.image = image(beautiful.widget_netup)
+neticon         = widget({ type = "imagebox", name = "neticon" })
+neticonup       = widget({ type = "imagebox", name = "neticonup" })
+neticon.image   = image(beautiful.widget_net)
+neticonup.image = image(beautiful.widget_netup)
 -- Initialize widgets
-mynetwidget       = widget({ type = "textbox", name = "mynetwidget", align = "right" })
-mynetfiwidget     = widget({ type = "textbox", name = "mynetfiwidget", align = "right" })
+netwidget       = widget({ type = "textbox", name = "netwidget" })
+netfiwidget     = widget({ type = "textbox", name = "netfiwidget" })
 -- Register ethernet widget
-vicious.register(mynetwidget, vicious.widgets.net,
+vicious.register(netwidget, vicious.widgets.net,
   '<span color="'.. beautiful.fg_netdn_widget ..'">${eth0 down_kb}</span> <span color="'
   .. beautiful.fg_netup_widget ..'">${eth0 up_kb}</span>', 2)
 -- Register wireless widget
-vicious.register(mynetfiwidget, vicious.widgets.net,
+vicious.register(netfiwidget, vicious.widgets.net,
   '<span color="'.. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
   .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 2)
 -- }}}
 
 -- {{{ Mail subject (latest e-mail)
 -- Widget icon
-mymailicon       = widget({ type = "imagebox", name = "mymailicon", align = "right" })
-mymailicon.image = image(beautiful.widget_mail)
+mailicon       = widget({ type = "imagebox", name = "mailicon" })
+mailicon.image = image(beautiful.widget_mail)
 -- Initialize widget
-mymboxwidget     = widget({ type = "textbox", name = "mymboxwidget", align = "right" })
+mboxwidget     = widget({ type = "textbox", name = "mboxwidget" })
 -- Register widget
-vicious.register(mymboxwidget, vicious.widgets.mbox, "$1", 60, nil, "/home/anrxc/mail/Inbox")
+vicious.register(mboxwidget, vicious.widgets.mbox, "$1", 60, "/home/anrxc/mail/Inbox")
 -- Register buttons
-mymboxwidget:buttons(awful.util.table.join(
+mboxwidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () awful.util.spawn("urxvt -title Alpine -e alpine_exp", false) end)))
 -- }}}
 
 -- {{{ Agenda and Todo (Emacs org-mode)
 -- Widget icon
-myorgicon       = widget({ type = "imagebox", name = "myorgicon", align = "right" })
-myorgicon.image = image(beautiful.widget_org)
+orgicon       = widget({ type = "imagebox", name = "orgicon" })
+orgicon.image = image(beautiful.widget_org)
 -- Initialize widget
-myorgwidget     = widget({ type = "textbox", name = "myorgwidget", align = "right" })
+orgwidget     = widget({ type = "textbox", name = "orgwidget" })
 -- Configure widget
-myorgmode = {}
-myorgmode.files  = {  -- Agenda files to be included
-    os.getenv("HOME") .. "/.org/work.org",     os.getenv("HOME") .. "/.org/index.org",
-    os.getenv("HOME") .. "/.org/personal.org", os.getenv("HOME") .. "/.org/computers.org"
-}
-myorgmode.colors = {  -- Index: past, today, soon, future
-    '<span color="'..beautiful.fg_urgent..'">', '<span color="'..beautiful.fg_normal..'">',
-    '<span color="'..beautiful.fg_widget..'">', '<span color="'..beautiful.fg_netup_widget..'">'
-}
+orgmode = {
+    files  = {
+      os.getenv("HOME") .. "/.org/work.org",     os.getenv("HOME") .. "/.org/index.org",
+      os.getenv("HOME") .. "/.org/personal.org", os.getenv("HOME") .. "/.org/computers.org"
+    },
+    colors = {
+      past   = '<span color="'..beautiful.fg_urgent..'">',
+      today  = '<span color="'..beautiful.fg_normal..'">',
+      soon   = '<span color="'..beautiful.fg_widget..'">',
+      future = '<span color="'..beautiful.fg_netup_widget..'">'
+}}
 -- Register widget
-vicious.register(myorgwidget, vicious.widgets.org, 
-     myorgmode.colors[1] .. '$1</span>|' .. myorgmode.colors[2] .. '$2</span>|' ..
-     myorgmode.colors[3] .. '$3</span>|' .. myorgmode.colors[4] .. '$4</span>',
-     240, nil, myorgmode.files)
+vicious.register(orgwidget, vicious.widgets.org, 
+     orgmode.colors.past .. '$1</span>|' .. orgmode.colors.today  .. '$2</span>|' ..
+     orgmode.colors.soon .. '$3</span>|' .. orgmode.colors.future .. '$4</span>',
+     240, orgmode.files)
 -- Register buttons
-myorgwidget:buttons(awful.util.table.join(
+orgwidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function ()
       awful.util.spawn("emacsclient --eval '(org-agenda-list)'", false)
   end),
@@ -321,70 +285,64 @@ myorgwidget:buttons(awful.util.table.join(
 
 -- {{{ Volume level, progressbar and changer
 -- Widget icon
-myvolicon       = widget({ type = "imagebox", name = "myvolicon", align = "right" })
-myvolicon.image = image(beautiful.widget_vol)
+volicon       = widget({ type = "imagebox", name = "volicon" })
+volicon.image = image(beautiful.widget_vol)
 -- Initialize widgets
-myvolwidget     = widget({ type = "textbox", name = "myvolwidget", align = "right" })
-myvolbarwidget  = widget({ type = "progressbar", name = "myvolbarwidget", align = "right" })
+volwidget     = widget({ type = "textbox", name = "volwidget" })
+volbarwidget  = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft })
 -- VOL progressbar properties
-myvolbarwidget.width          = 10
-myvolbarwidget.height         = 0.9
-myvolbarwidget.gap            = 0
-myvolbarwidget.border_padding = 1
-myvolbarwidget.border_width   = 0
-myvolbarwidget.ticks_count    = 4
-myvolbarwidget.ticks_gap      = 1
-myvolbarwidget.vertical       = true
-myvolbarwidget:bar_properties_set("volume", {
-    bg        = beautiful.bg_widget,
-    fg        = beautiful.fg_widget,
-    fg_center = beautiful.fg_widget,
-    fg_end    = beautiful.fg_end_widget,
-    fg_off    = beautiful.fg_off_widget,
-    min_value = 0,
-    max_value = 100 })
+volbarwidget:set_width(8)
+volbarwidget:set_height(10)
+volbarwidget:set_vertical(true)
+volbarwidget:set_background_color(beautiful.fg_off_widget)
+volbarwidget:set_border_color(nil)
+volbarwidget:set_color(beautiful.fg_widget)
+volbarwidget:set_gradient_colors({
+    beautiful.fg_widget,
+    beautiful.fg_center_widget,
+    beautiful.fg_end_widget })
+awful.widget.layout.margins[volbarwidget.widget] = { top = 2, bottom = 2 }
 -- Register widgets
-vicious.register(myvolwidget, vicious.widgets.volume, "$1%", 2, nil, "PCM")
-vicious.register(myvolbarwidget, vicious.widgets.volume, "$1", 2, "volume", "PCM")
+vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
+vicious.register(volbarwidget, vicious.widgets.volume, "$1", 2, "PCM")
 -- Register buttons
-myvolbarwidget:buttons(awful.util.table.join(
+volbarwidget.widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function () awful.util.spawn("kmix", false) end),
     awful.button({ }, 2, function () awful.util.spawn("amixer -q sset Master toggle", false) end),
     awful.button({ }, 4, function () awful.util.spawn("amixer -q sset PCM 2dB+", false) end),
-    awful.button({ }, 5, function () awful.util.spawn("amixer -q sset PCM 2dB-", false) end)))
--- Register buttons
-myvolwidget:buttons( myvolbarwidget:buttons() )
+    awful.button({ }, 5, function () awful.util.spawn("amixer -q sset PCM 2dB-", false) end)
+))  volwidget:buttons( volbarwidget.widget:buttons() )
 -- }}}
 
 -- {{{ Date, time and a calendar
 -- Widget icon
-mydateicon       = widget({ type = "imagebox", name = "mydateicon", align = "right" })
-mydateicon.image = image(beautiful.widget_date)
+dateicon       = widget({ type = "imagebox", name = "dateicon" })
+dateicon.image = image(beautiful.widget_date)
 -- Initialize widget
-mydatewidget     = widget({ type = "textbox", name = "mydatewidget", align = "right" })
+datewidget     = widget({ type = "textbox", name = "datewidget" })
 -- Register widget
-vicious.register(mydatewidget, vicious.widgets.date, "%b %e, %R", 60)
+vicious.register(datewidget, vicious.widgets.date, "%b %e, %R", 60)
 -- Register buttons
-mydatewidget:buttons(awful.util.table.join(
+datewidget:buttons(awful.util.table.join(
     -- PyLendar: http://sysphere.org/~anrxc/j/archives/2009/03/11/desktop_calendars
     awful.button({ }, 1, function () awful.util.spawn("pylendar.py", false) end)))
 -- }}}
 
 -- {{{ System tray
 -- Initialize widget
-mysystray = widget({ type = "systray", align = "right" })
+systray = widget({ type = "systray" })
 -- }}}
 -- }}}
 
 -- {{{ Wibox initialisation
-mywibox     = {}
-mypromptbox = {}
-mylayoutbox = {}
-mytaglist   = {}
-mytaglist.buttons = awful.util.table.join(
+wibox     = {}
+promptbox = {}
+layoutbox = {}
+taglist   = {}
+taglist.buttons = awful.util.table.join(
                     awful.button({ }, 1, awful.tag.viewonly),
                     awful.button({ modkey }, 1, awful.client.movetotag),
-                    awful.button({ }, 3, function (tag) tag.selected = not tag.selected end),
+                    awful.button({ }, 3, awful.tag.viewtoggle),
                     awful.button({ modkey }, 3, awful.client.toggletag),
                     awful.button({ }, 4, awful.tag.viewnext),
                     awful.button({ }, 5, awful.tag.viewprev))
@@ -392,46 +350,53 @@ mytaglist.buttons = awful.util.table.join(
 -- Add a wibox to each screen
 for s = 1, screen.count() do
     -- Create a promptbox
-    mypromptbox[s] = awful.widget.prompt({ align = "left" })
+    promptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
     -- Create an imagebox widget with icons indicating active layout
-    mylayoutbox[s] = widget({ type = "imagebox", align = "left" })
-    mylayoutbox[s]:buttons(awful.util.table.join(
+    layoutbox[s] = awful.widget.layoutbox(s)
+    layoutbox[s]:buttons(awful.util.table.join(
                            awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
                            awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
 
     -- Create the taglist
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
+    taglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, taglist.buttons)
     -- Create the wibox
-    mywibox[s] = wibox({ position="top", height="14", fg=beautiful.fg_normal, bg=beautiful.bg_normal })
+    wibox[s] = awful.wibox({
+        position = "top", height = 14, screen = s,
+        fg = beautiful.fg_normal, bg = beautiful.bg_normal
+    })
     -- Add widgets to the wibox (order matters)
-    mywibox[s].widgets = { mytaglist[s],
-                           mylayoutbox[s],
-                           mypromptbox[s],
-                           mycpuicon, mythermalwidget, myspacer, mycpuwidget,
-                           myseparator,
-                           mybaticon, mybatwidget, myspacer,
-                           myseparator,
-                           mymemicon, myspacer, mymemwidget, myspacer,
-                           myseparator,
-                           myfsicon, myfswidget, myspacer,
-                           myseparator,
-                           myneticon, mynetwidget, myneticonup,
-                           myseparator,
-                           myneticon, mynetfiwidget, myneticonup,
-                           myseparator,
-                           mymailicon, myspacer, mymboxwidget, myspacer,
-                           myseparator,
-                           myorgicon, myorgwidget, myspacer,
-                           myseparator,
-                           myvolicon, myvolwidget, myspacer, myvolbarwidget, myspacer,
-                           myseparator,
-                           mydateicon, mydatewidget,
-                           myseparator,
-                           s == screen.count() and mysystray or nil
+    wibox[s].widgets = {{
+        taglist[s],
+        layoutbox[s],
+        promptbox[s],
+        layout = awful.widget.layout.horizontal.leftright
+    },
+        s == screen.count() and systray or nil,
+        separator,
+        datewidget, dateicon,
+        separator,
+        volwidget, spacer, volbarwidget, volicon,
+        separator,
+        spacer, orgwidget, orgicon,
+        separator,
+        mboxwidget, spacer, mailicon,
+        separator,
+        neticonup, netfiwidget, neticon,
+        separator,
+        neticonup, netwidget, neticon,
+        separator,
+        fswidget["backup"], fswidget["storage"],
+        fswidget["home"], fswidget["root"], fsicon,
+        separator,
+        spacer, memwidget, spacer, memicon,
+        separator,
+        spacer, batwidget, baticon,
+        separator,
+        cpuwidget, spacer, thermalwidget, cpuicon,
+        layout = awful.widget.layout.horizontal.rightleft
     }
-    mywibox[s].screen = s
 end
 -- }}}
 -- }}}
@@ -440,13 +405,20 @@ end
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
     awful.button({ }, 3, function ()
-        awful.prompt.run({ prompt = "Run: " }, mypromptbox[mouse.screen].widget,
-            function (...) mypromptbox[mouse.screen].text = awful.util.spawn(unpack(arg), false) end,
+        awful.prompt.run({ prompt = "Run: " }, promptbox[mouse.screen].widget,
+            function (...) promptbox[mouse.screen].text = awful.util.spawn(unpack(arg), false) end,
             awful.completion.shell, awful.util.getdir("cache") .. "/history")
     end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
+
+-- Client mouse bindings
+clientbuttons = awful.util.table.join(
+    awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+    awful.button({ modkey }, 1, awful.mouse.client.move),
+    awful.button({ modkey }, 3, awful.mouse.client.resize)
+)
 -- }}}
 
 
@@ -498,57 +470,39 @@ globalkeys = awful.util.table.join(
     -- {{{ Prompt menus
     --     - Run, Dictionary, Manual, Lua, SSH, Calculator and Web search
     awful.key({ altkey }, "F2", function ()
-        awful.prompt.run({ prompt = "Run: " }, mypromptbox[mouse.screen].widget,
-            function (...) mypromptbox[mouse.screen].text = awful.util.spawn(unpack(arg), false) end,
+        awful.prompt.run({ prompt = "Run: " }, promptbox[mouse.screen].widget,
+            function (...) promptbox[mouse.screen].text = awful.util.spawn(unpack(arg), false) end,
             awful.completion.shell, awful.util.getdir("cache") .. "/history")
     end),
     awful.key({ altkey }, "F3", function ()
-        awful.prompt.run({ prompt = "Dictionary: " }, mypromptbox[mouse.screen].widget,
+        awful.prompt.run({ prompt = "Dictionary: " }, promptbox[mouse.screen].widget,
             function (words)
                 local xmessage = "xmessage -timeout 10 -file -"
                 awful.util.spawn_with_shell("crodict " .. words .. " | " .. xmessage, false)
             end)
     end),
     awful.key({ altkey }, "F4", function ()
-        awful.prompt.run({ prompt = "Manual: " }, mypromptbox[mouse.screen].widget,
-            function (page) awful.util.spawn("urxvt -e man " .. page, false) end,
-            function(cmd, cur_pos, ncomp)
-                local pages = {}
-                local m = 'IFS=: && find $(manpath||echo "$MANPATH") -type f -printf "%f\n"| cut -d. -f1'
-                local c, err = io.popen(m)
-                if c then while true do
-                    local manpage = c:read("*line")
-                    if not manpage then break end
-                    if manpage:find("^" .. cmd:sub(1, cur_pos)) then
-                        table.insert(pages, manpage)
-                    end
-                  end
-                  c:close()
-                else io.stderr:write(err) end
-                if #cmd == 0 then return cmd, cur_pos end
-                if #pages == 0 then return end
-                while ncomp > #pages do ncomp = ncomp - #pages end
-                return pages[ncomp], cur_pos
-            end)
+        awful.prompt.run({ prompt = "Manual: " }, promptbox[mouse.screen].widget,
+            function (page) awful.util.spawn("urxvt -e man " .. page, false) end)
     end),
     awful.key({ altkey }, "F5", function ()
-        awful.prompt.run({ prompt = "Run Lua code: " }, mypromptbox[mouse.screen].widget,
+        awful.prompt.run({ prompt = "Run Lua code: " }, promptbox[mouse.screen].widget,
         awful.util.eval, nil, awful.util.getdir("cache") .. "/history_eval")
     end),
     awful.key({ altkey }, "F10", function ()
-        awful.prompt.run({ prompt = "Connect: " }, mypromptbox[mouse.screen].widget,
+        awful.prompt.run({ prompt = "Connect: " }, promptbox[mouse.screen].widget,
             function (host) awful.util.spawn("urxvt -e ssh " .. host, false) end)
     end),
     awful.key({ altkey }, "F11", function ()
-        awful.prompt.run({ prompt = "Calculate: " }, mypromptbox[mouse.screen].widget,
+        awful.prompt.run({ prompt = "Calculate: " }, promptbox[mouse.screen].widget,
             function (expr)
                 local xmessage = "xmessage -timeout 10 -file -"
                 awful.util.spawn_with_shell("echo '" .. expr .. ' = ' ..
-                awful.util.eval("return (" .. expr .. ")") .. "' | " .. xmessage, false)
+                  awful.util.eval("return (" .. expr .. ")") .. "' | " .. xmessage, false)
             end)
     end),
     awful.key({ altkey }, "F12", function ()
-        awful.prompt.run({ prompt = "Web search: " }, mypromptbox[mouse.screen].widget,
+        awful.prompt.run({ prompt = "Web search: " }, promptbox[mouse.screen].widget,
             function (command)
                 awful.util.spawn("firefox 'http://yubnub.org/parser/parse?command="..command.."'", false)
                 if tags[mouse.screen][3] then awful.tag.viewonly(tags[mouse.screen][3]) end
@@ -559,7 +513,7 @@ globalkeys = awful.util.table.join(
     -- {{{ Awesome controls
     awful.key({ modkey, "Shift" }, "q", awesome.quit),
     awful.key({ modkey, "Shift" }, "r", function ()
-        mypromptbox[mouse.screen].text = awful.util.escape(awful.util.restart())
+        promptbox[mouse.screen].text = awful.util.escape(awful.util.restart())
     end),
     -- }}}
 
@@ -583,7 +537,7 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Focus controls
-    awful.key({ modkey }, "p", function () awful.screen.focus(1) end),
+    awful.key({ modkey }, "p", function () awful.screen.focus_relative(1) end),
     awful.key({ modkey }, "s", function ()
         for k, c in pairs(client.get(mouse.screen)) do
             if c.minimized then -- Scratchpad replacement/imitation
@@ -630,8 +584,8 @@ globalkeys = awful.util.table.join(
 -- {{{ Client manipulation
 clientkeys = awful.util.table.join(
     awful.key({ modkey }, "b", function () -- Hide the wibox
-        if mywibox[mouse.screen].screen == nil then mywibox[mouse.screen].screen = mouse.screen
-        else mywibox[mouse.screen].screen = nil end
+        if wibox[mouse.screen].screen == nil then wibox[mouse.screen].screen = mouse.screen
+        else wibox[mouse.screen].screen = nil end
     end),
     awful.key({ modkey }, "c", function (c) c:kill() end),
     awful.key({ modkey }, "f", function (c) c.fullscreen = not c.fullscreen end),
@@ -640,7 +594,6 @@ clientkeys = awful.util.table.join(
         c.maximized_vertical   = not c.maximized_vertical
     end),
     awful.key({ modkey }, "o",     awful.client.movetoscreen),
-    awful.key({ modkey }, "t",     awful.client.togglemarked),
     awful.key({ modkey }, "Next",  function () awful.client.moveresize(20, 20, -20, -20) end),
     awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20, 20, 20) end),
     awful.key({ modkey }, "Down",  function () awful.client.moveresize(0, 20, 0, 0) end),
@@ -684,7 +637,7 @@ for i = 1, keynumber do
             function ()
                 local screen = mouse.screen
                 if tags[screen][i] then
-                    tags[screen][i].selected = not tags[screen][i].selected
+                    awful.tag.viewtoggle(tags[screen][i])
                 end
             end),
         awful.key({ modkey, "Shift" }, i,
@@ -698,15 +651,6 @@ for i = 1, keynumber do
                 if client.focus and tags[client.focus.screen][i] then
                     awful.client.toggletag(tags[client.focus.screen][i])
                 end
-            end),
-        awful.key({ modkey, "Shift" }, "F" .. i,
-            function ()
-                local screen = mouse.screen
-                if tags[screen][i] then
-                    for k, c in pairs(awful.client.getmarked()) do
-                        awful.client.movetotag(tags[screen][i], c)
-                    end
-                end
             end))
 end
 -- }}}
@@ -716,103 +660,99 @@ root.keys(globalkeys)
 -- }}}
 
 
--- {{{ Hooks
+-- {{{ Rules
+awful.rules.rules = {
+    { rule = { },
+      properties = {
+          border_width = beautiful.border_width,
+          border_color = beautiful.border_normal,
+          focus = true,
+          keys = clientkeys,
+          buttons = clientbuttons
+    }},
+    -- Application specific behaviour
+    { rule = { class = "Gajim.py" },
+      properties = { tag = tags[1][5] } },
+    { rule = { class = "Knode" },
+      properties = { tag = tags[1][8] } },
+    { rule = { class = "Akregator" },
+      properties = { tag = tags[1][8] } },
+    { rule = { class = "Amarok" },
+      properties = { tag = tags[1][9] } },
+    { rule = { class = "Amarokapp" },
+      properties = { tag = tags[1][9] } },
+    { rule = { class = "Gimp" },
+      properties = { tag = tags[1][9] } },
+    { rule = { name = "Alpine" },
+      properties = { tag = tags[1][4] } },
+    { rule = { instance = "uTorrent.exe" },
+      properties = { tag = tags[screen.count()][9] } },
+    { rule = { class = "Emacs" },
+      properties = { tag = tags[screen.count()][2] } },
+    { rule = { class = "Firefox" },
+      properties = { tag = tags[screen.count()][3] } },
+    { rule = { class = "Firefox", instance = "Download" },
+      properties = { floating = true } },
+    { rule = { class = "Firefox", instance = "Places" },
+      properties = { floating = true } },
+    { rule = { class = "Firefox", instance = "Greasemonkey" },
+      properties = { floating = true } },
+    { rule = { class = "Firefox", instance = "Extension" },
+      properties = { floating = true } },
+    { rule = { class = "Firefox", instance = "Scrapbook" },
+      properties = { floating = true } },
+    { rule = { class = "Emacs", instance = "_Remember_" },
+      properties = { floating = true } },
+    { rule = { class = "Xmag", instance = "xmag" },
+      properties = { floating = true } },
+    { rule = { class = "Xmessage", instance = "xmessage" },
+      properties = { floating = true } },
+    { rule = { class = "ROX%-Filer" },
+      properties = { floating = true } },
+    { rule = { class = "Ark" },
+      properties = { floating = true } },
+    { rule = { class = "Kgpg" },
+      properties = { floating = true } },
+    { rule = { class = "Kmix" },
+      properties = { floating = true } },
+    { rule = { class = "Geeqie" },
+      properties = { floating = true } },
+    { rule = { class = "Smplayer" },
+      properties = { floating = true } },
+    { rule = { class = "xine" },
+      properties = { floating = true } },
+    { rule = { class = "Pinentry%-gtk%-2" },
+      properties = { floating = true } },
+    { rule = { name = "VLC media player" },
+      properties = { floating = true } },
+}
+-- }}}
+
+
+-- {{{ Signals
 --
--- {{{ Hook function to execute when focusing a client
-awful.hooks.focus.register(function (c)
-    if not awful.client.ismarked(c) then
-        c.border_color = beautiful.border_focus
-    end
-end)
--- }}}
-
--- {{{ Hook function to execute when unfocusing a client
-awful.hooks.unfocus.register(function (c)
-    if not awful.client.ismarked(c) then
-        c.border_color = beautiful.border_normal
-    end
-end)
--- }}}
-
--- {{{ Hook function to execute when marking a client
-awful.hooks.marked.register(function (c)
-    c.border_color = beautiful.border_marked
-end)
--- }}}
-
--- {{{ Hook function to execute when unmarking a client
-awful.hooks.unmarked.register(function (c)
-    c.border_color = beautiful.border_focus
-end)
--- }}}
-
--- {{{ Hook function to execute when the mouse enters a client
-awful.hooks.mouse_enter.register(function (c)
-    -- Sloppy focus (but disabled for magnifier layout)
-    if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-        and awful.client.focus.filter(c) then
-            client.focus = c
-    end
-end)
--- }}}
-
--- {{{ Hook function to execute when a new client appears
-awful.hooks.manage.register(function (c)
-    -- If we are not managing this application at startup,
-    -- move it to the screen where the mouse is
-    if not startup and awful.client.focus.filter(c) then
-        c.screen = mouse.screen
-        -- Additionaly make sure it is not maximized
-        --   - common problem with apps like Firefox
-        c.maximized_vertical   = false
-        c.maximized_horizontal = false
-    end
-
+-- {{{ Signal function to execute when a new client appears
+client.add_signal("manage", function (c, startup)
     -- Add a titlebar to each client if enabled globaly
-    --   - check the arrange hook for finer controls
     if use_titlebar then
         awful.titlebar.add(c, { modkey = modkey })
-        c.titlebar.border_width = beautiful.border_width
-        c.titlebar.border_color = beautiful.border_focus
+    -- Floating clients always have titlebars
+    elseif awful.client.floating.get(c)
+        or awful.layout.get(c.screen) == awful.layout.suit.floating then
+            if not c.titlebar and c.class ~= "Xmessage" then
+                awful.titlebar.add(c, { modkey = modkey })
+            end
+            -- Floating clients are always on top
+            c.above = true
     end
 
-    -- Set client mouse bindings
-    c:buttons(awful.util.table.join(
-        awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
-        awful.button({ modkey }, 1, awful.mouse.client.move),
-        awful.button({ modkey }, 3, awful.mouse.client.resize)
-    ))
-
-    -- New clients may not receive focus (unfocusable), so set the border anyway
-    c.border_width = beautiful.border_width
-    c.border_color = beautiful.border_normal
-
-    -- Check application->screen/tag mappings and floating state
-    local target_screen, target_tag, target_float
-
-    for _, rule in pairs(apprules) do
-        if (((rule.cls  == nil) or (c.class    and c.class    == rule.cls))
-        and ((rule.ins  == nil) or (c.instance and c.instance == rule.ins))
-        and ((rule.name == nil) or (c.name and string.find(c.name, rule.name, 1, true))))
-        then
-            target_screen = rule.scr
-            target_tag    = rule.tag
-            target_float  = rule.float
+    -- Enable sloppy focus
+    c:add_signal("mouse::enter", function(c)
+        if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
+            and awful.client.focus.filter(c) then
+            client.focus = c
         end
-    end
-
-    -- Apply application->screen/tag mappings and floating state
-    if target_float  then awful.client.floating.set(c, target_float) end
-    if target_screen then
-        c.screen = target_screen
-        awful.client.movetotag(tags[target_screen][target_tag], c)
-    end
-
-    -- Focus after tag mapping
-    client.focus = c
-
-    -- Set client key bindings
-    c:keys(clientkeys)
+    end)
 
     -- Set new clients as slaves
     awful.client.setslave(c)
@@ -831,51 +771,8 @@ awful.hooks.manage.register(function (c)
 end)
 -- }}}
 
--- {{{ Hook function to execute when arranging the screen
-awful.hooks.arrange.register(function (screen)
-    -- Update layout imagebox widget with an icon indicating active layout
-    local layout = awful.layout.getname(awful.layout.get(screen))
-    if layout and beautiful["layout_" ..layout] then
-        mylayoutbox[screen].image = image(beautiful["layout_" .. layout])
-    else
-        mylayoutbox[screen].image = nil
-    end
-
-    -- If no window has focus or current one is a desktop or a dock:
-    if not client.focus then
-        --   - give focus to the latest client in history
-        local c = awful.client.focus.history.get(screen, 0)
-        --   - give focus the the client under the pointer
-        --local c = awful.mouse.client_under_pointer()
-        if c then client.focus = c end
-    end
-
-    -- Fine grained borders and floaters control
-    local visible_clients = awful.client.visible(screen)
-
-    if #visible_clients > 0 then
-        for _, c in pairs(visible_clients) do
-            -- Floating clients always have borders
-            if awful.client.floating.get(c) or layout == "floating" then
-                c.border_width = beautiful.border_width
-                if not c.fullscreen then
-                    -- Floating clients always have titlebars
-                    if not c.titlebar and c.class ~= "Xmessage" then
-                        awful.titlebar.add(c, { modkey = modkey })
-                    end
-                    -- Floating clients are always on top
-                    c.above = true
-                end
-            -- Tiled clients don't have borders if only one client is visible
-            --elseif (#visible_clients == 1) or (layout == "max") then
-            --   - avoid flicker in max layout if floaters are on top
-            elseif #visible_clients == 1 then
-                visible_clients[1].border_width = 0
-            else
-                c.border_width = beautiful.border_width
-            end
-        end
-    end
-end)
+-- {{{ Focus signal functions
+client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 -- }}}
