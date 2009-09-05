@@ -3,7 +3,6 @@
 -- Awesome configuration file, using awesome 3.4-git on Arch GNU/Linux.
 --   * Adrian C. <anrxc_at_sysphere_org>
 
--- Updated on: Sep  5, 20:38:55 CEST 2009
 -- Screenshot: http://sysphere.org/gallery/snapshots
 
 -- FAQ: 

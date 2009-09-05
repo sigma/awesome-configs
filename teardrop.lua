@@ -1,6 +1,5 @@
 ---------------------------------------------------------------------------
 -- Drop down (quake-like) applications for the awesome window manager
---   * Updated on: Aug 27, 15:09:15 CEST 2009
 ---------------------------------------------------------------------------
 -- Original by: Lucas de Vries <lucas_glacicle_com>
 --   * http://awesome.naquadah.org/wiki/Drop-down_terminal
