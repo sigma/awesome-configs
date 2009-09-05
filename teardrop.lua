@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------
 -- Drop down (quake-like) applications for the awesome window manager
---   * Updated on: Aug 24, 14:53:50 CEST 2009
+--   * Updated on: Aug 27, 15:09:15 CEST 2009
 ---------------------------------------------------------------------------
 -- Original by: Lucas de Vries <lucas_glacicle_com>
 --   * http://awesome.naquadah.org/wiki/Drop-down_terminal
@@ -9,6 +9,7 @@
 --   * Original code turned into a module
 --   * Startup notification disabled
 --   * Slides in from the bottom of the screen by default
+--   * Ported to awesome 3.4 (signals, new properties...)
 -- 
 -- Licensed under the WTFPL version 2
 --   * http://sam.zoy.org/wtfpl/COPYING
@@ -58,8 +59,8 @@ function toggle(prog, edge, height, screen)
         -- Create table
         dropdown[prog] = {}
 
-        -- Add unmanage hook for dropdown programs
-        awful.hooks.unmanage.register(function (c)
+        -- Add unmanage signal for dropdown programs
+        capi.client.add_signal("unmanage", function (c)
             for scr, cl in pairs(dropdown[prog]) do
                 if cl == c then
                     dropdown[prog][scr] = nil
@@ -113,12 +114,12 @@ function toggle(prog, edge, height, screen)
             c:raise()
             capi.client.focus = c
 
-            -- Remove hook
-            awful.hooks.manage.unregister(spawnw)
+            -- Remove signal
+            capi.client.remove_signal("manage", spawnw)
         end
 
-        -- Add hook
-        awful.hooks.manage.register(spawnw)
+        -- Add signal
+        capi.client.add_signal("manage", spawnw)
 
         -- Spawn program
         awful.util.spawn(prog, false)
@@ -130,12 +131,12 @@ function toggle(prog, edge, height, screen)
         awful.client.movetotag(awful.tag.selected(screen), c)
 
         -- Focus and raise if not hidden
-        if c.hide then
-            c.hide = false
+        if c.hidden then
+            c.hidden = false
             c:raise()
             capi.client.focus = c
         else
-            c.hide = true
+            c.hidden = true
         end
     end
 end
