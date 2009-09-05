@@ -8,7 +8,7 @@
 
 -- FAQ: 
 --   1. Statusbar widgets created with Vicious:
---        - http://git.sysphere.org/vicious
+--        - http://git.sysphere.org/vicious/
 
 --   2. Why is there no Menu or a Taskbar in your config?
 --        Everything is done with the keyboard.
@@ -18,7 +18,7 @@
 --          - http://slinky.imukuppi.org/zenburnpage/
 
 --      3a. My .Xdefaults can be found here: 
---            - http://git.sysphere.org/dotfiles
+--            - http://git.sysphere.org/dotfiles/
 
 --   4. Fonts used on my desktop: 
 --        Terminus  : http://www.is-vn.bg/hamster
