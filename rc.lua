@@ -686,7 +686,7 @@ awful.rules.rules = {
       properties = { tag = tags[1][4] } },
     { rule = { instance = "uTorrent.exe" },
       properties = { tag = tags[screen.count()][9] } },
-    { rule = { class = "Emacs" },
+    { rule = { class = "Emacs", instance = "emacs" },
       properties = { tag = tags[screen.count()][2] } },
     { rule = { class = "Firefox" },
       properties = { tag = tags[screen.count()][3] } },
