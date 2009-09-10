@@ -326,7 +326,7 @@ datewidget:buttons(awful.util.table.join(
     -- PyLendar: http://sysphere.org/~anrxc/j/archives/2009/03/11/desktop_calendars
     awful.button({ }, 1, function () awful.util.spawn("pylendar.py", false) end)))
 -- }}}
-
+ 
 -- {{{ System tray
 -- Initialize widget
 systray = widget({ type = "systray" })
@@ -376,7 +376,7 @@ for s = 1, screen.count() do
         separator,
         datewidget, dateicon,
         separator,
-        volwidget, spacer, volbarwidget, volicon,
+        volwidget, spacer, volbarwidget.widget, volicon,
         separator,
         spacer, orgwidget, orgicon,
         separator,
@@ -386,14 +386,16 @@ for s = 1, screen.count() do
         separator,
         neticonup, netwidget, neticon,
         separator,
-        fswidget["backup"], fswidget["storage"],
-        fswidget["home"], fswidget["root"], fsicon,
+        fswidget["backup"].widget,
+        fswidget["storage"].widget,
+        fswidget["home"].widget,
+        fswidget["root"].widget, fsicon,
         separator,
-        spacer, memwidget, spacer, memicon,
+        spacer, memwidget.widget, spacer, memicon,
         separator,
         spacer, batwidget, baticon,
         separator,
-        cpuwidget, spacer, thermalwidget, cpuicon,
+        cpuwidget.widget, spacer, thermalwidget, cpuicon,
         layout = awful.widget.layout.horizontal.rightleft
     }
 end
