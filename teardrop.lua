@@ -9,7 +9,8 @@
 --   * Startup notification disabled
 --   * Slides in from the bottom of the screen by default
 --   * Ported to awesome 3.4 (signals, new properties...)
--- 
+--   * Does not show up on tags when hidden
+--
 -- Licensed under the WTFPL version 2
 --   * http://sam.zoy.org/wtfpl/COPYING
 ---------------------------------------------------------------------------
@@ -53,6 +54,14 @@ function toggle(prog, edge, height, screen)
     if screen == nil then screen = capi.mouse.screen end
     if height == nil then height = 0.25 end
     if edge   == nil then edge   = 0 end
+
+    local function untag(c)
+        local tags = c:tags()
+        for i, v in pairs(tags) do
+            tags[i] = nil
+        end
+        c:tags(tags)
+    end
 
     if not dropdown[prog] then
         -- Create table
@@ -136,6 +145,7 @@ function toggle(prog, edge, height, screen)
             capi.client.focus = c
         else
             c.hidden = true
+            untag(c)
         end
     end
 end
