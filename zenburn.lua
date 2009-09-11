@@ -48,6 +48,11 @@ theme.bg_widget        = "#3F3F3F"
 theme.border_widget    = "#3F3F3F"
 -- }}}
 
+-- {{{ Mouse finder
+theme.mouse_finder_color = "#CC9393"
+--theme.mouse_finder_[timeout|animate_timeout|radius|factor]
+-- }}}
+
 -- {{{ Taglist and Tasklist
 -- theme.[taglist|tasklist]_[bg|fg]_[focus|urgent]
 -- }}}

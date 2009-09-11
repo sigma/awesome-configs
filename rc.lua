@@ -503,6 +503,7 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Awesome controls
+    awful.key({ modkey, "Shift" }, "m", function () awful.mouse.finder():find() end),
     awful.key({ modkey, "Shift" }, "q", awesome.quit),
     awful.key({ modkey, "Shift" }, "r", function ()
         promptbox[mouse.screen].text = awful.util.escape(awful.util.restart())
