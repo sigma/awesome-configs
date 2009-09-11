@@ -1,6 +1,6 @@
 -- {{{ Header
 --
--- Awesome configuration file, using awesome 3.4-git on Arch GNU/Linux.
+-- Awesome configuration file, using awesome 3.4-rc1 on Arch GNU/Linux.
 --   * Adrian C. <anrxc_at_sysphere_org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
@@ -16,15 +16,16 @@
 --        It's Zenburn. Awesome, Emacs, Urxvt, Alpine... all use these colors.
 --          - http://slinky.imukuppi.org/zenburnpage/
 
---      3a. My .Xdefaults can be found here: 
+--      3a. My .Xdefaults (and .xinitrc) can be found here: 
 --            - http://git.sysphere.org/dotfiles/
 
 --   4. Fonts used on my desktop: 
 --        Terminus  : http://www.is-vn.bg/hamster
 --        Profont   : http://www.tobias-jung.de/seekingprofont
 
--- This work is licensed under the Creative Commons Attribution-Share Alike License.
--- To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/
+-- This work is licensed under the Creative Commons Attribution
+-- Share Alike License. To view a copy of this license, visit:
+--   - http://creativecommons.org/licenses/by-sa/3.0/
 -- }}}
 
 
@@ -672,59 +673,29 @@ awful.rules.rules = {
           buttons = clientbuttons
     }},
     -- Application specific behaviour
+    { rule = { name = "Alpine" },
+      properties = { tag = tags[1][4] } },
     { rule = { class = "Gajim.py" },
       properties = { tag = tags[1][5] } },
     { rule = { class = "Knode" },
       properties = { tag = tags[1][8] } },
     { rule = { class = "Akregator" },
       properties = { tag = tags[1][8] } },
-    { rule = { class = "Amarok" },
-      properties = { tag = tags[1][9] } },
-    { rule = { class = "Amarokapp" },
-      properties = { tag = tags[1][9] } },
-    { rule = { class = "Gimp" },
-      properties = { tag = tags[1][9] } },
-    { rule = { name = "Alpine" },
-      properties = { tag = tags[1][4] } },
-    { rule = { instance = "uTorrent.exe" },
-      properties = { tag = tags[screen.count()][9] } },
-    { rule = { class = "Emacs", instance = "emacs" },
-      properties = { tag = tags[screen.count()][2] } },
     { rule = { class = "Firefox" },
       properties = { tag = tags[screen.count()][3] } },
-    { rule = { class = "Firefox", instance = "Download" },
-      properties = { floating = true } },
-    { rule = { class = "Firefox", instance = "Places" },
-      properties = { floating = true } },
-    { rule = { class = "Firefox", instance = "Greasemonkey" },
-      properties = { floating = true } },
-    { rule = { class = "Firefox", instance = "Extension" },
-      properties = { floating = true } },
-    { rule = { class = "Firefox", instance = "Scrapbook" },
-      properties = { floating = true } },
+    { rule = { class = "Emacs", instance = "emacs" },
+      properties = { tag = tags[screen.count()][2] } },
     { rule = { class = "Emacs", instance = "_Remember_" },
-      properties = { floating = true } },
-    { rule = { class = "Xmag", instance = "xmag" },
       properties = { floating = true } },
     { rule = { class = "Xmessage", instance = "xmessage" },
       properties = { floating = true } },
-    { rule = { class = "ROX%-Filer" },
+    { rule = { class = "ROX-Filer" },
       properties = { floating = true } },
     { rule = { class = "Ark" },
       properties = { floating = true } },
-    { rule = { class = "Kgpg" },
-      properties = { floating = true } },
-    { rule = { class = "Kmix" },
-      properties = { floating = true } },
     { rule = { class = "Geeqie" },
       properties = { floating = true } },
-    { rule = { class = "Smplayer" },
-      properties = { floating = true } },
-    { rule = { class = "xine" },
-      properties = { floating = true } },
-    { rule = { class = "Pinentry%-gtk%-2" },
-      properties = { floating = true } },
-    { rule = { name = "VLC media player" },
+    { rule = { class = "Pinentry-gtk-2" },
       properties = { floating = true } },
 }
 -- }}}
