@@ -45,11 +45,8 @@ require("teardrop")
 beautiful.init(awful.util.getdir("config") .. "/zenburn.lua")
 
 -- Modifier keys
-altkey = "Mod1"      -- Alt_L
-modkey = "Mod4"      -- Super_L
-
--- Window titlebars
-use_titlebar = false -- True for floaters
+altkey = "Mod1" -- Alt_L
+modkey = "Mod4" -- Super_L
 
 -- Window management layouts
 layouts = {
@@ -706,17 +703,16 @@ awful.rules.rules = {
 --
 -- {{{ Signal function to execute when a new client appears
 client.add_signal("manage", function (c, startup)
-    -- Add a titlebar to each client if enabled globaly
-    if use_titlebar then
-        awful.titlebar.add(c, { modkey = modkey })
-    -- Floating clients always have titlebars
-    elseif awful.client.floating.get(c)
-        or awful.layout.get(c.screen) == awful.layout.suit.floating then
-            if not c.titlebar and c.class ~= "Xmessage" then
-                awful.titlebar.add(c, { modkey = modkey })
-            end
-            -- Floating clients are always on top
-            c.above = true
+    -- Add a titlebar to each floating client
+    if awful.client.floating.get(c) or
+        awful.layout.get(c.screen) == awful.layout.suit.floating
+    then
+        if not c.titlebar and c.class ~= "Xmessage" then
+            awful.titlebar.add(c, { modkey = modkey })
+        end
+
+        -- Floating clients are always on top
+        c.above = true
     end
 
     -- Enable sloppy focus
