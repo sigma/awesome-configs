@@ -54,7 +54,7 @@ function toggle(prog, edge, height, screen)
     if height == nil then height = 0.25 end
     if screen == nil then screen = capi.mouse.screen end
 
-    local function untag(c)
+    local function untag (c)
         local tags = c:tags()
         for i, v in pairs(tags) do
             tags[i] = nil

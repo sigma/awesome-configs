@@ -1,7 +1,7 @@
 -- {{{ Header
 --
--- Awesome configuration file, using awesome 3.4-rc1 on Arch GNU/Linux.
---   * Adrian C. <anrxc_at_sysphere_org>
+-- Awesome configuration, using awesome 3.4-rc1 on Arch GNU/Linux
+--   * Adrian C. <anrxc.sysphere.org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
 
@@ -13,7 +13,7 @@
 --        Everything is done with the keyboard.
 
 --   3. Why these colors? 
---        It's Zenburn. Awesome, Emacs, Urxvt, Alpine... all use these colors.
+--        It's Zenburn; Awesome, Emacs, Alpine... all use it.
 --          - http://slinky.imukuppi.org/zenburnpage/
 
 --      3a. My .Xdefaults (and .xinitrc) can be found here: 
@@ -49,7 +49,7 @@ altkey = "Mod1"      -- Alt_L
 modkey = "Mod4"      -- Super_L
 
 -- Window titlebars
-use_titlebar = false -- True for floaters (manage signal)
+use_titlebar = false -- True for floaters
 
 -- Window management layouts
 layouts = {
@@ -111,14 +111,14 @@ spacer.text    = " "
 separator.text = "|"
 -- }}}
 
--- {{{ CPU usage graph and temperature
+-- {{{ CPU usage and temperature
 -- Widget icon
 cpuicon        = widget({ type = "imagebox", name = "cpuicon" })
 cpuicon.image  = image(beautiful.widget_cpu)
 -- Initialize widgets
 thermalwidget  = widget({ type = "textbox", name = "thermalwidget" })
 cpuwidget      = awful.widget.graph({ layout = awful.widget.layout.horizontal.rightleft })
--- CPU graph properties
+-- Graph properties
 cpuwidget:set_width(50)
 cpuwidget:set_scale(false)
 cpuwidget:set_max_value(100)
@@ -134,7 +134,7 @@ vicious.register(cpuwidget, vicious.widgets.cpu, "$1", 2)
 vicious.register(thermalwidget, vicious.widgets.thermal, "$1°C", 60, "TZS0")
 -- }}}
 
--- {{{ Battery percentage and state indicator
+-- {{{ Battery state
 -- Widget icon
 baticon       = widget({ type = "imagebox", name = "baticon" })
 baticon.image = image(beautiful.widget_bat)
@@ -144,13 +144,13 @@ batwidget     = widget({ type = "textbox", name = "batwidget" })
 vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 60, "BAT0")
 -- }}}
 
--- {{{ Memory usage bar
+-- {{{ Memory usage
 -- Widget icon
 memicon       = widget({ type = "imagebox", name = "memicon" })
 memicon.image = image(beautiful.widget_mem)
 -- Initialize widget
 memwidget     = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft })
--- MEM progressbar properties
+-- Pogressbar properties
 memwidget:set_width(8)
 memwidget:set_height(10)
 memwidget:set_vertical(true)
@@ -166,7 +166,7 @@ awful.widget.layout.margins[memwidget.widget] = { top = 2, bottom = 2 }
 vicious.register(memwidget, vicious.widgets.mem, "$1", 60)
 -- }}}
 
--- {{{ File system usage bars
+-- {{{ File system usage
 -- Widget icon
 fsicon       = widget({ type = "imagebox", name = "fsicon" })
 fsicon.image = image(beautiful.widget_fs)
@@ -190,7 +190,7 @@ fswidget = {
         fg_center = beautiful.fg_center_widget,
         fg_end    = beautiful.fg_end_widget
 }}
--- FS progressbar properties
+-- Progressbar properties
 for _, w in pairs(fswidget) do
     if w.widget ~= nil then
         w:set_width(fswidget.settings.width)
@@ -218,7 +218,7 @@ vicious.register(fswidget["storage"], vicious.widgets.fs, "${/mnt/storage usep}"
 vicious.register(fswidget["backup"],  vicious.widgets.fs, "${/mnt/backup usep}",  240)
 -- }}}
 
--- {{{ Network usage statistics
+-- {{{ Network usage
 -- Widget icons
 neticon         = widget({ type = "imagebox", name = "neticon" })
 neticonup       = widget({ type = "imagebox", name = "neticonup" })
@@ -237,7 +237,7 @@ vicious.register(netfiwidget, vicious.widgets.net,
   .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 2)
 -- }}}
 
--- {{{ Mail subject (latest e-mail)
+-- {{{ Mail subject
 -- Widget icon
 mailicon       = widget({ type = "imagebox", name = "mailicon" })
 mailicon.image = image(beautiful.widget_mail)
@@ -250,7 +250,7 @@ mboxwidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () awful.util.spawn("urxvt -title Alpine -e alpine_exp", false) end)))
 -- }}}
 
--- {{{ Agenda and Todo (Emacs org-mode)
+-- {{{ Org-mode agenda
 -- Widget icon
 orgicon       = widget({ type = "imagebox", name = "orgicon" })
 orgicon.image = image(beautiful.widget_org)
@@ -283,14 +283,14 @@ orgwidget:buttons(awful.util.table.join(
   end)))
 -- }}}
 
--- {{{ Volume level, progressbar and changer
+-- {{{ Volume level
 -- Widget icon
 volicon       = widget({ type = "imagebox", name = "volicon" })
 volicon.image = image(beautiful.widget_vol)
 -- Initialize widgets
 volwidget     = widget({ type = "textbox", name = "volwidget" })
 volbarwidget  = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft })
--- VOL progressbar properties
+-- Progressbar properties
 volbarwidget:set_width(8)
 volbarwidget:set_height(10)
 volbarwidget:set_vertical(true)
@@ -314,7 +314,7 @@ volbarwidget.widget:buttons(awful.util.table.join(
 ))  volwidget:buttons( volbarwidget.widget:buttons() )
 -- }}}
 
--- {{{ Date, time and a calendar
+-- {{{ Date and time
 -- Widget icon
 dateicon       = widget({ type = "imagebox", name = "dateicon" })
 dateicon.image = image(beautiful.widget_date)
@@ -327,7 +327,7 @@ datewidget:buttons(awful.util.table.join(
     -- PyLendar: http://sysphere.org/~anrxc/j/archives/2009/03/11/desktop_calendars
     awful.button({ }, 1, function () awful.util.spawn("pylendar.py", false) end)))
 -- }}}
- 
+
 -- {{{ System tray
 -- Initialize widget
 systray = widget({ type = "systray" })
@@ -366,7 +366,7 @@ for s = 1, screen.count() do
         position = "top", height = 14, screen = s,
         fg = beautiful.fg_normal, bg = beautiful.bg_normal
     })
-    -- Add widgets to the wibox (order matters)
+    -- Add widgets to the wibox
     wibox[s].widgets = {{
         taglist[s],
         layoutbox[s],
@@ -387,10 +387,8 @@ for s = 1, screen.count() do
         separator,
         neticonup, netwidget, neticon,
         separator,
-        fswidget["backup"].widget,
-        fswidget["storage"].widget,
-        fswidget["home"].widget,
-        fswidget["root"].widget, fsicon,
+        fswidget["backup"].widget, fswidget["storage"].widget,
+        fswidget["home"].widget, fswidget["root"].widget, fsicon,
         separator,
         spacer, memwidget.widget, spacer, memicon,
         separator,
@@ -406,11 +404,6 @@ end
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function ()
-        awful.prompt.run({ prompt = "Run: " }, promptbox[mouse.screen].widget,
-            function (...) promptbox[mouse.screen].text = awful.util.spawn(unpack(arg), false) end,
-            awful.completion.shell, awful.util.getdir("cache") .. "/history")
-    end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -542,7 +535,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "p", function () awful.screen.focus_relative(1) end),
     awful.key({ modkey }, "s", function ()
         for k, c in pairs(client.get(mouse.screen)) do
-            if c.minimized then -- Scratchpad replacement/imitation
+            if c.minimized then
                 awful.client.movetotag(awful.tag.selected(mouse.screen), c)
                 awful.client.floating.set(c, true)
                 awful.placement.centered(c)
@@ -552,25 +545,32 @@ globalkeys = awful.util.table.join(
         end
     end),
     awful.key({ altkey }, "Tab", awful.client.urgent.jumpto),
-    awful.key({ modkey }, "Tab", function () awful.client.focus.history.previous();
+    awful.key({ modkey }, "Tab", function ()
+        awful.client.focus.history.previous()
         if client.focus then client.focus:raise() end
     end),
-    awful.key({ modkey }, "j",   function () awful.client.focus.byidx(1);
+    awful.key({ modkey }, "j", function ()
+        awful.client.focus.byidx(1)
         if client.focus then client.focus:raise() end
     end),
-    awful.key({ modkey }, "k",   function () awful.client.focus.byidx(-1);
+    awful.key({ modkey }, "k", function ()
+        awful.client.focus.byidx(-1)
         if client.focus then client.focus:raise() end
     end),
-    awful.key({ modkey }, "#48", function () awful.client.focus.bydirection("down");
+    awful.key({ modkey }, "#48", function ()
+        awful.client.focus.bydirection("down")
         if client.focus then client.focus:raise() end
     end),
-    awful.key({ modkey }, "#34", function () awful.client.focus.bydirection("up");
+    awful.key({ modkey }, "#34", function ()
+        awful.client.focus.bydirection("up")
         if client.focus then client.focus:raise() end
     end),
-    awful.key({ modkey }, "#47", function () awful.client.focus.bydirection("left");
+    awful.key({ modkey }, "#47", function ()
+        awful.client.focus.bydirection("left")
         if client.focus then client.focus:raise() end
     end),
-    awful.key({ modkey }, "#51", function () awful.client.focus.bydirection("right");
+    awful.key({ modkey }, "#51", function ()
+        awful.client.focus.bydirection("right")
         if client.focus then client.focus:raise() end
     end),
     awful.key({ modkey, "Shift" }, "j",   function () awful.client.swap.byidx(1) end),
@@ -585,8 +585,9 @@ globalkeys = awful.util.table.join(
 
 -- {{{ Client manipulation
 clientkeys = awful.util.table.join(
-    awful.key({ modkey }, "b", function () -- Hide the wibox
-        if wibox[mouse.screen].screen == nil then wibox[mouse.screen].screen = mouse.screen
+    awful.key({ modkey }, "b", function ()
+        if wibox[mouse.screen].screen == nil then
+             wibox[mouse.screen].screen = mouse.screen
         else wibox[mouse.screen].screen = nil end
     end),
     awful.key({ modkey }, "c", function (c) c:kill() end),
@@ -609,10 +610,14 @@ clientkeys = awful.util.table.join(
         if c.titlebar then awful.titlebar.remove(c) 
         else awful.titlebar.add(c, { modkey = modkey }) end
     end),
-    awful.key({ modkey, "Control" }, "r",      function (c) c:redraw() end),
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle),
+    awful.key({ modkey, "Control" }, "r",     function (c) c:redraw() end),
+    awful.key({ modkey, "Control" }, "space", function (c)
+        awful.client.floating.toggle(c)
+        if awful.client.floating.get(c) then
+             c.above = true;  awful.titlebar.add(c)
+        else c.above = false; awful.titlebar.remove(c) end
+    end),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    -- Suspend/resume on focus changes could be auto. when running on bat power, if only suspending FF:
     awful.key({ modkey, "Shift" }, "c", function (c) awful.util.spawn("kill -CONT "..c.pid, false) end),
     awful.key({ modkey, "Shift" }, "s", function (c) awful.util.spawn("kill -STOP "..c.pid, false) end)
 )
@@ -628,32 +633,28 @@ end
 -- {{{ Tag controls
 for i = 1, keynumber do
     globalkeys = awful.util.table.join( globalkeys,
-        awful.key({ modkey }, i,
-            function ()
-                local screen = mouse.screen
-                if tags[screen][i] then
-                    awful.tag.viewonly(tags[screen][i])
-                end
-            end),
-        awful.key({ modkey, "Control" }, i,
-            function ()
-                local screen = mouse.screen
-                if tags[screen][i] then
-                    awful.tag.viewtoggle(tags[screen][i])
-                end
-            end),
-        awful.key({ modkey, "Shift" }, i,
-            function ()
-                if client.focus and tags[client.focus.screen][i] then
-                    awful.client.movetotag(tags[client.focus.screen][i])
-                end
-            end),
-        awful.key({ modkey, "Control", "Shift" }, i,
-            function ()
-                if client.focus and tags[client.focus.screen][i] then
-                    awful.client.toggletag(tags[client.focus.screen][i])
-                end
-            end))
+        awful.key({ modkey }, i, function ()
+            local screen = mouse.screen
+            if tags[screen][i] then
+                awful.tag.viewonly(tags[screen][i])
+            end
+        end),
+        awful.key({ modkey, "Control" }, i, function ()
+            local screen = mouse.screen
+            if tags[screen][i] then
+                awful.tag.viewtoggle(tags[screen][i])
+            end
+        end),
+        awful.key({ modkey, "Shift" }, i, function ()
+            if client.focus and tags[client.focus.screen][i] then
+                awful.client.movetotag(tags[client.focus.screen][i])
+            end
+        end),
+        awful.key({ modkey, "Control", "Shift" }, i, function ()
+            if client.focus and tags[client.focus.screen][i] then
+                awful.client.toggletag(tags[client.focus.screen][i])
+            end
+        end))
 end
 -- }}}
 
@@ -719,10 +720,10 @@ client.add_signal("manage", function (c, startup)
     end
 
     -- Enable sloppy focus
-    c:add_signal("mouse::enter", function(c)
+    c:add_signal("mouse::enter", function (c)
         if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-            and awful.client.focus.filter(c) then
-            client.focus = c
+           and awful.client.focus.filter(c) then
+               client.focus = c
         end
     end)
 
@@ -737,14 +738,13 @@ client.add_signal("manage", function (c, startup)
     --   - are centered on the screen
     --awful.placement.centered(c, c.transient_for)
 
-    -- Honoring of size hints
-    --   - false will remove gaps between windows
+    -- Honor size hints
     c.size_hints_honor = false
 end)
 -- }}}
 
 -- {{{ Focus signal functions
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.add_signal("focus",   function (c) c.border_color = beautiful.border_focus end)
+client.add_signal("unfocus", function (c) c.border_color = beautiful.border_normal end)
 -- }}}
 -- }}}
