@@ -50,7 +50,11 @@ theme.border_widget    = "#3F3F3F"
 
 -- {{{ Mouse finder
 theme.mouse_finder_color = "#CC9393"
---theme.mouse_finder_[timeout|animate_timeout|radius|factor]
+-- theme.mouse_finder_[timeout|animate_timeout|radius|factor]
+-- }}}
+
+-- {{{ Tooltips
+-- theme.tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
 -- }}}
 
 -- {{{ Taglist and Tasklist
@@ -58,9 +62,8 @@ theme.mouse_finder_color = "#CC9393"
 -- }}}
 
 -- {{{ Menu
--- theme.menu_[height|width]
 -- theme.menu_[bg|fg]_[normal|focus]
--- theme.menu_[border_color|border_width]
+-- theme.menu_[height|width|border_color|border_width]
 -- }}}
 -- }}}
 
