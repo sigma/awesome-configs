@@ -1,60 +1,54 @@
---------------------------------------------------------------------------
+----------------------------------------------------------------
 -- Drop-down applications manager for the awesome window manager
---------------------------------------------------------------------------
--- Author: Adrian C. <anrxc.sysphere.org>
+----------------------------------------------------------------
+-- Adrian C. <anrxc.sysphere.org>
 -- Licensed under the WTFPL version 2
 --   * http://sam.zoy.org/wtfpl/COPYING
---------------------------------------------------------------------------
+----------------------------------------------------------------
 -- To use this module add:
---     require("teardrop")
--- to the top of your rc.lua and call:
---     teardrop.toggle(prog, position, height, width, sticky, screen)
--- from a keybinding
+--   require("teardrop")
+-- to the top of your rc.lua, and call it from a keybinding:
+--   teardrop(prog, pos, edge, height, width, sticky, screen)
 --
 -- Parameters:
---   prog     - Program to run, for example: "urxvt" or "gmrun"
---   position - Position, "bottom" to slide in from the bottom of the
---              screen, "center" when creating a scratchpad, by
---              default it drops down from the "top"
---   width    - Width, in absolute pixels when > 1 or a width percentage
---              when < 1, 0.9999 (100% of the screen) by default
---   height   - Height, in absolute pixels when > 1 or a height percentage
---              when < 1, 0.25 (25% of the screen) by default
---   sticky   - Sticky, if true, will make the client visible on all tags
---              (useful when creating a scratchpad), false by default
---   screen   - Screen (optional)
---------------------------------------------------------------------------
+--   prog     - Program to run; "urxvt", "gmrun", "thunderbird"
+--   pos      - Position; "bottom", "center" or "top" (default)
+--   edge     - Edge; "left", "right" or "middle" (default)
+--   width    - Width in absolute pixels, or width percentage
+--              when < 1 (0.9999 (99.9% of the screen) default)
+--   height   - Height in absolute pixels, or height percentage
+--              when < 1 (0.25 (25% of the screen) default)
+--   sticky   - Visible on all tags, false by default
+--   screen   - Screen (optional), mouse.screen by default
+----------------------------------------------------------------
 
 -- Grab environment
 local pairs = pairs
 local awful = require("awful")
+local setmetatable = setmetatable
 local capi = {
     mouse = mouse,
     client = client,
     screen = screen
 }
 
-
 -- Teardrop: Drop-down applications manager for the awesome window manager
 module("teardrop")
 
-
--- Application visibility toggle
 local dropdown = {}
---
+
 -- Create a new window for the drop-down application when it doesn't
--- exist, or toggle between hidden and visible states when it does.
-function toggle(prog, position, width, height, sticky, screen)
-    local position = position or "top"
-    local width    = width    or 0.9999
-    local height   = height   or 0.25
-    local sticky   = sticky   or false
-    local screen   = screen   or capi.mouse.screen
+-- exist, or toggle between hidden and visible states when it does
+function toggle(prog, pos, edge, width, height, sticky, screen)
+    local pos    = pos    or "top"
+    local edge   = edge   or "middle"
+    local width  = width  or 0.9999
+    local height = height or 0.25
+    local sticky = sticky or false
+    local screen = screen or capi.mouse.screen
 
     if not dropdown[prog] then
-        -- Create table
         dropdown[prog] = {}
-
         -- Add unmanage signal for teardrop programs
         capi.client.add_signal("unmanage", function (c)
             for scr, cl in pairs(dropdown[prog]) do
@@ -67,7 +61,7 @@ function toggle(prog, position, width, height, sticky, screen)
 
     if not dropdown[prog][screen] then
         spawnw = function (c)
-            -- Store client
+            -- Store the client
             dropdown[prog][screen] = c
 
             -- Teardrop clients are floaters
@@ -76,17 +70,22 @@ function toggle(prog, position, width, height, sticky, screen)
             -- Client geometry and placement
             local screengeom = capi.screen[screen].workarea
 
-            if width  < 1 then width  = screengeom.width * width   end
+            if width  < 1 then width  = screengeom.width  * width  end
             if height < 1 then height = screengeom.height * height end
 
-            if position == "bottom" then
+            if edge  == "left" then
                 posx = screengeom.x
-                posy = screengeom.height + screengeom.y - height
-            elseif position == "center" then
+            elseif edge == "right" then
+                posx = screengeom.width - width
+            else --  Middle of the screen by default
                 posx = screengeom.x + (screengeom.width - width) / 2
+            end
+
+            if pos   == "bottom" then
+                posy = screengeom.height + screengeom.y - height
+            elseif pos == "center" then
                 posy = screengeom.y + (screengeom.height - height) / 2
             else --  Top of the screen by default
-                posx = screengeom.x
                 posy = screengeom.y - screengeom.y
             end
 
@@ -95,11 +94,11 @@ function toggle(prog, position, width, height, sticky, screen)
                 x = posx,      y = posy,
                 width = width, height = height
             })
-            --  * skip tasklist and always on top
+            -- - skip tasklist and always on top
             c.ontop = true
             c.above = true
             c.skip_taskbar = true
-            --  * no titlebar and optional sticky
+            -- - no titlebar and optional sticky
             if sticky     then c.sticky = true end
             if c.titlebar then
                 awful.titlebar.remove(c)
@@ -131,20 +130,23 @@ function toggle(prog, position, width, height, sticky, screen)
 
         -- Focus and raise if hidden
         if c.hidden then
-            -- Make sure a scratchpad is centered
-            if position == "center" then
-                awful.placement.centered(c)
+            -- Make sure a client is centered
+            if pos  == "center" and
+               edge == "middle" then
+                 awful.placement.centered(c)
             end
             c.hidden = false
             c:raise()
             capi.client.focus = c
         else -- Hide and detach tags if not
             c.hidden = true
-            local tags = c:tags()
-            for i, v in pairs(tags) do
-                tags[i] = nil
+            local ctags = c:tags()
+            for i, v in pairs(ctags) do
+                ctags[i] = nil
             end
-            c:tags(tags)
+            c:tags(ctags)
         end
     end
 end
+
+setmetatable(_M, { __call = function(_, ...) return toggle(...) end })

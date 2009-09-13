@@ -424,8 +424,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "u", function () awful.util.spawn("utorrent", false) end),
     awful.key({ modkey }, "w", function () awful.util.spawn("firefox", false) end),
     awful.key({ altkey }, "F1",  function () awful.util.spawn("urxvt", false) end),
-    awful.key({ altkey }, "#49", function () teardrop.toggle("urxvt", "bottom") end),
-    awful.key({ modkey }, "F2",  function () teardrop.toggle("gmrun", nil, nil, 0.08) end),
+    awful.key({ altkey }, "#49", function () teardrop("urxvt", "bottom") end),
+    awful.key({ modkey }, "F2",  function () teardrop("gmrun", nil, nil, nil, 0.08) end),
     awful.key({ modkey }, "a", function ()
         awful.util.spawn("urxvt -title Alpine -e alpine_exp", false)
     end),
