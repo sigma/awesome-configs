@@ -424,8 +424,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "u", function () awful.util.spawn("utorrent", false) end),
     awful.key({ modkey }, "w", function () awful.util.spawn("firefox", false) end),
     awful.key({ altkey }, "F1",  function () awful.util.spawn("urxvt", false) end),
-    awful.key({ altkey }, "#49", function () teardrop.toggle("urxvt") end),
-    awful.key({ modkey }, "F2",  function () teardrop.toggle("gmrun", 1, 0.08) end),
+    awful.key({ altkey }, "#49", function () teardrop.toggle("urxvt", 1) end),
+    awful.key({ modkey }, "F2",  function () teardrop.toggle("gmrun", 0, 0.08) end),
     awful.key({ modkey }, "a", function ()
         awful.util.spawn("urxvt -title Alpine -e alpine_exp", false)
     end),
@@ -605,7 +605,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
     awful.key({ modkey, "Shift" }, "o", function (c) c.ontop = not c.ontop end),
     awful.key({ modkey, "Shift" }, "t", function (c)
-        if c.titlebar then awful.titlebar.remove(c) 
+        if c.titlebar then awful.titlebar.remove(c)
         else awful.titlebar.add(c, { modkey = modkey }) end
     end),
     awful.key({ modkey, "Control" }, "r",     function (c) c:redraw() end),

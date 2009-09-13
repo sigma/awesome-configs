@@ -4,10 +4,10 @@
 -- Original by: Lucas de Vries <lucas_glacicle_com>
 --   * http://awesome.naquadah.org/wiki/Drop-down_terminal
 -- 
--- Modified by: Adrian C. <anrxc_sysphere_org>
+-- Teardrop by: Adrian C. <anrxc_sysphere_org>
 --   * turned into a module
 --   * st-notification disabled
---   * bottom edge by default
+--   * bottom edge as an option
 --   * ported to awesome 3.4
 --   * different tag handling
 --
@@ -22,8 +22,8 @@
 -- 
 -- Parameters:
 --   prog     - Program to run, for example: "urxvt" or "gmrun"
---   edge     - Screen edge (optional), 1 to drop down from the top of the
---              screen, by default it slides in from the bottom
+--   edge     - Screen edge (optional), 1 to slide in from the bottom of
+--              the screen, by default it drops down from the top
 --   height   - Height (optional), in absolute pixels when > 1 or a height
 --              percentage when < 1, 0.25 (25% of the screen) by default
 --   screen   - Screen (optional)
@@ -43,10 +43,9 @@ local capi = {
 module("teardrop")
 
 
-local dropdown = {}
-
 -- Drop-down (quake-like) application toggle
--- 
+local dropdown = {}
+--
 -- Create a new window for the drop-down application when it doesn't
 -- exist, or toggle between hidden and visible states when it does.
 function toggle(prog, edge, height, screen)
@@ -81,7 +80,7 @@ function toggle(prog, edge, height, screen)
             -- Store client
             dropdown[prog][screen] = c
 
-            -- Float client
+            -- Float the client
             awful.client.floating.set(c, true)
 
             -- Get screen geometry
@@ -94,14 +93,14 @@ function toggle(prog, edge, height, screen)
 
             -- Deduce edge
             if edge < 1 then
-                -- Slide in from the bottom of the screen
-                screenedge = screengeom.height + screengeom.y - height
-            else
                 -- Drop down from the top of the screen
                 --   * not covering the wibox
                 --screenedge = screengeom.y
                 --   * covering the wibox
                 screenedge = screengeom.y - screengeom.y
+            else
+                -- Slide in from the bottom of the screen
+                screenedge = screengeom.height + screengeom.y - height
             end
 
             -- Resize client
@@ -112,11 +111,18 @@ function toggle(prog, edge, height, screen)
                 height = height
             })
 
-            -- Mark application as ontop
+            -- Client properties
+            --   * skip tasklist
+            c.skip_taskbar = true
+            --   * always ontop
             c.ontop = true
             c.above = true
+            --   * no titlebar
+            if c.titlebar then
+                awful.titlebar.remove(c)
+            end
 
-            -- Focus and raise client
+            -- Focus and raise
             c:raise()
             capi.client.focus = c
 
