@@ -1,31 +1,27 @@
 --------------------------------------------------------------------------
--- Drop-down applications module for the awesome window manager
+-- Drop-down applications manager for the awesome window manager
 --------------------------------------------------------------------------
--- Original by: Lucas de Vries <lucas_glacicle_com>
---   * http://awesome.naquadah.org/wiki/Drop-down_terminal
--- 
--- Teardrop by: Adrian C. <anrxc_sysphere_org>
---   * turned into a module
---   * st-notification disabled
---   * bottom edge as an option
---   * ported to awesome 3.4
---   * different tag handling
---
+-- Author: Adrian C. <anrxc.sysphere.org>
 -- Licensed under the WTFPL version 2
 --   * http://sam.zoy.org/wtfpl/COPYING
 --------------------------------------------------------------------------
 -- To use this module add:
 --     require("teardrop")
 -- to the top of your rc.lua and call:
---     teardrop.toggle(prog, edge, height, screen)
--- from a keybinding. 
--- 
+--     teardrop.toggle(prog, position, height, width, sticky, screen)
+-- from a keybinding
+--
 -- Parameters:
 --   prog     - Program to run, for example: "urxvt" or "gmrun"
---   edge     - Screen edge (optional), 1 to slide in from the bottom of
---              the screen, by default it drops down from the top
---   height   - Height (optional), in absolute pixels when > 1 or a height
---              percentage when < 1, 0.25 (25% of the screen) by default
+--   position - Position, "bottom" to slide in from the bottom of the
+--              screen, "center" when creating a scratchpad, by
+--              default it drops down from the "top"
+--   width    - Width, in absolute pixels when > 1 or a width percentage
+--              when < 1, 0.9999 (100% of the screen) by default
+--   height   - Height, in absolute pixels when > 1 or a height percentage
+--              when < 1, 0.25 (25% of the screen) by default
+--   sticky   - Sticky, if true, will make the client visible on all tags
+--              (useful when creating a scratchpad), false by default
 --   screen   - Screen (optional)
 --------------------------------------------------------------------------
 
@@ -39,33 +35,27 @@ local capi = {
 }
 
 
--- Teardrop: Drop-down applications module for the awesome window manager
+-- Teardrop: Drop-down applications manager for the awesome window manager
 module("teardrop")
 
 
--- Drop-down (quake-like) application toggle
+-- Application visibility toggle
 local dropdown = {}
 --
 -- Create a new window for the drop-down application when it doesn't
 -- exist, or toggle between hidden and visible states when it does.
-function toggle(prog, edge, height, screen)
-    if edge   == nil then edge   = 0 end
-    if height == nil then height = 0.25 end
-    if screen == nil then screen = capi.mouse.screen end
-
-    local function untag (c)
-        local tags = c:tags()
-        for i, v in pairs(tags) do
-            tags[i] = nil
-        end
-        c:tags(tags)
-    end
+function toggle(prog, position, width, height, sticky, screen)
+    local position = position or "top"
+    local width    = width    or 0.9999
+    local height   = height   or 0.25
+    local sticky   = sticky   or false
+    local screen   = screen   or capi.mouse.screen
 
     if not dropdown[prog] then
         -- Create table
         dropdown[prog] = {}
 
-        -- Add unmanage signal for dropdown programs
+        -- Add unmanage signal for teardrop programs
         capi.client.add_signal("unmanage", function (c)
             for scr, cl in pairs(dropdown[prog]) do
                 if cl == c then
@@ -80,44 +70,37 @@ function toggle(prog, edge, height, screen)
             -- Store client
             dropdown[prog][screen] = c
 
-            -- Float the client
+            -- Teardrop clients are floaters
             awful.client.floating.set(c, true)
 
-            -- Get screen geometry
-            screengeom = capi.screen[screen].workarea
+            -- Client geometry and placement
+            local screengeom = capi.screen[screen].workarea
 
-            -- Calculate height
-            if height < 1 then
-                height = screengeom.height * height
+            if width  < 1 then width  = screengeom.width * width   end
+            if height < 1 then height = screengeom.height * height end
+
+            if position == "bottom" then
+                posx = screengeom.x
+                posy = screengeom.height + screengeom.y - height
+            elseif position == "center" then
+                posx = screengeom.x + (screengeom.width - width) / 2
+                posy = screengeom.y + (screengeom.height - height) / 2
+            else --  Top of the screen by default
+                posx = screengeom.x
+                posy = screengeom.y - screengeom.y
             end
-
-            -- Deduce edge
-            if edge < 1 then
-                -- Drop down from the top of the screen
-                --   * not covering the wibox
-                --screenedge = screengeom.y
-                --   * covering the wibox
-                screenedge = screengeom.y - screengeom.y
-            else
-                -- Slide in from the bottom of the screen
-                screenedge = screengeom.height + screengeom.y - height
-            end
-
-            -- Resize client
-            c:geometry({
-                x = screengeom.x,
-                y = screenedge,
-                width = screengeom.width,
-                height = height
-            })
 
             -- Client properties
-            --   * skip tasklist
-            c.skip_taskbar = true
-            --   * always ontop
+            c:geometry({
+                x = posx,      y = posy,
+                width = width, height = height
+            })
+            --  * skip tasklist and always on top
             c.ontop = true
             c.above = true
-            --   * no titlebar
+            c.skip_taskbar = true
+            --  * no titlebar and optional sticky
+            if sticky     then c.sticky = true end
             if c.titlebar then
                 awful.titlebar.remove(c)
             end
@@ -126,11 +109,11 @@ function toggle(prog, edge, height, screen)
             c:raise()
             capi.client.focus = c
 
-            -- Remove signal
+            -- Remove manage signal
             capi.client.remove_signal("manage", spawnw)
         end
 
-        -- Add signal
+        -- Add manage signal
         capi.client.add_signal("manage", spawnw)
 
         -- Spawn program
@@ -139,8 +122,8 @@ function toggle(prog, edge, height, screen)
         -- Get client
         c = dropdown[prog][screen]
 
+        -- Hide when switching the workspace
         if c:isvisible() == false then
-            -- Hide when switching the workspace
             c.hidden = true
             -- Switch the client to the current workspace
             awful.client.movetotag(awful.tag.selected(screen), c)
@@ -148,12 +131,20 @@ function toggle(prog, edge, height, screen)
 
         -- Focus and raise if hidden
         if c.hidden then
+            -- Make sure a scratchpad is centered
+            if position == "center" then
+                awful.placement.centered(c)
+            end
             c.hidden = false
             c:raise()
             capi.client.focus = c
-        else
+        else -- Hide and detach tags if not
             c.hidden = true
-            untag(c)
+            local tags = c:tags()
+            for i, v in pairs(tags) do
+                tags[i] = nil
+            end
+            c:tags(tags)
         end
     end
 end
