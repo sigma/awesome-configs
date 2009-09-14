@@ -5,27 +5,8 @@
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
 
--- FAQ: 
---   1. Statusbar widgets created with Vicious:
---        - http://git.sysphere.org/vicious/
-
---   2. Why is there no Menu or a Taskbar in your config?
---        Everything is done with the keyboard.
-
---   3. Why these colors? 
---        It's Zenburn; Awesome, Emacs, Alpine... all use it.
---          - http://slinky.imukuppi.org/zenburnpage/
-
---      3a. My .Xdefaults (and .xinitrc) can be found here: 
---            - http://git.sysphere.org/dotfiles/
-
---   4. Fonts used on my desktop: 
---        Terminus  : http://www.is-vn.bg/hamster
---        Profont   : http://www.tobias-jung.de/seekingprofont
-
--- This work is licensed under the Creative Commons Attribution
--- Share Alike License. To view a copy of this license, visit:
---   - http://creativecommons.org/licenses/by-sa/3.0/
+-- This work is licensed under the Creative Commons Attribution Share
+-- Alike License: http://creativecommons.org/licenses/by-sa/3.0/
 -- }}}
 
 
@@ -41,7 +22,7 @@ require("teardrop")
 
 -- {{{ Variable definitions
 --
--- Zenburn theme
+-- Custom theme
 beautiful.init(awful.util.getdir("config") .. "/zenburn.lua")
 
 -- Modifier keys
@@ -67,8 +48,6 @@ layouts = {
 
 
 -- {{{ Tags
---
--- Define tags table
 tags = {}
 tags.settings = {
     { name = "term",  layout = layouts[2]  },
@@ -82,7 +61,6 @@ tags.settings = {
     { name = "media", layout = layouts[9]  }
 }
 
--- Initialize tags
 for s = 1, screen.count() do
     tags[s] = {}
     for i, v in ipairs(tags.settings) do
@@ -321,7 +299,6 @@ datewidget     = widget({ type = "textbox", name = "datewidget" })
 vicious.register(datewidget, vicious.widgets.date, "%b %e, %R", 60)
 -- Register buttons
 datewidget:buttons(awful.util.table.join(
-    -- PyLendar: http://sysphere.org/~anrxc/j/archives/2009/03/11/desktop_calendars
     awful.button({ }, 1, function () awful.util.spawn("pylendar.py", false) end)))
 -- }}}
 
@@ -344,11 +321,10 @@ taglist.buttons = awful.util.table.join(
                     awful.button({ }, 4, awful.tag.viewnext),
                     awful.button({ }, 5, awful.tag.viewprev))
 
--- Add a wibox to each screen
 for s = 1, screen.count() do
     -- Create a promptbox
     promptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
-    -- Create an imagebox widget with icons indicating active layout
+    -- Create a layoutbox
     layoutbox[s] = awful.widget.layoutbox(s)
     layoutbox[s]:buttons(awful.util.table.join(
                            awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
@@ -440,17 +416,14 @@ globalkeys = awful.util.table.join(
     -- {{{ Multimedia keys
     awful.key({}, "#160", function () awful.util.spawn("kscreenlocker --forcelock", false) end),
     awful.key({}, "#146", function () awful.util.spawn("khelpcenter", false) end),
-    -- pvol: http://sysphere.org/~anrxc/j/archives/2009/03/21/pvol_and_ossaudiodev
     awful.key({}, "#121", function () awful.util.spawn("pvol.py -m", false) end),
     awful.key({}, "#122", function () awful.util.spawn("pvol.py -p -c -2", false) end),
     awful.key({}, "#123", function () awful.util.spawn("pvol.py -p -c 2", false) end),
-    -- plight: http://sysphere.org/~anrxc/j/archives/2009/05/13/plight_and_brightness
     awful.key({}, "#232", function () awful.util.spawn("plight.py -s -a", false) end),
     awful.key({}, "#233", function () awful.util.spawn("plight.py -s -a", false) end),
     awful.key({}, "#244", function () awful.util.spawn("sudo /usr/sbin/pm-hibernate", false) end),
     awful.key({}, "#150", function () awful.util.spawn("sudo /usr/sbin/pm-suspend", false) end),
     awful.key({}, "#156", function () awful.util.spawn("emacsclient -n -c", false) end),
-    -- pypres: http://sysphere.org/~anrxc/j/archives/2009/07/23/python_presentation_manager
     awful.key({}, "#225", function () awful.util.spawn("pypres.py", false) end),
     awful.key({}, "#181", function () awful.util.spawn("xrefresh", false) end),
     awful.key({}, "#180", function () awful.util.spawn("firefox -browser", false) end),
@@ -460,7 +433,6 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Prompt menus
-    --     - Run, Dictionary, Manual, Lua, SSH, Calculator and Web search
     awful.key({ altkey }, "F2", function ()
         awful.prompt.run({ prompt = "Run: " }, promptbox[mouse.screen].widget,
             function (...) promptbox[mouse.screen].text = awful.util.spawn(unpack(arg), false) end,
@@ -621,7 +593,7 @@ clientkeys = awful.util.table.join(
 )
 -- }}}
 
--- {{{ Bind keyboard digits
+-- {{{ Keyboard digits
 keynumber = 0
 for s = 1, screen.count() do
    keynumber = math.min(9, math.max(#tags[s], keynumber));
@@ -671,7 +643,6 @@ awful.rules.rules = {
           keys = clientkeys,
           buttons = clientbuttons
     }},
-    -- Application specific behaviour
     { rule = { name = "Alpine" },
       properties = { tag = tags[1][4] } },
     { rule = { class = "Gajim.py" },
@@ -727,12 +698,9 @@ client.add_signal("manage", function (c, startup)
     -- Set new clients as slaves
     awful.client.setslave(c)
 
-    -- New floating windows:
-    --   - don't cover the wibox
+    -- Placement of floating clients
     awful.placement.no_offscreen(c)
-    --   - don't overlap until it's unavoidable
     --awful.placement.no_overlap(c)
-    --   - are centered on the screen
     --awful.placement.centered(c, c.transient_for)
 
     -- Honor size hints
