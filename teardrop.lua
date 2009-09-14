@@ -15,9 +15,9 @@
 --   vert   - Vertical; "bottom", "center" or "top" (default)
 --   horiz  - Horizontal; "left", "right" or "center" (default)
 --   width  - Width in absolute pixels, or width percentage
---            when < 1 (0.9999 (99.9% of the screen) default)
+--            when < 1 (0.9999 (99.9% of the screen) by default)
 --   height - Height in absolute pixels, or height percentage
---            when < 1 (0.25 (25% of the screen) default)
+--            when < 1 (0.25 (25% of the screen) by default)
 --   sticky - Visible on all tags, false by default
 --   screen - Screen (optional), mouse.screen by default
 ----------------------------------------------------------------

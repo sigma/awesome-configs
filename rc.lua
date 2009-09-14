@@ -505,8 +505,8 @@ globalkeys = awful.util.table.join(
                 awful.client.movetotag(awful.tag.selected(mouse.screen), c)
                 awful.client.floating.set(c, true)
                 awful.placement.centered(c)
-                c.minimized = false; c.sticky = true
-                client.focus = c; c:raise()
+                c.minimized = false
+                c:raise(); client.focus = c
             end
         end
     end),
