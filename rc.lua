@@ -37,10 +37,7 @@ layouts = {
     awful.layout.suit.tile.top,        -- 4
     awful.layout.suit.fair,            -- 5
     awful.layout.suit.fair.horizontal, -- 6
---  awful.layout.suit.spiral,          -- /
---  awful.layout.suit.spiral.dwindle,  -- /
     awful.layout.suit.max,             -- 7
---  awful.layout.suit.max.fullscreen,  -- /
     awful.layout.suit.magnifier,       -- 8
     awful.layout.suit.floating         -- 9
 }
@@ -303,7 +300,6 @@ datewidget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ System tray
--- Initialize widget
 systray = widget({ type = "systray" })
 -- }}}
 -- }}}
@@ -682,7 +678,6 @@ client.add_signal("manage", function (c, startup)
         if not c.titlebar and c.class ~= "Xmessage" then
             awful.titlebar.add(c, { modkey = modkey })
         end
-
         -- Floating clients are always on top
         c.above = true
     end
@@ -695,13 +690,9 @@ client.add_signal("manage", function (c, startup)
         end
     end)
 
-    -- Set new clients as slaves
+    -- Client placement
     awful.client.setslave(c)
-
-    -- Placement of floating clients
     awful.placement.no_offscreen(c)
-    --awful.placement.no_overlap(c)
-    --awful.placement.centered(c, c.transient_for)
 
     -- Honor size hints
     c.size_hints_honor = false
