@@ -11,15 +11,15 @@
 --   teardrop(prog, pos, edge, height, width, sticky, screen)
 --
 -- Parameters:
---   prog     - Program to run; "urxvt", "gmrun", "thunderbird"
---   pos      - Position; "bottom", "center" or "top" (default)
---   edge     - Edge; "left", "right" or "middle" (default)
---   width    - Width in absolute pixels, or width percentage
---              when < 1 (0.9999 (99.9% of the screen) default)
---   height   - Height in absolute pixels, or height percentage
---              when < 1 (0.25 (25% of the screen) default)
---   sticky   - Visible on all tags, false by default
---   screen   - Screen (optional), mouse.screen by default
+--   prog   - Program to run; "urxvt", "gmrun", "thunderbird"
+--   vert   - Vertical; "bottom", "center" or "top" (default)
+--   horiz  - Horizontal; "left", "right" or "center" (default)
+--   width  - Width in absolute pixels, or width percentage
+--            when < 1 (0.9999 (99.9% of the screen) default)
+--   height - Height in absolute pixels, or height percentage
+--            when < 1 (0.25 (25% of the screen) default)
+--   sticky - Visible on all tags, false by default
+--   screen - Screen (optional), mouse.screen by default
 ----------------------------------------------------------------
 
 -- Grab environment
@@ -39,9 +39,9 @@ local dropdown = {}
 
 -- Create a new window for the drop-down application when it doesn't
 -- exist, or toggle between hidden and visible states when it does
-function toggle(prog, pos, edge, width, height, sticky, screen)
-    local pos    = pos    or "top"
-    local edge   = edge   or "middle"
+function toggle(prog, vert, horiz, width, height, sticky, screen)
+    local vert   = vert   or "top"
+    local horiz  = horiz  or "center"
     local width  = width  or 0.9999
     local height = height or 0.25
     local sticky = sticky or false
@@ -49,6 +49,7 @@ function toggle(prog, pos, edge, width, height, sticky, screen)
 
     if not dropdown[prog] then
         dropdown[prog] = {}
+
         -- Add unmanage signal for teardrop programs
         capi.client.add_signal("unmanage", function (c)
             for scr, cl in pairs(dropdown[prog]) do
@@ -61,7 +62,6 @@ function toggle(prog, pos, edge, width, height, sticky, screen)
 
     if not dropdown[prog][screen] then
         spawnw = function (c)
-            -- Store the client
             dropdown[prog][screen] = c
 
             -- Teardrop clients are floaters
@@ -73,68 +73,44 @@ function toggle(prog, pos, edge, width, height, sticky, screen)
             if width  < 1 then width  = screengeom.width  * width  end
             if height < 1 then height = screengeom.height * height end
 
-            if edge  == "left" then
-                posx = screengeom.x
-            elseif edge == "right" then
-                posx = screengeom.width - width
-            else --  Middle of the screen by default
-                posx = screengeom.x + (screengeom.width - width) / 2
-            end
+            if     horiz == "left"  then x = screengeom.x
+            elseif horiz == "right" then x = screengeom.width - width
+            else   x =  screengeom.x+(screengeom.width-width)/2 end
 
-            if pos   == "bottom" then
-                posy = screengeom.height + screengeom.y - height
-            elseif pos == "center" then
-                posy = screengeom.y + (screengeom.height - height) / 2
-            else --  Top of the screen by default
-                posy = screengeom.y - screengeom.y
-            end
+            if     vert == "bottom" then y = screengeom.height + screengeom.y - height
+            elseif vert == "center" then y = screengeom.y+(screengeom.height-height)/2
+            else   y =  screengeom.y - screengeom.y end
 
             -- Client properties
-            c:geometry({
-                x = posx,      y = posy,
-                width = width, height = height
-            })
-            -- - skip tasklist and always on top
+            c:geometry({ x = x, y = y, width = width, height = height })
             c.ontop = true
             c.above = true
             c.skip_taskbar = true
-            -- - no titlebar and optional sticky
-            if sticky     then c.sticky = true end
-            if c.titlebar then
-                awful.titlebar.remove(c)
-            end
+            if sticky then c.sticky = true end
+            if c.titlebar then awful.titlebar.remove(c) end
 
-            -- Focus and raise
             c:raise()
             capi.client.focus = c
-
-            -- Remove manage signal
             capi.client.remove_signal("manage", spawnw)
         end
 
-        -- Add manage signal
+        -- Add manage signal and spawn the program
         capi.client.add_signal("manage", spawnw)
-
-        -- Spawn program
         awful.util.spawn(prog, false)
     else
-        -- Get client
+        -- Get a running client
         c = dropdown[prog][screen]
 
-        -- Hide when switching the workspace
-        if c:isvisible() == false then
-            c.hidden = true
-            -- Switch the client to the current workspace
+        -- Switch the client to the current workspace
+        if c:isvisible() == false then c.hidden = true;
             awful.client.movetotag(awful.tag.selected(screen), c)
         end
 
         -- Focus and raise if hidden
         if c.hidden then
-            -- Make sure a client is centered
-            if pos  == "center" and
-               edge == "middle" then
-                 awful.placement.centered(c)
-            end
+            -- Make sure it is centered
+            if vert  == "center" then awful.placement.center_vertical(c)   end
+            if horiz == "center" then awful.placement.center_horizontal(c) end
             c.hidden = false
             c:raise()
             capi.client.focus = c
