@@ -379,7 +379,7 @@ root.buttons(awful.util.table.join(
 
 -- Client mouse bindings
 clientbuttons = awful.util.table.join(
-    awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+    awful.button({ }, 1, function (c) client.focus = c end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize)
 )
@@ -501,44 +501,20 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "p", function () awful.screen.focus_relative(1) end),
     awful.key({ modkey }, "s", function ()
         for k, c in pairs(client.get(mouse.screen)) do
-            if c.minimized then
+            if c.minimized then awful.client.floating.set(c, true);
                 awful.client.movetotag(awful.tag.selected(mouse.screen), c)
-                awful.client.floating.set(c, true)
-                awful.placement.centered(c)
-                c.minimized = false
-                c:raise(); client.focus = c
+                awful.placement.centered(c); c.minimized = false; client.focus = c
             end
         end
     end),
     awful.key({ altkey }, "Tab", awful.client.urgent.jumpto),
-    awful.key({ modkey }, "Tab", function ()
-        awful.client.focus.history.previous()
-        if client.focus then client.focus:raise() end
-    end),
-    awful.key({ modkey }, "j", function ()
-        awful.client.focus.byidx(1)
-        if client.focus then client.focus:raise() end
-    end),
-    awful.key({ modkey }, "k", function ()
-        awful.client.focus.byidx(-1)
-        if client.focus then client.focus:raise() end
-    end),
-    awful.key({ modkey }, "#48", function ()
-        awful.client.focus.bydirection("down")
-        if client.focus then client.focus:raise() end
-    end),
-    awful.key({ modkey }, "#34", function ()
-        awful.client.focus.bydirection("up")
-        if client.focus then client.focus:raise() end
-    end),
-    awful.key({ modkey }, "#47", function ()
-        awful.client.focus.bydirection("left")
-        if client.focus then client.focus:raise() end
-    end),
-    awful.key({ modkey }, "#51", function ()
-        awful.client.focus.bydirection("right")
-        if client.focus then client.focus:raise() end
-    end),
+    awful.key({ modkey }, "Tab", function () awful.client.focus.history.previous() end),
+    awful.key({ modkey }, "j",   function () awful.client.focus.byidx(1) end),
+    awful.key({ modkey }, "k",   function () awful.client.focus.byidx(-1) end),
+    awful.key({ modkey }, "#48", function () awful.client.focus.bydirection("down") end),
+    awful.key({ modkey }, "#34", function () awful.client.focus.bydirection("up") end),
+    awful.key({ modkey }, "#47", function () awful.client.focus.bydirection("left") end),
+    awful.key({ modkey }, "#51", function () awful.client.focus.bydirection("right") end),
     awful.key({ modkey, "Shift" }, "j",   function () awful.client.swap.byidx(1) end),
     awful.key({ modkey, "Shift" }, "k",   function () awful.client.swap.byidx(-1) end),
     awful.key({ modkey, "Shift" }, "#48", function () awful.client.swap.bydirection("down") end),
@@ -700,6 +676,7 @@ end)
 -- }}}
 
 -- {{{ Focus signal functions
+client.add_signal("focus",   function (c) c:raise() end)
 client.add_signal("focus",   function (c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function (c) c.border_color = beautiful.border_normal end)
 -- }}}
