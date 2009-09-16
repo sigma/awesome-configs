@@ -8,7 +8,7 @@
 -- To use this module add:
 --   require("teardrop")
 -- to the top of your rc.lua, and call it from a keybinding:
---   teardrop(prog, pos, edge, height, width, sticky, screen)
+--   teardrop(prog, vert, horiz, width, height, sticky, screen)
 --
 -- Parameters:
 --   prog   - Program to run; "urxvt", "gmrun", "thunderbird"
