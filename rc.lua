@@ -48,7 +48,7 @@ layouts = {
 -- {{{ Tags
 tags = {}
 tags.settings = {
-    { name = "term",  layout = layouts[2]  },
+    { name = "term",  layout = layouts[3]  },
     { name = "emacs", layout = layouts[1]  },
     { name = "web",   layout = layouts[1]  },
     { name = "mail",  layout = layouts[7]  },
@@ -499,8 +499,8 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Focus controls
-    awful.key({ modkey }, "p", function () awful.screen.focus_relative(1) end),
-    awful.key({ modkey }, "s", function () scratchpad.toggle() end),
+    awful.key({ modkey }, "p",   function () awful.screen.focus_relative(1) end),
+    awful.key({ modkey }, "s",   function () scratchpad.toggle() end),
     awful.key({ altkey }, "Tab", awful.client.urgent.jumpto),
     awful.key({ modkey }, "Tab", function () awful.client.focus.history.previous() end),
     awful.key({ modkey }, "j",   function () awful.client.focus.byidx(1) end),
