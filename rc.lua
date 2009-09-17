@@ -539,7 +539,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey }, "Up",    function () awful.client.moveresize(0, -20, 0, 0) end),
     awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20, 0, 0, 0) end),
     awful.key({ modkey }, "Right", function () awful.client.moveresize(20, 0, 0, 0) end),
-    awful.key({ modkey },          "d", function (c) scratchpad.set(c) end),
+    awful.key({ modkey },          "d", function (c) scratchpad.set(c, 0.60, 0.60, true) end),
     awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
     awful.key({ modkey, "Shift" }, "o", function (c) c.ontop = not c.ontop end),
     awful.key({ modkey, "Shift" }, "t", function (c)
