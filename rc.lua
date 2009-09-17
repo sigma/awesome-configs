@@ -17,6 +17,7 @@ require("awful.autofocus")
 -- User libraries
 require("vicious")
 require("teardrop")
+require("scratchpad")
 -- }}}
 
 
@@ -499,14 +500,7 @@ globalkeys = awful.util.table.join(
 
     -- {{{ Focus controls
     awful.key({ modkey }, "p", function () awful.screen.focus_relative(1) end),
-    awful.key({ modkey }, "s", function ()
-        for k, c in pairs(client.get(mouse.screen)) do
-            if c.minimized then awful.client.floating.set(c, true);
-                awful.client.movetotag(awful.tag.selected(mouse.screen), c)
-                awful.placement.centered(c); c.minimized = false; client.focus = c
-            end
-        end
-    end),
+    awful.key({ modkey }, "s", function () scratchpad.toggle() end),
     awful.key({ altkey }, "Tab", awful.client.urgent.jumpto),
     awful.key({ modkey }, "Tab", function () awful.client.focus.history.previous() end),
     awful.key({ modkey }, "j",   function () awful.client.focus.byidx(1) end),
@@ -545,7 +539,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey }, "Up",    function () awful.client.moveresize(0, -20, 0, 0) end),
     awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20, 0, 0, 0) end),
     awful.key({ modkey }, "Right", function () awful.client.moveresize(20, 0, 0, 0) end),
-    awful.key({ modkey },          "d", function (c) c.minimized = not c.minimized end),
+    awful.key({ modkey },          "d", function (c) scratchpad.set(c) end),
     awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
     awful.key({ modkey, "Shift" }, "o", function (c) c.ontop = not c.ontop end),
     awful.key({ modkey, "Shift" }, "t", function (c)
