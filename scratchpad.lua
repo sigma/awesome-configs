@@ -85,10 +85,10 @@ function set(c, width, height, sticky, screen)
         -- compare it with the focused client
         if oc == c then
             -- If it matches then unscratch and clear the table
-            awful.client.floating.toggle(oc)
+            awful.client.floating.toggle(oc); oc.sticky = false
             scratch["pad"][screen] = nil
         else -- If they don't match, unscratch and replace it
-            oc.hidden = false
+            oc.hidden = false; oc.sticky = false
             awful.client.floating.toggle(oc)
             scratch["pad"][screen] = c
             setscratch(c)
