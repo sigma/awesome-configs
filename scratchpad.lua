@@ -72,8 +72,16 @@ function set(c, width, height, sticky, screen)
         capi.client.focus = c
     end
 
-    -- Prepare a table for storing clients
-    if not scratch["pad"] then scratch["pad"] = {} end
+    -- Prepare a table for storing clients,
+    if not scratch["pad"] then scratch["pad"] = {}
+        -- add unmanage signal for scratchpad clients
+        capi.client.add_signal("unmanage", function (c)
+            local oc = scratch["pad"][screen]
+            if oc == c then
+                scratch["pad"][screen] = nil
+            end
+        end)
+    end
 
     -- If the scratcphad is emtpy, store the client,
     if not scratch["pad"][screen] then
