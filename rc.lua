@@ -661,8 +661,10 @@ client.add_signal("manage", function (c, startup)
     end)
 
     -- Client placement
-    awful.client.setslave(c)
-    awful.placement.no_offscreen(c)
+    if not startup then
+        awful.client.setslave(c)
+        awful.placement.no_offscreen(c)
+    end
 
     -- Honor size hints
     c.size_hints_honor = false
