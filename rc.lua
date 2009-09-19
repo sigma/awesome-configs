@@ -103,8 +103,8 @@ cpuwidget:set_gradient_colors({
     beautiful.fg_center_widget,
     beautiful.fg_widget })
 -- Register widgets
-vicious.register(cpuwidget, vicious.widgets.cpu, "$1", 2)
-vicious.register(thermalwidget, vicious.widgets.thermal, "$1°C", 60, "TZS0")
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
+vicious.register(thermalwidget, vicious.widgets.thermal, "$1°C", 19, "TZS0")
 -- }}}
 
 -- {{{ Battery state
@@ -114,7 +114,7 @@ baticon.image = image(beautiful.widget_bat)
 -- Initialize widget
 batwidget     = widget({ type = "textbox", name = "batwidget" })
 -- Register widget
-vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 60, "BAT0")
+vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT0")
 -- }}}
 
 -- {{{ Memory usage
@@ -136,7 +136,7 @@ memwidget:set_gradient_colors({
     beautiful.fg_end_widget })
 awful.widget.layout.margins[memwidget.widget] = { top = 2, bottom = 2 }
 -- Register widget
-vicious.register(memwidget, vicious.widgets.mem, "$1", 60)
+vicious.register(memwidget, vicious.widgets.mem, "$1", 13)
 -- }}}
 
 -- {{{ File system usage
@@ -185,10 +185,10 @@ for _, w in pairs(fswidget) do
     end
 end
 -- Register widgets
-vicious.register(fswidget["root"],    vicious.widgets.fs, "${/ usep}",            240)
-vicious.register(fswidget["home"],    vicious.widgets.fs, "${/home usep}",        240)
-vicious.register(fswidget["storage"], vicious.widgets.fs, "${/mnt/storage usep}", 240)
-vicious.register(fswidget["backup"],  vicious.widgets.fs, "${/mnt/backup usep}",  240)
+vicious.register(fswidget["root"],    vicious.widgets.fs, "${/ usep}",            599)
+vicious.register(fswidget["home"],    vicious.widgets.fs, "${/home usep}",        599)
+vicious.register(fswidget["storage"], vicious.widgets.fs, "${/mnt/storage usep}", 599)
+vicious.register(fswidget["backup"],  vicious.widgets.fs, "${/mnt/backup usep}",  599)
 -- }}}
 
 -- {{{ Network usage
@@ -203,11 +203,11 @@ netfiwidget     = widget({ type = "textbox", name = "netfiwidget" })
 -- Register ethernet widget
 vicious.register(netwidget, vicious.widgets.net,
   '<span color="'.. beautiful.fg_netdn_widget ..'">${eth0 down_kb}</span> <span color="'
-  .. beautiful.fg_netup_widget ..'">${eth0 up_kb}</span>', 2)
+  .. beautiful.fg_netup_widget ..'">${eth0 up_kb}</span>', 3)
 -- Register wireless widget
 vicious.register(netfiwidget, vicious.widgets.net,
   '<span color="'.. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
-  .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 2)
+  .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 3)
 -- }}}
 
 -- {{{ Mail subject
@@ -217,7 +217,7 @@ mailicon.image = image(beautiful.widget_mail)
 -- Initialize widget
 mboxwidget     = widget({ type = "textbox", name = "mboxwidget" })
 -- Register widget
-vicious.register(mboxwidget, vicious.widgets.mbox, "$1", 60, "/home/anrxc/mail/Inbox")
+vicious.register(mboxwidget, vicious.widgets.mbox, "$1", 181, "/home/anrxc/mail/Inbox")
 -- Register buttons
 mboxwidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () awful.util.spawn("urxvt -title Alpine -e alpine_exp", false) end)))
@@ -245,7 +245,7 @@ orgmode = {
 vicious.register(orgwidget, vicious.widgets.org, 
      orgmode.colors.past .. '$1</span>|' .. orgmode.colors.today  .. '$2</span>|' ..
      orgmode.colors.soon .. '$3</span>|' .. orgmode.colors.future .. '$4</span>',
-     240, orgmode.files)
+     601, orgmode.files)
 -- Register buttons
 orgwidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function ()
@@ -294,7 +294,7 @@ dateicon.image = image(beautiful.widget_date)
 -- Initialize widget
 datewidget     = widget({ type = "textbox", name = "datewidget" })
 -- Register widget
-vicious.register(datewidget, vicious.widgets.date, "%b %e, %R", 60)
+vicious.register(datewidget, vicious.widgets.date, "%b %e, %R", 61)
 -- Register buttons
 datewidget:buttons(awful.util.table.join(
     awful.button({ }, 1, function () awful.util.spawn("pylendar.py", false) end)))
@@ -303,7 +303,7 @@ datewidget:buttons(awful.util.table.join(
 -- {{{ System tray
 systray = widget({ type = "systray" })
 -- }}}
--- }}}
+-- }}}n
 
 -- {{{ Wibox initialisation
 wibox     = {}
