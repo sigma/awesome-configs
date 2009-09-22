@@ -48,7 +48,7 @@ layouts = {
 -- {{{ Tags
 tags = {}
 tags.settings = {
-    { name = "term",  layout = layouts[3]  },
+    { name = "term",  layout = layouts[2]  },
     { name = "emacs", layout = layouts[1]  },
     { name = "web",   layout = layouts[1]  },
     { name = "mail",  layout = layouts[7]  },
@@ -631,7 +631,7 @@ awful.rules.rules = {
       properties = { tag = tags[1][8] } },
     { rule = { class = "Akregator" },
       properties = { tag = tags[1][8] } },
-    { rule = { class = "Firefox" },
+    { rule = { class = "Firefox", instance = "Navigator" },
       properties = { tag = tags[screen.count()][3] } },
     { rule = { class = "Emacs", instance = "emacs" },
       properties = { tag = tags[screen.count()][2] } },
@@ -646,6 +646,8 @@ awful.rules.rules = {
     { rule = { class = "Geeqie" },
       properties = { floating = true } },
     { rule = { class = "Pinentry-gtk-2" },
+      properties = { floating = true } },
+    { rule = { instance = "firefox-bin" },
       properties = { floating = true } },
 }
 -- }}}
