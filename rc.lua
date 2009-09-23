@@ -679,7 +679,11 @@ client.add_signal("manage", function (c, startup)
     -- Client placement
     if not startup then
         awful.client.setslave(c)
-        awful.placement.no_offscreen(c)
+
+        if  not c.size_hints.user_position
+        and not c.size_hints.program_position then
+            awful.placement.no_offscreen(c)
+        end
     end
 
     -- Honor size hints
