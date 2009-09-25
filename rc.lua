@@ -185,6 +185,7 @@ for _, w in pairs(fswidget) do
     end
 end
 -- Register widgets
+vicious.enable_caching(vicious.widgets.fs)
 vicious.register(fswidget["root"],    vicious.widgets.fs, "${/ usep}",            599)
 vicious.register(fswidget["home"],    vicious.widgets.fs, "${/home usep}",        599)
 vicious.register(fswidget["storage"], vicious.widgets.fs, "${/mnt/storage usep}", 599)
@@ -201,6 +202,7 @@ neticonup.image = image(beautiful.widget_netup)
 netwidget       = widget({ type = "textbox", name = "netwidget" })
 netfiwidget     = widget({ type = "textbox", name = "netfiwidget" })
 -- Register ethernet widget
+vicious.enable_caching(vicious.widgets.net)
 vicious.register(netwidget, vicious.widgets.net,
   '<span color="'.. beautiful.fg_netdn_widget ..'">${eth0 down_kb}</span> <span color="'
   .. beautiful.fg_netup_widget ..'">${eth0 up_kb}</span>', 3)
@@ -276,6 +278,7 @@ volbarwidget:set_gradient_colors({
     beautiful.fg_end_widget })
 awful.widget.layout.margins[volbarwidget.widget] = { top = 2, bottom = 2 }
 -- Register widgets
+vicious.enable_caching(vicious.widgets.volume)
 vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
 vicious.register(volbarwidget, vicious.widgets.volume, "$1", 2, "PCM")
 -- Register buttons
