@@ -1,12 +1,13 @@
 -- {{{ Header
 --
--- Awesome configuration, using awesome 3.4-rc1 on Arch GNU/Linux
+-- Awesome configuration, using awesome 3.4-rc2 on Arch GNU/Linux
 --   * Adrian C. <anrxc.sysphere.org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
 
 -- This work is licensed under the Creative Commons Attribution Share
 -- Alike License: http://creativecommons.org/licenses/by-sa/3.0/
+--
 -- }}}
 
 
@@ -32,15 +33,13 @@ modkey = "Mod4" -- Super_L
 
 -- Window management layouts
 layouts = {
-    awful.layout.suit.tile,            -- 1
-    awful.layout.suit.tile.left,       -- 2
-    awful.layout.suit.tile.bottom,     -- 3
-    awful.layout.suit.tile.top,        -- 4
-    awful.layout.suit.fair,            -- 5
-    awful.layout.suit.fair.horizontal, -- 6
-    awful.layout.suit.max,             -- 7
-    awful.layout.suit.magnifier,       -- 8
-    awful.layout.suit.floating         -- 9
+    awful.layout.suit.tile,        -- 1
+    awful.layout.suit.tile.left,   -- 2
+    awful.layout.suit.tile.bottom, -- 3
+    awful.layout.suit.tile.top,    -- 4
+    awful.layout.suit.max,         -- 5
+    awful.layout.suit.magnifier,   -- 6
+    awful.layout.suit.floating     -- 7
 }
 -- }}}
 
@@ -51,12 +50,12 @@ tags.settings = {
     { name = "term",  layout = layouts[2]  },
     { name = "emacs", layout = layouts[1]  },
     { name = "web",   layout = layouts[1]  },
-    { name = "mail",  layout = layouts[7]  },
+    { name = "mail",  layout = layouts[5]  },
     { name = "im",    layout = layouts[1], mwfact = 0.13 },
-    { name = "6",     layout = layouts[9], hide = true },
-    { name = "7",     layout = layouts[9], hide = true },
-    { name = "rss",   layout = layouts[8]  },
-    { name = "media", layout = layouts[9]  }
+    { name = "6",     layout = layouts[7], hide = true },
+    { name = "7",     layout = layouts[7], hide = true },
+    { name = "rss",   layout = layouts[6]  },
+    { name = "media", layout = layouts[7]  }
 }
 
 for s = 1, screen.count() do
@@ -184,8 +183,9 @@ for _, w in pairs(fswidget) do
         ))
     end
 end
--- Register widgets
+-- Enable caching
 vicious.enable_caching(vicious.widgets.fs)
+-- Register widgets
 vicious.register(fswidget["root"],    vicious.widgets.fs, "${/ usep}",            599)
 vicious.register(fswidget["home"],    vicious.widgets.fs, "${/home usep}",        599)
 vicious.register(fswidget["storage"], vicious.widgets.fs, "${/mnt/storage usep}", 599)
@@ -201,8 +201,9 @@ neticonup.image = image(beautiful.widget_netup)
 -- Initialize widgets
 netwidget       = widget({ type = "textbox", name = "netwidget" })
 netfiwidget     = widget({ type = "textbox", name = "netfiwidget" })
--- Register ethernet widget
+-- Enable caching
 vicious.enable_caching(vicious.widgets.net)
+-- Register ethernet widget
 vicious.register(netwidget, vicious.widgets.net,
   '<span color="'.. beautiful.fg_netdn_widget ..'">${eth0 down_kb}</span> <span color="'
   .. beautiful.fg_netup_widget ..'">${eth0 up_kb}</span>', 3)
@@ -277,8 +278,9 @@ volbarwidget:set_gradient_colors({
     beautiful.fg_center_widget,
     beautiful.fg_end_widget })
 awful.widget.layout.margins[volbarwidget.widget] = { top = 2, bottom = 2 }
--- Register widgets
+-- Enable caching
 vicious.enable_caching(vicious.widgets.volume)
+-- Register widgets
 vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
 vicious.register(volbarwidget, vicious.widgets.volume, "$1", 2, "PCM")
 -- Register buttons
