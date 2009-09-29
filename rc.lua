@@ -204,12 +204,12 @@ netfiwidget     = widget({ type = "textbox", name = "netfiwidget" })
 -- Enable caching
 vicious.enable_caching(vicious.widgets.net)
 -- Register ethernet widget
-vicious.register(netwidget, vicious.widgets.net,
-  '<span color="'.. beautiful.fg_netdn_widget ..'">${eth0 down_kb}</span> <span color="'
+vicious.register(netwidget, vicious.widgets.net, '<span color="'
+  .. beautiful.fg_netdn_widget ..'">${eth0 down_kb}</span> <span color="'
   .. beautiful.fg_netup_widget ..'">${eth0 up_kb}</span>', 3)
 -- Register wireless widget
-vicious.register(netfiwidget, vicious.widgets.net,
-  '<span color="'.. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
+vicious.register(netfiwidget, vicious.widgets.net, '<span color="'
+  .. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
   .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 3)
 -- }}}
 
