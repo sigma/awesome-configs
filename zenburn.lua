@@ -5,8 +5,8 @@
 
 
 -- {{{ Main
-theme   = {}
-confdir = awful.util.getdir("config")
+theme = {}
+theme.confdir       = awful.util.getdir("config")
 theme.wallpaper_cmd = { "/usr/bin/nitrogen --restore" }
 --theme.wallpaper_cmd = { "awsetbg /usr/share/awesome/themes/zenburn/zenburn-background.png" }
 -- }}}
@@ -71,69 +71,69 @@ theme.mouse_finder_color = "#CC9393"
 -- {{{ Icons
 --
 -- {{{ Taglist icons
-theme.taglist_squares_sel   = confdir .. "/icons/taglist/squarefz.png"
-theme.taglist_squares_unsel = confdir .. "/icons/taglist/squareza.png"
+theme.taglist_squares_sel   = theme.confdir .. "/icons/taglist/squarefz.png"
+theme.taglist_squares_unsel = theme.confdir .. "/icons/taglist/squareza.png"
 --theme.taglist_squares_resize = "false"
 -- }}}
 
 -- {{{ Misc icons
---theme.awesome_icon           = confdir .. "/icons/awesome.png"
+--theme.awesome_icon           = theme.confdir .. "/icons/awesome.png"
 --theme.menu_submenu_icon      = "/usr/share/awesome/themes/default/submenu.png"
 --theme.tasklist_floating_icon = "/usr/share/awesome/themes/default/tasklist/floatingw.png"
 -- }}}
 
 -- {{{ Layout icons
-theme.layout_tile       = confdir .. "/icons/layouts/tile.png"
-theme.layout_tileleft   = confdir .. "/icons/layouts/tileleft.png"
-theme.layout_tilebottom = confdir .. "/icons/layouts/tilebottom.png"
-theme.layout_tiletop    = confdir .. "/icons/layouts/tiletop.png"
-theme.layout_fairv      = confdir .. "/icons/layouts/fairv.png"
-theme.layout_fairh      = confdir .. "/icons/layouts/fairh.png"
-theme.layout_spiral     = confdir .. "/icons/layouts/spiral.png"
-theme.layout_dwindle    = confdir .. "/icons/layouts/dwindle.png"
-theme.layout_max        = confdir .. "/icons/layouts/max.png"
-theme.layout_fullscreen = confdir .. "/icons/layouts/fullscreen.png"
-theme.layout_magnifier  = confdir .. "/icons/layouts/magnifier.png"
-theme.layout_floating   = confdir .. "/icons/layouts/floating.png"
+theme.layout_tile       = theme.confdir .. "/icons/layouts/tile.png"
+theme.layout_tileleft   = theme.confdir .. "/icons/layouts/tileleft.png"
+theme.layout_tilebottom = theme.confdir .. "/icons/layouts/tilebottom.png"
+theme.layout_tiletop    = theme.confdir .. "/icons/layouts/tiletop.png"
+theme.layout_fairv      = theme.confdir .. "/icons/layouts/fairv.png"
+theme.layout_fairh      = theme.confdir .. "/icons/layouts/fairh.png"
+theme.layout_spiral     = theme.confdir .. "/icons/layouts/spiral.png"
+theme.layout_dwindle    = theme.confdir .. "/icons/layouts/dwindle.png"
+theme.layout_max        = theme.confdir .. "/icons/layouts/max.png"
+theme.layout_fullscreen = theme.confdir .. "/icons/layouts/fullscreen.png"
+theme.layout_magnifier  = theme.confdir .. "/icons/layouts/magnifier.png"
+theme.layout_floating   = theme.confdir .. "/icons/layouts/floating.png"
 -- }}}
 
 -- {{{ Widget icons
-theme.widget_cpu    = confdir .. "/icons/cpu.png"
-theme.widget_bat    = confdir .. "/icons/bat.png"
-theme.widget_mem    = confdir .. "/icons/mem.png"
-theme.widget_fs     = confdir .. "/icons/disk.png"
-theme.widget_net    = confdir .. "/icons/down.png"
-theme.widget_netup  = confdir .. "/icons/up.png"
-theme.widget_mail   = confdir .. "/icons/mail.png"
-theme.widget_vol    = confdir .. "/icons/vol.png"
-theme.widget_org    = confdir .. "/icons/cal.png"
-theme.widget_date   = confdir .. "/icons/time.png"
-theme.widget_crypto = confdir .. "/icons/crypto.png"
+theme.widget_cpu    = theme.confdir .. "/icons/cpu.png"
+theme.widget_bat    = theme.confdir .. "/icons/bat.png"
+theme.widget_mem    = theme.confdir .. "/icons/mem.png"
+theme.widget_fs     = theme.confdir .. "/icons/disk.png"
+theme.widget_net    = theme.confdir .. "/icons/down.png"
+theme.widget_netup  = theme.confdir .. "/icons/up.png"
+theme.widget_mail   = theme.confdir .. "/icons/mail.png"
+theme.widget_vol    = theme.confdir .. "/icons/vol.png"
+theme.widget_org    = theme.confdir .. "/icons/cal.png"
+theme.widget_date   = theme.confdir .. "/icons/time.png"
+theme.widget_crypto = theme.confdir .. "/icons/crypto.png"
 -- }}}
 
 -- {{{ Titlebar icons
-theme.titlebar_close_button_focus  = confdir .. "/icons/titlebar/close_focus.png"
-theme.titlebar_close_button_normal = confdir .. "/icons/titlebar/close_normal.png"
+theme.titlebar_close_button_focus  = theme.confdir .. "/icons/titlebar/close_focus.png"
+theme.titlebar_close_button_normal = theme.confdir .. "/icons/titlebar/close_normal.png"
 
-theme.titlebar_ontop_button_focus_active    = confdir .. "/icons/titlebar/ontop_focus_active.png"
-theme.titlebar_ontop_button_normal_active   = confdir .. "/icons/titlebar/ontop_normal_active.png"
-theme.titlebar_ontop_button_focus_inactive  = confdir .. "/icons/titlebar/ontop_focus_inactive.png"
-theme.titlebar_ontop_button_normal_inactive = confdir .. "/icons/titlebar/ontop_normal_inactive.png"
+theme.titlebar_ontop_button_focus_active    = theme.confdir .. "/icons/titlebar/ontop_focus_active.png"
+theme.titlebar_ontop_button_normal_active   = theme.confdir .. "/icons/titlebar/ontop_normal_active.png"
+theme.titlebar_ontop_button_focus_inactive  = theme.confdir .. "/icons/titlebar/ontop_focus_inactive.png"
+theme.titlebar_ontop_button_normal_inactive = theme.confdir .. "/icons/titlebar/ontop_normal_inactive.png"
 
-theme.titlebar_sticky_button_focus_active    = confdir .. "/icons/titlebar/sticky_focus_active.png"
-theme.titlebar_sticky_button_normal_active   = confdir .. "/icons/titlebar/sticky_normal_active.png"
-theme.titlebar_sticky_button_focus_inactive  = confdir .. "/icons/titlebar/sticky_focus_inactive.png"
-theme.titlebar_sticky_button_normal_inactive = confdir .. "/icons/titlebar/sticky_normal_inactive.png"
+theme.titlebar_sticky_button_focus_active    = theme.confdir .. "/icons/titlebar/sticky_focus_active.png"
+theme.titlebar_sticky_button_normal_active   = theme.confdir .. "/icons/titlebar/sticky_normal_active.png"
+theme.titlebar_sticky_button_focus_inactive  = theme.confdir .. "/icons/titlebar/sticky_focus_inactive.png"
+theme.titlebar_sticky_button_normal_inactive = theme.confdir .. "/icons/titlebar/sticky_normal_inactive.png"
 
-theme.titlebar_floating_button_focus_active    = confdir .. "/icons/titlebar/floating_focus_active.png"
-theme.titlebar_floating_button_normal_active   = confdir .. "/icons/titlebar/floating_normal_active.png"
-theme.titlebar_floating_button_focus_inactive  = confdir .. "/icons/titlebar/floating_focus_inactive.png"
-theme.titlebar_floating_button_normal_inactive = confdir .. "/icons/titlebar/floating_normal_inactive.png"
+theme.titlebar_floating_button_focus_active    = theme.confdir .. "/icons/titlebar/floating_focus_active.png"
+theme.titlebar_floating_button_normal_active   = theme.confdir .. "/icons/titlebar/floating_normal_active.png"
+theme.titlebar_floating_button_focus_inactive  = theme.confdir .. "/icons/titlebar/floating_focus_inactive.png"
+theme.titlebar_floating_button_normal_inactive = theme.confdir .. "/icons/titlebar/floating_normal_inactive.png"
 
-theme.titlebar_maximized_button_focus_active    = confdir .. "/icons/titlebar/maximized_focus_active.png"
-theme.titlebar_maximized_button_normal_active   = confdir .. "/icons/titlebar/maximized_normal_active.png"
-theme.titlebar_maximized_button_focus_inactive  = confdir .. "/icons/titlebar/maximized_focus_inactive.png"
-theme.titlebar_maximized_button_normal_inactive = confdir .. "/icons/titlebar/maximized_normal_inactive.png"
+theme.titlebar_maximized_button_focus_active    = theme.confdir .. "/icons/titlebar/maximized_focus_active.png"
+theme.titlebar_maximized_button_normal_active   = theme.confdir .. "/icons/titlebar/maximized_normal_active.png"
+theme.titlebar_maximized_button_focus_inactive  = theme.confdir .. "/icons/titlebar/maximized_focus_inactive.png"
+theme.titlebar_maximized_button_normal_inactive = theme.confdir .. "/icons/titlebar/maximized_normal_inactive.png"
 -- }}}
 -- }}}
 
