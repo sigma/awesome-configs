@@ -94,9 +94,11 @@ function set(c, width, height, sticky, screen)
         if oc == c then
             -- If it matches then unscratch and clear the table
             awful.client.floating.toggle(oc); oc.sticky = false
+            oc.ontop = false; oc.above = false
             scratch["pad"][screen] = nil
         else -- If they don't match, unscratch and replace it
             oc.hidden = false; oc.sticky = false
+            oc.ontop = false; oc.above = false
             awful.client.floating.toggle(oc)
             scratch["pad"][screen] = c
             setscratch(c)
