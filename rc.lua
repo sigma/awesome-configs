@@ -245,7 +245,7 @@ orgmode = {
       future = '<span color="'..beautiful.fg_netup_widget..'">'
 }}
 -- Register widget
-vicious.register(orgwidget, vicious.widgets.org, 
+vicious.register(orgwidget, vicious.widgets.org,
      orgmode.colors.past .. '$1</span>|' .. orgmode.colors.today  .. '$2</span>|' ..
      orgmode.colors.soon .. '$3</span>|' .. orgmode.colors.future .. '$4</span>',
      601, orgmode.files)

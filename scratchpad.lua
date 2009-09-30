@@ -53,7 +53,7 @@ function set(c, width, height, sticky, screen)
 
         if width  < 1 then width  = screengeom.width  * width  end
         if height < 1 then height = screengeom.height * height end
-        
+
         c:geometry({ -- Client is always centered on screen
             x = screengeom.x + (screengeom.width  - width)  / 2,
             y = screengeom.y + (screengeom.height - height) / 2,
