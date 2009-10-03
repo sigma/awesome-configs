@@ -299,7 +299,7 @@ dateicon.image = image(beautiful.widget_date)
 -- Initialize widget
 datewidget     = widget({ type = "textbox", name = "datewidget" })
 -- Register widget
-vicious.register(datewidget, vicious.widgets.date, "%b %e, %R", 61)
+vicious.register(datewidget, vicious.widgets.date, "%b %d, %R", 61)
 -- Register buttons
 datewidget:buttons(awful.util.table.join(
     awful.button({ }, 1, function () awful.util.spawn("pylendar.py", false) end)))
