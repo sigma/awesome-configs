@@ -47,7 +47,7 @@ layouts = {
 -- {{{ Tags
 tags = {}
 tags.settings = {
-    { name = "term",  layout = layouts[2]  },
+    { name = "term",  layout = layouts[3]  },
     { name = "emacs", layout = layouts[1]  },
     { name = "web",   layout = layouts[1]  },
     { name = "mail",  layout = layouts[5]  },
@@ -92,10 +92,9 @@ thermalwidget  = widget({ type = "textbox", name = "thermalwidget" })
 cpuwidget      = awful.widget.graph({ layout = awful.widget.layout.horizontal.rightleft })
 -- Graph properties
 cpuwidget:set_width(50)
-cpuwidget:set_scale(false)
+cpuwidget:set_height(14)
 cpuwidget:set_max_value(100)
 cpuwidget:set_background_color(beautiful.fg_off_widget)
-cpuwidget:set_border_color(beautiful.border_widget)
 cpuwidget:set_color(beautiful.fg_end_widget)
 cpuwidget:set_gradient_colors({
     beautiful.fg_end_widget,
