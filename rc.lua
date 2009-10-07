@@ -96,6 +96,7 @@ cpuwidget:set_height(14)
 cpuwidget:set_max_value(100)
 cpuwidget:set_background_color(beautiful.fg_off_widget)
 cpuwidget:set_color(beautiful.fg_end_widget)
+cpuwidget:set_gradient_angle(50)
 cpuwidget:set_gradient_colors({
     beautiful.fg_end_widget,
     beautiful.fg_center_widget,
