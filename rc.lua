@@ -143,11 +143,11 @@ vicious.register(memwidget, vicious.widgets.mem, "$1", 13)
 fsicon       = widget({ type = "imagebox", name = "fsicon" })
 fsicon.image = image(beautiful.widget_fs)
 -- Initialize widgets
-fswidget = {
-    ["root"]    = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    ["home"]    = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    ["storage"] = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    ["backup"]  = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
+fs = {
+    root    = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
+    home    = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
+    storage = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
+    backup  = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
     -- Configure widgets
     margins = {
         top = 1, bottom = 1
@@ -163,20 +163,20 @@ fswidget = {
         fg_end    = beautiful.fg_end_widget
 }}
 -- Progressbar properties
-for _, w in pairs(fswidget) do
+for _, w in pairs(fs) do
     if w.widget ~= nil then
-        w:set_width(fswidget.settings.width)
-        w:set_height(fswidget.settings.height)
-        w:set_vertical(fswidget.settings.vertical)
-        w:set_background_color(fswidget.colors.bg)
-        w:set_border_color(fswidget.colors.border)
-        w:set_color(fswidget.colors.fg)
+        w:set_width(fs.settings.width)
+        w:set_height(fs.settings.height)
+        w:set_vertical(fs.settings.vertical)
+        w:set_background_color(fs.colors.bg)
+        w:set_border_color(fs.colors.border)
+        w:set_color(fs.colors.fg)
         w:set_gradient_colors({
-            fswidget.colors.fg,
-            fswidget.colors.fg_center,
-            fswidget.colors.fg_end
+            fs.colors.fg,
+            fs.colors.fg_center,
+            fs.colors.fg_end
         })
-        awful.widget.layout.margins[w.widget] = fswidget.margins
+        awful.widget.layout.margins[w.widget] = fs.margins
         -- Register buttons
         w.widget:buttons(awful.util.table.join(
             awful.button({ }, 1, function () awful.util.spawn("rox", false) end)
@@ -186,10 +186,10 @@ end
 -- Enable caching
 vicious.enable_caching(vicious.widgets.fs)
 -- Register widgets
-vicious.register(fswidget["root"],    vicious.widgets.fs, "${/ usep}",            599)
-vicious.register(fswidget["home"],    vicious.widgets.fs, "${/home usep}",        599)
-vicious.register(fswidget["storage"], vicious.widgets.fs, "${/mnt/storage usep}", 599)
-vicious.register(fswidget["backup"],  vicious.widgets.fs, "${/mnt/backup usep}",  599)
+vicious.register(fs.root,    vicious.widgets.fs, "${/ usep}",            599)
+vicious.register(fs.home,    vicious.widgets.fs, "${/home usep}",        599)
+vicious.register(fs.storage, vicious.widgets.fs, "${/mnt/storage usep}", 599)
+vicious.register(fs.backup,  vicious.widgets.fs, "${/mnt/backup usep}",  599)
 -- }}}
 
 -- {{{ Network usage
@@ -362,8 +362,8 @@ for s = 1, screen.count() do
         separator,
         neticonup, netwidget, neticon,
         separator,
-        fswidget["backup"].widget, fswidget["storage"].widget,
-        fswidget["home"].widget, fswidget["root"].widget, fsicon,
+        fs.backup.widget, fs.storage.widget,
+        fs.home.widget, fs.root.widget, fsicon,
         separator,
         spacer, memwidget.widget, spacer, memicon,
         separator,
