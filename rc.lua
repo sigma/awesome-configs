@@ -1,6 +1,6 @@
 -- {{{ Header
 --
--- Awesome configuration, using awesome 3.4-rc2 on Arch GNU/Linux
+-- Awesome configuration, using awesome 3.4-rc3 on Arch GNU/Linux
 --   * Adrian C. <anrxc.sysphere.org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
@@ -546,7 +546,10 @@ clientkeys = awful.util.table.join(
         else wibox[mouse.screen].screen = nil end
     end),
     awful.key({ modkey }, "c", function (c) c:kill() end),
-    awful.key({ modkey }, "f", function (c) c.fullscreen = not c.fullscreen end),
+    awful.key({ modkey }, "f", function (c)
+        c.fullscreen = not c.fullscreen
+        c.above      = not c.fullscreen
+    end),
     awful.key({ modkey }, "m", function (c)
         c.maximized_horizontal = not c.maximized_horizontal
         c.maximized_vertical   = not c.maximized_vertical
@@ -562,14 +565,14 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
     awful.key({ modkey, "Shift" }, "o", function (c) c.ontop = not c.ontop end),
     awful.key({ modkey, "Shift" }, "t", function (c)
-        if c.titlebar then awful.titlebar.remove(c)
+        if   c.titlebar then awful.titlebar.remove(c)
         else awful.titlebar.add(c, { modkey = modkey }) end
     end),
     awful.key({ modkey, "Control" }, "r",     function (c) c:redraw() end),
     awful.key({ modkey, "Control" }, "space", function (c)
         awful.client.floating.toggle(c)
         if awful.client.floating.get(c) then
-             c.above = true;  awful.titlebar.add(c)
+             c.above = true; awful.titlebar.add(c); awful.placement.no_offscreen(c)
         else c.above = false; awful.titlebar.remove(c) end
     end),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
