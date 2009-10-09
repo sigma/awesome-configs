@@ -28,11 +28,11 @@ require("scratchpad")
 beautiful.init(awful.util.getdir("config") .. "/zenburn.lua")
 
 -- Modifier keys
-altkey = "Mod1" -- Alt_L
-modkey = "Mod4" -- Super_L
+local altkey = "Mod1" -- Alt_L
+local modkey = "Mod4" -- Super_L
 
 -- Window management layouts
-layouts = {
+local layouts = {
     awful.layout.suit.tile,        -- 1
     awful.layout.suit.tile.left,   -- 2
     awful.layout.suit.tile.bottom, -- 3
@@ -45,8 +45,8 @@ layouts = {
 
 
 -- {{{ Tags
-tags = {}
-tags.default = {
+local tags = {}
+tags.setup = {
     { name = "term",  layout = layouts[3]  },
     { name = "emacs", layout = layouts[1]  },
     { name = "web",   layout = layouts[1]  },
@@ -60,7 +60,7 @@ tags.default = {
 
 for s = 1, screen.count() do
     tags[s] = {}
-    for i, t in ipairs(tags.default) do
+    for i, t in ipairs(tags.setup) do
         tags[s][i] = tag({ name = t.name })
         tags[s][i].screen = s
         awful.tag.setproperty(tags[s][i], "layout", t.layout)
@@ -77,19 +77,19 @@ end
 -- {{{ Widgets configuration
 --
 -- {{{ Reusable separators
-spacer         = widget({ type = "textbox", name = "spacer" })
-separator      = widget({ type = "textbox", name = "separator" })
-spacer.text    = " "
-separator.text = "|"
+local spacer    = widget({ type = "textbox", name = "spacer" })
+local separator = widget({ type = "textbox", name = "separator" })
+spacer.text     = " "
+separator.text  = "|"
 -- }}}
 
 -- {{{ CPU usage and temperature
 -- Widget icon
-cpuicon        = widget({ type = "imagebox", name = "cpuicon" })
-cpuicon.image  = image(beautiful.widget_cpu)
+local cpuicon = widget({ type = "imagebox", name = "cpuicon" })
+cpuicon.image = image(beautiful.widget_cpu)
 -- Initialize widgets
-thermalwidget  = widget({ type = "textbox", name = "thermalwidget" })
-cpuwidget      = awful.widget.graph({ layout = awful.widget.layout.horizontal.rightleft })
+local tempwidget = widget({ type = "textbox", name = "tempwidget" })
+local cpuwidget  = awful.widget.graph()
 -- Graph properties
 cpuwidget:set_width(50)
 cpuwidget:set_height(14)
@@ -103,25 +103,25 @@ cpuwidget:set_gradient_colors({
     beautiful.fg_widget })
 -- Register widgets
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
-vicious.register(thermalwidget, vicious.widgets.thermal, "$1°C", 19, "TZS0")
+vicious.register(tempwidget, vicious.widgets.thermal, "$1°C", 19, "TZS0")
 -- }}}
 
 -- {{{ Battery state
 -- Widget icon
-baticon       = widget({ type = "imagebox", name = "baticon" })
+local baticon = widget({ type = "imagebox", name = "baticon" })
 baticon.image = image(beautiful.widget_bat)
 -- Initialize widget
-batwidget     = widget({ type = "textbox", name = "batwidget" })
+local batwidget = widget({ type = "textbox", name = "batwidget" })
 -- Register widget
 vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT0")
 -- }}}
 
 -- {{{ Memory usage
 -- Widget icon
-memicon       = widget({ type = "imagebox", name = "memicon" })
+local memicon = widget({ type = "imagebox", name = "memicon" })
 memicon.image = image(beautiful.widget_mem)
 -- Initialize widget
-memwidget     = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft })
+local memwidget = awful.widget.progressbar()
 -- Pogressbar properties
 memwidget:set_width(8)
 memwidget:set_height(10)
@@ -140,14 +140,14 @@ vicious.register(memwidget, vicious.widgets.mem, "$1", 13)
 
 -- {{{ File system usage
 -- Widget icon
-fsicon       = widget({ type = "imagebox", name = "fsicon" })
+local fsicon = widget({ type = "imagebox", name = "fsicon" })
 fsicon.image = image(beautiful.widget_fs)
 -- Initialize widgets
-fs = {
-    root    = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    home    = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    storage = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    backup  = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
+local fs = {
+    root    = awful.widget.progressbar(),
+    home    = awful.widget.progressbar(),
+    storage = awful.widget.progressbar(),
+    backup  = awful.widget.progressbar(),
     -- Configure widgets
     margins = {
         top = 1, bottom = 1
@@ -194,13 +194,13 @@ vicious.register(fs.backup,  vicious.widgets.fs, "${/mnt/backup usep}",  599)
 
 -- {{{ Network usage
 -- Widget icons
-neticon         = widget({ type = "imagebox", name = "neticon" })
-neticonup       = widget({ type = "imagebox", name = "neticonup" })
+local neticon   = widget({ type = "imagebox", name = "neticon" })
+local neticonup = widget({ type = "imagebox", name = "neticonup" })
 neticon.image   = image(beautiful.widget_net)
 neticonup.image = image(beautiful.widget_netup)
 -- Initialize widgets
-netwidget       = widget({ type = "textbox", name = "netwidget" })
-netfiwidget     = widget({ type = "textbox", name = "netfiwidget" })
+local netwidget   = widget({ type = "textbox", name = "netwidget" })
+local netfiwidget = widget({ type = "textbox", name = "netfiwidget" })
 -- Enable caching
 vicious.enable_caching(vicious.widgets.net)
 -- Register ethernet widget
@@ -215,10 +215,10 @@ vicious.register(netfiwidget, vicious.widgets.net, '<span color="'
 
 -- {{{ Mail subject
 -- Widget icon
-mailicon       = widget({ type = "imagebox", name = "mailicon" })
+local mailicon = widget({ type = "imagebox", name = "mailicon" })
 mailicon.image = image(beautiful.widget_mail)
 -- Initialize widget
-mboxwidget     = widget({ type = "textbox", name = "mboxwidget" })
+local mboxwidget = widget({ type = "textbox", name = "mboxwidget" })
 -- Register widget
 vicious.register(mboxwidget, vicious.widgets.mbox, "$1", 181, "/home/anrxc/mail/Inbox")
 -- Register buttons
@@ -228,12 +228,12 @@ mboxwidget:buttons(awful.util.table.join(
 
 -- {{{ Org-mode agenda
 -- Widget icon
-orgicon       = widget({ type = "imagebox", name = "orgicon" })
+local orgicon = widget({ type = "imagebox", name = "orgicon" })
 orgicon.image = image(beautiful.widget_org)
 -- Initialize widget
-orgwidget     = widget({ type = "textbox", name = "orgwidget" })
+local orgwidget = widget({ type = "textbox", name = "orgwidget" })
 -- Configure widget
-orgmode = {
+local orgmode = {
     files  = {
       os.getenv("HOME") .. "/.org/work.org",     os.getenv("HOME") .. "/.org/index.org",
       os.getenv("HOME") .. "/.org/personal.org", os.getenv("HOME") .. "/.org/computers.org"
@@ -261,11 +261,11 @@ orgwidget:buttons(awful.util.table.join(
 
 -- {{{ Volume level
 -- Widget icon
-volicon       = widget({ type = "imagebox", name = "volicon" })
+local volicon = widget({ type = "imagebox", name = "volicon" })
 volicon.image = image(beautiful.widget_vol)
 -- Initialize widgets
-volwidget     = widget({ type = "textbox", name = "volwidget" })
-volbarwidget  = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft })
+local volwidget    = widget({ type = "textbox", name = "volwidget" })
+local volbarwidget = awful.widget.progressbar()
 -- Progressbar properties
 volbarwidget:set_width(8)
 volbarwidget:set_height(10)
@@ -294,10 +294,10 @@ volbarwidget.widget:buttons(awful.util.table.join(
 
 -- {{{ Date and time
 -- Widget icon
-dateicon       = widget({ type = "imagebox", name = "dateicon" })
+local dateicon = widget({ type = "imagebox", name = "dateicon" })
 dateicon.image = image(beautiful.widget_date)
 -- Initialize widget
-datewidget     = widget({ type = "textbox", name = "datewidget" })
+local datewidget = widget({ type = "textbox", name = "datewidget" })
 -- Register widget
 vicious.register(datewidget, vicious.widgets.date, "%b %d, %R", 61)
 -- Register buttons
@@ -306,15 +306,15 @@ datewidget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ System tray
-systray = widget({ type = "systray" })
+local systray = widget({ type = "systray" })
 -- }}}
 -- }}}
 
 -- {{{ Wibox initialisation
-wibox     = {}
-promptbox = {}
-layoutbox = {}
-taglist   = {}
+local wibox     = {}
+local promptbox = {}
+local layoutbox = {}
+local taglist   = {}
 taglist.buttons = awful.util.table.join(
                     awful.button({ }, 1, awful.tag.viewonly),
                     awful.button({ modkey }, 1, awful.client.movetotag),
@@ -369,7 +369,7 @@ for s = 1, screen.count() do
         separator,
         spacer, batwidget, baticon,
         separator,
-        cpuwidget.widget, spacer, thermalwidget, cpuicon,
+        cpuwidget.widget, spacer, tempwidget, cpuicon,
         layout = awful.widget.layout.horizontal.rightleft
     }
 end
@@ -384,7 +384,7 @@ root.buttons(awful.util.table.join(
 ))
 
 -- Client mouse bindings
-clientbuttons = awful.util.table.join(
+local clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize)
@@ -395,7 +395,7 @@ clientbuttons = awful.util.table.join(
 -- {{{ Key bindings
 --
 -- {{{ Global keys
-globalkeys = awful.util.table.join(
+local globalkeys = awful.util.table.join(
     -- {{{ Applications
     awful.key({ modkey }, "e", function () awful.util.spawn("emacsclient -n -c", false) end),
     awful.key({ modkey }, "r", function () awful.util.spawn("rox", false) end),
@@ -539,7 +539,7 @@ globalkeys = awful.util.table.join(
 -- }}}
 
 -- {{{ Client manipulation
-clientkeys = awful.util.table.join(
+local clientkeys = awful.util.table.join(
     awful.key({ modkey }, "b", function ()
         if wibox[mouse.screen].screen == nil then
              wibox[mouse.screen].screen = mouse.screen
@@ -582,7 +582,7 @@ clientkeys = awful.util.table.join(
 -- }}}
 
 -- {{{ Keyboard digits
-keynumber = 0
+local keynumber = 0
 for s = 1, screen.count() do
    keynumber = math.min(9, math.max(#tags[s], keynumber));
 end
