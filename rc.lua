@@ -46,7 +46,7 @@ layouts = {
 
 -- {{{ Tags
 tags = {}
-tags.settings = {
+tags.default = {
     { name = "term",  layout = layouts[3]  },
     { name = "emacs", layout = layouts[1]  },
     { name = "web",   layout = layouts[1]  },
@@ -60,12 +60,12 @@ tags.settings = {
 
 for s = 1, screen.count() do
     tags[s] = {}
-    for i, v in ipairs(tags.settings) do
-        tags[s][i] = tag({ name = v.name })
+    for i, t in ipairs(tags.default) do
+        tags[s][i] = tag({ name = t.name })
         tags[s][i].screen = s
-        awful.tag.setproperty(tags[s][i], "layout", v.layout)
-        awful.tag.setproperty(tags[s][i], "mwfact", v.mwfact)
-        awful.tag.setproperty(tags[s][i], "hide",   v.hide)
+        awful.tag.setproperty(tags[s][i], "layout", t.layout)
+        awful.tag.setproperty(tags[s][i], "mwfact", t.mwfact)
+        awful.tag.setproperty(tags[s][i], "hide",   t.hide)
     end
     tags[s][1].selected = true
 end
