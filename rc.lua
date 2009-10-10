@@ -543,14 +543,13 @@ local globalkeys = awful.util.table.join(
 -- {{{ Client manipulation
 local clientkeys = awful.util.table.join(
     awful.key({ modkey }, "b", function ()
-        if wibox[mouse.screen].screen == nil then
-             wibox[mouse.screen].screen = mouse.screen
-        else wibox[mouse.screen].screen = nil end
+        if   wibox[mouse.screen].screen == nil
+        then wibox[mouse.screen].screen =  mouse.screen
+        else wibox[mouse.screen].screen =  nil end
     end),
     awful.key({ modkey }, "c", function (c) c:kill() end),
-    awful.key({ modkey }, "f", function (c)
-        c.fullscreen = not c.fullscreen
-        c.above      = not c.fullscreen
+    awful.key({ modkey }, "f", function (c) awful.titlebar.remove(c)
+        c.fullscreen = not c.fullscreen; c.above = not c.fullscreen
     end),
     awful.key({ modkey }, "m", function (c)
         c.maximized_horizontal = not c.maximized_horizontal
@@ -571,10 +570,9 @@ local clientkeys = awful.util.table.join(
         else awful.titlebar.add(c, { modkey = modkey }) end
     end),
     awful.key({ modkey, "Control" }, "r",     function (c) c:redraw() end),
-    awful.key({ modkey, "Control" }, "space", function (c)
-        awful.client.floating.toggle(c)
-        if awful.client.floating.get(c) then
-             c.above = true; awful.titlebar.add(c); awful.placement.no_offscreen(c)
+    awful.key({ modkey, "Control" }, "space", function (c) awful.client.floating.toggle(c)
+        if   awful.client.floating.get(c)
+        then c.above = true; awful.titlebar.add(c); awful.placement.no_offscreen(c)
         else c.above = false; awful.titlebar.remove(c) end
     end),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
