@@ -31,6 +31,10 @@ beautiful.init(awful.util.getdir("config") .. "/zenburn.lua")
 local altkey = "Mod1" -- Alt_L
 local modkey = "Mod4" -- Super_L
 
+-- Function aliases
+local exec  = awful.util.spawn
+local sexec = awful.util.spawn_with_shell
+
 -- Window management layouts
 local layouts = {
     awful.layout.suit.tile,        -- 1
@@ -179,7 +183,7 @@ for _, w in pairs(fs) do
         awful.widget.layout.margins[w.widget] = fs.margins
         -- Register buttons
         w.widget:buttons(awful.util.table.join(
-            awful.button({ }, 1, function () awful.util.spawn("rox", false) end)
+          awful.button({ }, 1, function () exec("rox", false) end)
         ))
     end
 end
@@ -223,7 +227,8 @@ local mboxwidget = widget({ type = "textbox", name = "mboxwidget" })
 vicious.register(mboxwidget, vicious.widgets.mbox, "$1", 181, "/home/anrxc/mail/Inbox")
 -- Register buttons
 mboxwidget:buttons(awful.util.table.join(
-  awful.button({ }, 1, function () awful.util.spawn("urxvt -title Alpine -e alpine_exp", false) end)))
+  awful.button({ }, 1, function () exec("urxvt -title Alpine -e alpine_exp", false) end)
+))
 -- }}}
 
 -- {{{ Org-mode agenda
@@ -251,12 +256,9 @@ vicious.register(orgwidget, vicious.widgets.org,
      601, orgmode.files)
 -- Register buttons
 orgwidget:buttons(awful.util.table.join(
-  awful.button({ }, 1, function ()
-      awful.util.spawn("emacsclient --eval '(org-agenda-list)'", false)
-  end),
-  awful.button({ }, 3, function ()
-      awful.util.spawn("emacsclient --eval '(make-remember-frame)'", false)
-  end)))
+  awful.button({ }, 1, function () exec("emacsclient --eval '(org-agenda-list)'", false) end),
+  awful.button({ }, 3, function () exec("emacsclient --eval '(make-remember-frame)'", false) end)
+))
 -- }}}
 
 -- {{{ Volume level
@@ -285,11 +287,11 @@ vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
 vicious.register(volbarwidget, vicious.widgets.volume, "$1", 2, "PCM")
 -- Register buttons
 volbarwidget.widget:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () awful.util.spawn("kmix", false) end),
-    awful.button({ }, 2, function () awful.util.spawn("amixer -q sset Master toggle", false) end),
-    awful.button({ }, 4, function () awful.util.spawn("amixer -q sset PCM 2dB+", false) end),
-    awful.button({ }, 5, function () awful.util.spawn("amixer -q sset PCM 2dB-", false) end)
-))  volwidget:buttons( volbarwidget.widget:buttons() )
+   awful.button({ }, 1, function () exec("kmix", false) end),
+   awful.button({ }, 2, function () exec("amixer -q sset Master toggle", false) end),
+   awful.button({ }, 4, function () exec("amixer -q sset PCM 2dB+", false) end),
+   awful.button({ }, 5, function () exec("amixer -q sset PCM 2dB-", false) end)
+)) volwidget:buttons( volbarwidget.widget:buttons() )
 -- }}}
 
 -- {{{ Date and time
@@ -302,7 +304,8 @@ datewidget = widget({ type = "textbox", name = "datewidget" })
 vicious.register(datewidget, vicious.widgets.date, "%b %d, %R", 61)
 -- Register buttons
 datewidget:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () awful.util.spawn("pylendar.py", false) end)))
+  awful.button({ }, 1, function () exec("pylendar.py", false) end)
+))
 -- }}}
 
 -- {{{ System tray
@@ -399,59 +402,53 @@ local clientbuttons = awful.util.table.join(
 -- {{{ Global keys
 local globalkeys = awful.util.table.join(
     -- {{{ Applications
-    awful.key({ modkey }, "e", function () awful.util.spawn("emacsclient -n -c", false) end),
-    awful.key({ modkey }, "r", function () awful.util.spawn("rox", false) end),
-    awful.key({ modkey }, "u", function () awful.util.spawn("utorrent", false) end),
-    awful.key({ modkey }, "w", function () awful.util.spawn("firefox", false) end),
-    awful.key({ altkey }, "F1",  function () awful.util.spawn("urxvt", false) end),
+    awful.key({ modkey }, "e", function () exec("emacsclient -n -c", false) end),
+    awful.key({ modkey }, "r", function () exec("rox", false) end),
+    awful.key({ modkey }, "u", function () exec("utorrent", false) end),
+    awful.key({ modkey }, "w", function () exec("firefox", false) end),
+    awful.key({ altkey }, "F1",  function () exec("urxvt", false) end),
     awful.key({ altkey }, "#49", function () teardrop("urxvt", "bottom") end),
     awful.key({ modkey }, "F2",  function () teardrop("gmrun", nil, nil, nil, 0.08) end),
-    awful.key({ modkey }, "a", function ()
-        awful.util.spawn("urxvt -title Alpine -e alpine_exp", false)
-    end),
-    awful.key({ modkey }, "g", function ()
-        awful.util.spawn_with_shell("GTK2_RC_FILES=~/.gtkrc-gajim gajim", false)
-    end),
-    awful.key({ modkey }, "q", function ()
-        awful.util.spawn("emacsclient --eval '(make-remember-frame)'", false)
-    end),
+    awful.key({ modkey }, "a", function () exec("urxvt -title Alpine -e alpine_exp", false) end),
+    awful.key({ modkey }, "g", function () sexec("GTK2_RC_FILES=~/.gtkrc-gajim gajim", false) end),
+    awful.key({ modkey }, "q", function () exec("emacsclient --eval '(make-remember-frame)'", false) end),
     -- }}}
 
     -- {{{ Multimedia keys
-    awful.key({}, "#160", function () awful.util.spawn("kscreenlocker --forcelock", false) end),
-    awful.key({}, "#146", function () awful.util.spawn("khelpcenter", false) end),
-    awful.key({}, "#121", function () awful.util.spawn("pvol.py -m", false) end),
-    awful.key({}, "#122", function () awful.util.spawn("pvol.py -p -c -2", false) end),
-    awful.key({}, "#123", function () awful.util.spawn("pvol.py -p -c 2", false) end),
-    awful.key({}, "#232", function () awful.util.spawn("plight.py -s -a", false) end),
-    awful.key({}, "#233", function () awful.util.spawn("plight.py -s -a", false) end),
-    awful.key({}, "#244", function () awful.util.spawn("sudo /usr/sbin/pm-hibernate", false) end),
-    awful.key({}, "#150", function () awful.util.spawn("sudo /usr/sbin/pm-suspend", false) end),
-    awful.key({}, "#156", function () awful.util.spawn("emacsclient -n -c", false) end),
-    awful.key({}, "#225", function () awful.util.spawn("pypres.py", false) end),
-    awful.key({}, "#181", function () awful.util.spawn("xrefresh", false) end),
-    awful.key({}, "#180", function () awful.util.spawn("firefox -browser", false) end),
-    awful.key({}, "#163", function () awful.util.spawn("urxvt -title Alpine -e alpine", false) end),
-    awful.key({}, "#157", function () awful.util.spawn("geeqie", false) end),
-    awful.key({}, "Print",function () awful.util.spawn("ksnapshot", false) end),
+    awful.key({}, "#160", function () exec("kscreenlocker --forcelock", false) end),
+    awful.key({}, "#146", function () exec("khelpcenter", false) end),
+    awful.key({}, "#121", function () exec("pvol.py -m", false) end),
+    awful.key({}, "#122", function () exec("pvol.py -p -c -2", false) end),
+    awful.key({}, "#123", function () exec("pvol.py -p -c 2", false) end),
+    awful.key({}, "#232", function () exec("plight.py -s -a", false) end),
+    awful.key({}, "#233", function () exec("plight.py -s -a", false) end),
+    awful.key({}, "#244", function () exec("sudo /usr/sbin/pm-hibernate", false) end),
+    awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend", false) end),
+    awful.key({}, "#156", function () exec("emacsclient -n -c", false) end),
+    awful.key({}, "#225", function () exec("pypres.py", false) end),
+    awful.key({}, "#181", function () exec("xrefresh", false) end),
+    awful.key({}, "#180", function () exec("firefox -browser", false) end),
+    awful.key({}, "#163", function () exec("urxvt -title Alpine -e alpine", false) end),
+    awful.key({}, "#157", function () exec("geeqie", false) end),
+    awful.key({}, "Print",function () exec("ksnapshot", false) end),
     -- }}}
 
     -- {{{ Prompt menus
     awful.key({ altkey }, "F2", function ()
         awful.prompt.run({ prompt = "Run: " }, promptbox[mouse.screen].widget,
-            function (...) promptbox[mouse.screen].text = awful.util.spawn(unpack(arg), false) end,
+            function (...) promptbox[mouse.screen].text = exec(unpack(arg), false) end,
             awful.completion.shell, awful.util.getdir("cache") .. "/history")
     end),
     awful.key({ altkey }, "F3", function ()
         awful.prompt.run({ prompt = "Dictionary: " }, promptbox[mouse.screen].widget,
             function (words)
                 local xmessage = "xmessage -timeout 10 -file -"
-                awful.util.spawn_with_shell("crodict " .. words .. " | " .. xmessage, false)
+                sexec("crodict " .. words .. " | " .. xmessage, false)
             end)
     end),
     awful.key({ altkey }, "F4", function ()
         awful.prompt.run({ prompt = "Manual: " }, promptbox[mouse.screen].widget,
-            function (page) awful.util.spawn("urxvt -e man " .. page, false) end)
+            function (page) exec("urxvt -e man " .. page, false) end)
     end),
     awful.key({ altkey }, "F5", function ()
         awful.prompt.run({ prompt = "Run Lua code: " }, promptbox[mouse.screen].widget,
@@ -459,20 +456,20 @@ local globalkeys = awful.util.table.join(
     end),
     awful.key({ altkey }, "F10", function ()
         awful.prompt.run({ prompt = "Connect: " }, promptbox[mouse.screen].widget,
-            function (host) awful.util.spawn("urxvt -e ssh " .. host, false) end)
+            function (host) exec("urxvt -e ssh " .. host, false) end)
     end),
     awful.key({ altkey }, "F11", function ()
         awful.prompt.run({ prompt = "Calculate: " }, promptbox[mouse.screen].widget,
             function (expr)
                 local xmessage = "xmessage -timeout 10 -file -"
-                awful.util.spawn_with_shell("echo '" .. expr .. ' = ' ..
+                sexec("echo '" .. expr .. ' = ' ..
                   awful.util.eval("return (" .. expr .. ")") .. "' | " .. xmessage, false)
             end)
     end),
     awful.key({ altkey }, "F12", function ()
         awful.prompt.run({ prompt = "Web search: " }, promptbox[mouse.screen].widget,
             function (command)
-                awful.util.spawn("firefox 'http://yubnub.org/parser/parse?command="..command.."'", false)
+                exec("firefox 'http://yubnub.org/parser/parse?command="..command.."'", false)
                 if tags[mouse.screen][3] then awful.tag.viewonly(tags[mouse.screen][3]) end
             end)
     end),
@@ -576,8 +573,8 @@ local clientkeys = awful.util.table.join(
         else c.above = false; awful.titlebar.remove(c) end
     end),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey, "Shift" }, "c", function (c) awful.util.spawn("kill -CONT "..c.pid, false) end),
-    awful.key({ modkey, "Shift" }, "s", function (c) awful.util.spawn("kill -STOP "..c.pid, false) end)
+    awful.key({ modkey, "Shift" }, "c", function (c) exec("kill -CONT "..c.pid, false) end),
+    awful.key({ modkey, "Shift" }, "s", function (c) exec("kill -STOP "..c.pid, false) end)
 )
 -- }}}
 
