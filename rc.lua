@@ -1,4 +1,4 @@
--- {{{ Header
+-- {{{ License
 --
 -- Awesome configuration, using awesome 3.4-rc3 on Arch GNU/Linux
 --   * Adrian C. <anrxc.sysphere.org>
@@ -7,9 +7,7 @@
 
 -- This work is licensed under the Creative Commons Attribution Share
 -- Alike License: http://creativecommons.org/licenses/by-sa/3.0/
---
 -- }}}
-
 
 -- {{{ Libraries
 require("awful")
@@ -24,7 +22,7 @@ require("scratchpad")
 
 -- {{{ Variable definitions
 --
--- Custom theme
+-- Beautiful theme
 beautiful.init(awful.util.getdir("config") .. "/zenburn.lua")
 
 -- Modifier keys
@@ -183,7 +181,7 @@ for _, w in pairs(fs) do
         awful.widget.layout.margins[w.widget] = fs.margins
         -- Register buttons
         w.widget:buttons(awful.util.table.join(
-          awful.button({ }, 1, function () exec("rox") end)
+          awful.button({ }, 1, function () exec("rox", false) end)
         ))
     end
 end
@@ -403,7 +401,7 @@ local clientbuttons = awful.util.table.join(
 local globalkeys = awful.util.table.join(
     -- {{{ Applications
     awful.key({ modkey }, "e", function () exec("emacsclient -n -c") end),
-    awful.key({ modkey }, "r", function () exec("rox") end),
+    awful.key({ modkey }, "r", function () exec("rox", false) end),
     awful.key({ modkey }, "u", function () exec("utorrent") end),
     awful.key({ modkey }, "w", function () exec("firefox") end),
     awful.key({ altkey }, "F1",  function () exec("urxvt") end),
@@ -663,9 +661,8 @@ awful.rules.rules = {
 -- {{{ Signal function to execute when a new client appears
 client.add_signal("manage", function (c, startup)
     -- Add a titlebar to each floating client
-    if awful.client.floating.get(c) or
-        awful.layout.get(c.screen) == awful.layout.suit.floating
-    then
+    if awful.client.floating.get(c)
+    or awful.layout.get(c.screen) == awful.layout.suit.floating then
         if not c.titlebar and c.class ~= "Xmessage" then
             awful.titlebar.add(c, { modkey = modkey })
         end
@@ -675,9 +672,9 @@ client.add_signal("manage", function (c, startup)
 
     -- Enable sloppy focus
     c:add_signal("mouse::enter", function (c)
-        if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-           and awful.client.focus.filter(c) then
-               client.focus = c
+        if  awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
+        and awful.client.focus.filter(c) then
+            client.focus = c
         end
     end)
 
@@ -687,6 +684,7 @@ client.add_signal("manage", function (c, startup)
 
         if  not c.size_hints.user_position
         and not c.size_hints.program_position then
+            awful.placement.no_overlap(c)
             awful.placement.no_offscreen(c)
         end
     end
