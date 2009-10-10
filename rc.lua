@@ -111,7 +111,7 @@ vicious.register(tempwidget, vicious.widgets.thermal, "$1°C", 19, "TZS0")
 local baticon = widget({ type = "imagebox", name = "baticon" })
 baticon.image = image(beautiful.widget_bat)
 -- Initialize widget
-local batwidget = widget({ type = "textbox", name = "batwidget" })
+batwidget = widget({ type = "textbox", name = "batwidget" })
 -- Register widget
 vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT0")
 -- }}}
@@ -297,7 +297,7 @@ volbarwidget.widget:buttons(awful.util.table.join(
 local dateicon = widget({ type = "imagebox", name = "dateicon" })
 dateicon.image = image(beautiful.widget_date)
 -- Initialize widget
-local datewidget = widget({ type = "textbox", name = "datewidget" })
+datewidget = widget({ type = "textbox", name = "datewidget" })
 -- Register widget
 vicious.register(datewidget, vicious.widgets.date, "%b %d, %R", 61)
 -- Register buttons
