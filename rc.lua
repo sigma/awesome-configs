@@ -538,9 +538,7 @@ local globalkeys = awful.util.table.join(
 -- {{{ Client manipulation
 local clientkeys = awful.util.table.join(
     awful.key({ modkey }, "b", function ()
-        if   wibox[mouse.screen].screen == nil
-        then wibox[mouse.screen].screen =  mouse.screen
-        else wibox[mouse.screen].screen =  nil end
+        wibox[mouse.screen].visible = not wibox[mouse.screen].visible
     end),
     awful.key({ modkey }, "c", function (c) c:kill() end),
     awful.key({ modkey }, "f", function (c) awful.titlebar.remove(c)
