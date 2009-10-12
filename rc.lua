@@ -1,6 +1,6 @@
 -- {{{ License
 --
--- Awesome configuration, using awesome 3.4-rc3 on Arch GNU/Linux
+-- Awesome configuration, using awesome 3.4 on Arch GNU/Linux
 --   * Adrian C. <anrxc.sysphere.org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
@@ -8,6 +8,7 @@
 -- This work is licensed under the Creative Commons Attribution Share
 -- Alike License: http://creativecommons.org/licenses/by-sa/3.0/
 -- }}}
+
 
 -- {{{ Libraries
 require("awful")
@@ -54,8 +55,8 @@ tags.setup = {
     { name = "web",   layout = layouts[1]  },
     { name = "mail",  layout = layouts[5]  },
     { name = "im",    layout = layouts[1], mwfact = 0.13 },
-    { name = "6",     layout = layouts[7], hide = true },
-    { name = "7",     layout = layouts[7], hide = true },
+    { name = "6",     layout = layouts[7], hide   = true },
+    { name = "7",     layout = layouts[7], hide   = true },
     { name = "rss",   layout = layouts[6]  },
     { name = "media", layout = layouts[7]  }
 }
@@ -86,7 +87,6 @@ separator.text  = "|"
 -- }}}
 
 -- {{{ CPU usage and temperature
--- Widget icon
 local cpuicon = widget({ type = "imagebox", name = "cpuicon" })
 cpuicon.image = image(beautiful.widget_cpu)
 -- Initialize widgets
@@ -99,17 +99,14 @@ cpuwidget:set_max_value(100)
 cpuwidget:set_background_color(beautiful.fg_off_widget)
 cpuwidget:set_color(beautiful.fg_end_widget)
 cpuwidget:set_gradient_angle(0)
-cpuwidget:set_gradient_colors({
-    beautiful.fg_end_widget,
-    beautiful.fg_center_widget,
-    beautiful.fg_widget })
+cpuwidget:set_gradient_colors({ beautiful.fg_end_widget,
+    beautiful.fg_center_widget, beautiful.fg_widget })
 -- Register widgets
-vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
+vicious.register(cpuwidget,  vicious.widgets.cpu,     "$1")
 vicious.register(tempwidget, vicious.widgets.thermal, "$1°C", 19, "TZS0")
 -- }}}
 
 -- {{{ Battery state
--- Widget icon
 local baticon = widget({ type = "imagebox", name = "baticon" })
 baticon.image = image(beautiful.widget_bat)
 -- Initialize widget
@@ -119,7 +116,6 @@ vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT0")
 -- }}}
 
 -- {{{ Memory usage
--- Widget icon
 local memicon = widget({ type = "imagebox", name = "memicon" })
 memicon.image = image(beautiful.widget_mem)
 -- Initialize widget
@@ -131,59 +127,41 @@ memwidget:set_vertical(true)
 memwidget:set_background_color(beautiful.fg_off_widget)
 memwidget:set_border_color(nil)
 memwidget:set_color(beautiful.fg_widget)
-memwidget:set_gradient_colors({
-    beautiful.fg_widget,
-    beautiful.fg_center_widget,
-    beautiful.fg_end_widget })
+memwidget:set_gradient_colors({ beautiful.fg_widget,
+    beautiful.fg_center_widget, beautiful.fg_end_widget })
 awful.widget.layout.margins[memwidget.widget] = { top = 2, bottom = 2 }
 -- Register widget
 vicious.register(memwidget, vicious.widgets.mem, "$1", 13)
 -- }}}
 
 -- {{{ File system usage
--- Widget icon
 local fsicon = widget({ type = "imagebox", name = "fsicon" })
 fsicon.image = image(beautiful.widget_fs)
 -- Initialize widgets
 local fs = {
-    root    = awful.widget.progressbar(),
-    home    = awful.widget.progressbar(),
-    storage = awful.widget.progressbar(),
-    backup  = awful.widget.progressbar(),
-    -- Configure widgets
-    margins = {
-        top = 1, bottom = 1
-    },
-    settings = {
-        width = 5, height = 12, vertical = true
-    },
-    colors = {
-        border    = beautiful.border_widget,
-        bg        = beautiful.fg_off_widget,
-        fg        = beautiful.fg_widget,
-        fg_center = beautiful.fg_center_widget,
-        fg_end    = beautiful.fg_end_widget
-}}
+  root    = awful.widget.progressbar(), home   = awful.widget.progressbar(),
+  storage = awful.widget.progressbar(), backup = awful.widget.progressbar()
+}
+-- Configure widgets
+fs.margins  = { top   = 1, bottom = 1 }
+fs.settings = { width = 5, height = 12, vertical = true }
 -- Progressbar properties
 for _, w in pairs(fs) do
-    if w.widget ~= nil then
-        w:set_width(fs.settings.width)
-        w:set_height(fs.settings.height)
-        w:set_vertical(fs.settings.vertical)
-        w:set_background_color(fs.colors.bg)
-        w:set_border_color(fs.colors.border)
-        w:set_color(fs.colors.fg)
-        w:set_gradient_colors({
-            fs.colors.fg,
-            fs.colors.fg_center,
-            fs.colors.fg_end
-        })
-        awful.widget.layout.margins[w.widget] = fs.margins
-        -- Register buttons
-        w.widget:buttons(awful.util.table.join(
-          awful.button({ }, 1, function () exec("rox", false) end)
-        ))
-    end
+  if w.widget ~= nil then
+    w:set_width(fs.settings.width)
+    w:set_height(fs.settings.height)
+    w:set_vertical(fs.settings.vertical)
+    w:set_background_color(beautiful.fg_off_widget)
+    w:set_border_color(beautiful.border_widget)
+    w:set_color(beautiful.fg_widget)
+    w:set_gradient_colors({ beautiful.fg_widget,
+      beautiful.fg_center_widget, beautiful.fg_end_widget })
+    awful.widget.layout.margins[w.widget] = fs.margins
+    -- Register buttons
+    w.widget:buttons(awful.util.table.join(
+      awful.button({ }, 1, function () exec("rox", false) end)
+    ))
+  end
 end
 -- Enable caching
 vicious.enable_caching(vicious.widgets.fs)
@@ -195,7 +173,6 @@ vicious.register(fs.backup,  vicious.widgets.fs, "${/mnt/backup usep}",  599)
 -- }}}
 
 -- {{{ Network usage
--- Widget icons
 local neticon   = widget({ type = "imagebox", name = "neticon" })
 local neticonup = widget({ type = "imagebox", name = "neticonup" })
 neticon.image   = image(beautiful.widget_net)
@@ -216,7 +193,6 @@ vicious.register(netfiwidget, vicious.widgets.net, '<span color="'
 -- }}}
 
 -- {{{ Mail subject
--- Widget icon
 local mailicon = widget({ type = "imagebox", name = "mailicon" })
 mailicon.image = image(beautiful.widget_mail)
 -- Initialize widget
@@ -230,28 +206,27 @@ mboxwidget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Org-mode agenda
--- Widget icon
 local orgicon = widget({ type = "imagebox", name = "orgicon" })
 orgicon.image = image(beautiful.widget_org)
 -- Initialize widget
 local orgwidget = widget({ type = "textbox", name = "orgwidget" })
 -- Configure widget
 local orgmode = {
-    files  = {
-      os.getenv("HOME") .. "/.org/work.org",     os.getenv("HOME") .. "/.org/index.org",
-      os.getenv("HOME") .. "/.org/personal.org", os.getenv("HOME") .. "/.org/computers.org"
-    },
-    colors = {
-      past   = '<span color="'..beautiful.fg_urgent..'">',
-      today  = '<span color="'..beautiful.fg_normal..'">',
-      soon   = '<span color="'..beautiful.fg_widget..'">',
-      future = '<span color="'..beautiful.fg_netup_widget..'">'
+  files = {
+    "/home/anrxc/.org/work.org",     "/home/anrxc/.org/index.org",
+    "/home/anrxc/.org/personal.org", "/home/anrxc/.org/computers.org"
+  },
+  colors = {
+    past   = '<span color="'..beautiful.fg_urgent..'">',
+    today  = '<span color="'..beautiful.fg_normal..'">',
+    soon   = '<span color="'..beautiful.fg_widget..'">',
+    future = '<span color="'..beautiful.fg_netup_widget..'">'
 }}
 -- Register widget
 vicious.register(orgwidget, vicious.widgets.org,
-     orgmode.colors.past .. '$1</span>|' .. orgmode.colors.today  .. '$2</span>|' ..
-     orgmode.colors.soon .. '$3</span>|' .. orgmode.colors.future .. '$4</span>',
-     601, orgmode.files)
+  orgmode.colors.past .. '$1</span>|' .. orgmode.colors.today  .. '$2</span>|' ..
+  orgmode.colors.soon .. '$3</span>|' .. orgmode.colors.future .. '$4</span>',
+  601, orgmode.files)
 -- Register buttons
 orgwidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () exec("emacsclient --eval '(org-agenda-list)'") end),
@@ -260,7 +235,6 @@ orgwidget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Volume level
--- Widget icon
 local volicon = widget({ type = "imagebox", name = "volicon" })
 volicon.image = image(beautiful.widget_vol)
 -- Initialize widgets
@@ -273,16 +247,14 @@ volbarwidget:set_vertical(true)
 volbarwidget:set_background_color(beautiful.fg_off_widget)
 volbarwidget:set_border_color(nil)
 volbarwidget:set_color(beautiful.fg_widget)
-volbarwidget:set_gradient_colors({
-    beautiful.fg_widget,
-    beautiful.fg_center_widget,
-    beautiful.fg_end_widget })
+volbarwidget:set_gradient_colors({ beautiful.fg_widget,
+    beautiful.fg_center_widget, beautiful.fg_end_widget })
 awful.widget.layout.margins[volbarwidget.widget] = { top = 2, bottom = 2 }
 -- Enable caching
 vicious.enable_caching(vicious.widgets.volume)
 -- Register widgets
-vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
-vicious.register(volbarwidget, vicious.widgets.volume, "$1", 2, "PCM")
+vicious.register(volwidget,    vicious.widgets.volume, "$1%", 2, "PCM")
+vicious.register(volbarwidget, vicious.widgets.volume, "$1",  2, "PCM")
 -- Register buttons
 volbarwidget.widget:buttons(awful.util.table.join(
    awful.button({ }, 1, function () exec("kmix") end),
@@ -293,7 +265,6 @@ volbarwidget.widget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Date and time
--- Widget icon
 local dateicon = widget({ type = "imagebox", name = "dateicon" })
 dateicon.image = image(beautiful.widget_date)
 -- Initialize widget
@@ -340,39 +311,28 @@ for s = 1, screen.count() do
     -- Create the taglist
     taglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, taglist.buttons)
     -- Create the wibox
-    wibox[s] = awful.wibox({
-        position = "top", height = 14, screen = s,
-        fg = beautiful.fg_normal, bg = beautiful.bg_normal
+    wibox[s] = awful.wibox({      screen = s,
+        fg = beautiful.fg_normal, height = 14,
+        bg = beautiful.bg_normal, position = "top"
     })
     -- Add widgets to the wibox
-    wibox[s].widgets = {{
-        taglist[s],
-        layoutbox[s],
-        promptbox[s],
-        layout = awful.widget.layout.horizontal.leftright
-    },
+    wibox[s].widgets = {
+        {   taglist[s],
+            layoutbox[s],
+            promptbox[s],
+            layout = awful.widget.layout.horizontal.leftright
+        },
         s == screen.count() and systray or nil,
-        separator,
-        datewidget, dateicon,
-        separator,
-        volwidget, spacer, volbarwidget.widget, volicon,
-        separator,
-        spacer, orgwidget, orgicon,
-        separator,
-        mboxwidget, spacer, mailicon,
-        separator,
-        neticonup, netfiwidget, neticon,
-        separator,
-        neticonup, netwidget, neticon,
-        separator,
-        fs.backup.widget, fs.storage.widget,
-        fs.home.widget, fs.root.widget, fsicon,
-        separator,
-        spacer, memwidget.widget, spacer, memicon,
-        separator,
-        spacer, batwidget, baticon,
-        separator,
-        cpuwidget.widget, spacer, tempwidget, cpuicon,
+        separator, datewidget, dateicon,
+        separator, volwidget, spacer, volbarwidget.widget, volicon,
+        separator, spacer, orgwidget, orgicon,
+        separator, mboxwidget, mailicon,
+        separator, neticonup, netfiwidget, neticon,
+        separator, neticonup, netwidget, neticon,
+        separator, fs.backup.widget, fs.storage.widget, fs.home.widget, fs.root.widget, fsicon,
+        separator, spacer, memwidget.widget, spacer, memicon,
+        separator, spacer, batwidget, baticon,
+        separator, cpuwidget.widget, spacer, tempwidget, cpuicon,
         layout = awful.widget.layout.horizontal.rightleft
     }
 end
@@ -386,7 +346,7 @@ root.buttons(awful.util.table.join(
     awful.button({ }, 5, awful.tag.viewprev)
 ))
 
--- Client mouse bindings
+-- Client bindings
 local clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
@@ -434,7 +394,7 @@ local globalkeys = awful.util.table.join(
     -- {{{ Prompt menus
     awful.key({ altkey }, "F2", function ()
         awful.prompt.run({ prompt = "Run: " }, promptbox[mouse.screen].widget,
-            function (...) promptbox[mouse.screen].text = exec(unpack(arg)) end,
+            function (...) promptbox[mouse.screen].text = exec(unpack(arg), false) end,
             awful.completion.shell, awful.util.getdir("cache") .. "/history")
     end),
     awful.key({ altkey }, "F3", function ()
