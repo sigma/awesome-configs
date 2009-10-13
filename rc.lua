@@ -80,17 +80,17 @@ end
 -- {{{ Widgets configuration
 --
 -- {{{ Reusable separators
-local spacer    = widget({ type = "textbox", name = "spacer" })
-local separator = widget({ type = "textbox", name = "separator" })
+local spacer    = widget({ type = "textbox" })
+local separator = widget({ type = "textbox" })
 spacer.text     = " "
 separator.text  = "|"
 -- }}}
 
 -- {{{ CPU usage and temperature
-local cpuicon = widget({ type = "imagebox", name = "cpuicon" })
+local cpuicon = widget({ type = "imagebox" })
 cpuicon.image = image(beautiful.widget_cpu)
 -- Initialize widgets
-local cpuwidget = widget({ type = "textbox", name = "cpuwidget" })
+local tzswidget = widget({ type = "textbox" })
 local cpugraph  = awful.widget.graph()
 -- Graph properties
 cpugraph:set_width(50)
@@ -103,20 +103,20 @@ cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
     beautiful.fg_center_widget, beautiful.fg_widget })
 -- Register widgets
 vicious.register(cpugraph,  vicious.widgets.cpu,     "$1")
-vicious.register(cpuwidget, vicious.widgets.thermal, "$1°C", 19, "TZS0")
+vicious.register(tzswidget, vicious.widgets.thermal, "$1°C", 19, "TZS0")
 -- }}}
 
 -- {{{ Battery state
-local baticon = widget({ type = "imagebox", name = "baticon" })
+local baticon = widget({ type = "imagebox" })
 baticon.image = image(beautiful.widget_bat)
 -- Initialize widget
-batwidget = widget({ type = "textbox", name = "batwidget" })
+batwidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT0")
 -- }}}
 
 -- {{{ Memory usage
-local memicon = widget({ type = "imagebox", name = "memicon" })
+local memicon = widget({ type = "imagebox" })
 memicon.image = image(beautiful.widget_mem)
 -- Initialize widget
 local membar = awful.widget.progressbar()
@@ -135,7 +135,7 @@ vicious.register(membar, vicious.widgets.mem, "$1", 13)
 -- }}}
 
 -- {{{ File system usage
-local fsicon = widget({ type = "imagebox", name = "fsicon" })
+local fsicon = widget({ type = "imagebox" })
 fsicon.image = image(beautiful.widget_fs)
 -- Initialize widgets
 local fs = {
@@ -168,13 +168,13 @@ vicious.register(fs.b, vicious.widgets.fs, "${/mnt/backup usep}",  599)
 -- }}}
 
 -- {{{ Network usage
-local dnicon = widget({ type = "imagebox", name = "dnicon" })
-local upicon = widget({ type = "imagebox", name = "upicon" })
+local dnicon = widget({ type = "imagebox" })
+local upicon = widget({ type = "imagebox" })
 dnicon.image = image(beautiful.widget_net)
 upicon.image = image(beautiful.widget_netup)
 -- Initialize widgets
-local netwidget = widget({ type = "textbox", name = "netwidget" })
-local wetwidget = widget({ type = "textbox", name = "wetwidget" })
+local netwidget = widget({ type = "textbox" })
+local wetwidget = widget({ type = "textbox" })
 -- Enable caching
 vicious.enable_caching(vicious.widgets.net)
 -- Register ethernet widget
@@ -188,10 +188,10 @@ vicious.register(wetwidget, vicious.widgets.net, '<span color="'
 -- }}}
 
 -- {{{ Mail subject
-local mailicon = widget({ type = "imagebox", name = "mailicon" })
+local mailicon = widget({ type = "imagebox" })
 mailicon.image = image(beautiful.widget_mail)
 -- Initialize widget
-local mailwidget = widget({ type = "textbox", name = "mailwidget" })
+local mailwidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(mailwidget, vicious.widgets.mbox, "$1", 181, "/home/anrxc/mail/Inbox")
 -- Register buttons
@@ -201,10 +201,10 @@ mailwidget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Org-mode agenda
-local orgicon = widget({ type = "imagebox", name = "orgicon" })
+local orgicon = widget({ type = "imagebox" })
 orgicon.image = image(beautiful.widget_org)
 -- Initialize widget
-local orgwidget = widget({ type = "textbox", name = "orgwidget" })
+local orgwidget = widget({ type = "textbox" })
 -- Configure widget
 local orgmode = {
   files = {
@@ -230,10 +230,10 @@ orgwidget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Volume level
-local volicon = widget({ type = "imagebox", name = "volicon" })
+local volicon = widget({ type = "imagebox" })
 volicon.image = image(beautiful.widget_vol)
 -- Initialize widgets
-local volwidget = widget({ type = "textbox", name = "volwidget" })
+local volwidget = widget({ type = "textbox" })
 local volbar    = awful.widget.progressbar()
 -- Progressbar properties
 volbar:set_width(8)
@@ -260,10 +260,10 @@ volbar.widget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Date and time
-local dateicon = widget({ type = "imagebox", name = "dateicon" })
+local dateicon = widget({ type = "imagebox" })
 dateicon.image = image(beautiful.widget_date)
 -- Initialize widget
-datewidget = widget({ type = "textbox", name = "datewidget" })
+datewidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(datewidget, vicious.widgets.date, "%b %d, %R", 61)
 -- Register buttons
@@ -327,7 +327,7 @@ for s = 1, screen.count() do
         separator, fs.b.widget, fs.s.widget, fs.h.widget, fs.r.widget, fsicon,
         separator, spacer, membar.widget, spacer, memicon,
         separator, spacer, batwidget, baticon,
-        separator, cpugraph.widget, spacer, cpuwidget, cpuicon,
+        separator, cpugraph.widget, spacer, tzswidget, cpuicon,
         layout = awful.widget.layout.horizontal.rightleft
     }
 end
@@ -437,9 +437,9 @@ local globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Tag browsing
-    awful.key({ altkey }, "n",      awful.tag.viewnext),
-    awful.key({ altkey }, "p",      awful.tag.viewprev),
-    awful.key({ altkey }, "Escape", awful.tag.history.restore),
+    awful.key({ altkey }, "n",   awful.tag.viewnext),
+    awful.key({ altkey }, "p",   awful.tag.viewprev),
+    awful.key({ altkey }, "Tab", awful.tag.history.restore),
     -- }}}
 
     -- {{{ Layout manipulation
@@ -456,9 +456,9 @@ local globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Focus controls
-    awful.key({ modkey }, "p",   function () awful.screen.focus_relative(1) end),
-    awful.key({ modkey }, "s",   function () scratchpad.toggle() end),
-    awful.key({ altkey }, "Tab", awful.client.urgent.jumpto),
+    awful.key({ modkey }, "p",      function () awful.screen.focus_relative(1) end),
+    awful.key({ modkey }, "s",      function () scratchpad.toggle() end),
+    awful.key({ altkey }, "Escape", awful.client.urgent.jumpto),
     awful.key({ modkey }, "Tab", function () awful.client.focus.history.previous()
         if client.focus then client.focus:raise() end
     end),
