@@ -90,20 +90,20 @@ separator.text  = "|"
 local cpuicon = widget({ type = "imagebox", name = "cpuicon" })
 cpuicon.image = image(beautiful.widget_cpu)
 -- Initialize widgets
-local tempwidget = widget({ type = "textbox", name = "tempwidget" })
-local cpuwidget  = awful.widget.graph()
+local cpuwidget = widget({ type = "textbox", name = "cpuwidget" })
+local cpugraph  = awful.widget.graph()
 -- Graph properties
-cpuwidget:set_width(50)
-cpuwidget:set_height(14)
-cpuwidget:set_max_value(100)
-cpuwidget:set_background_color(beautiful.fg_off_widget)
-cpuwidget:set_color(beautiful.fg_end_widget)
-cpuwidget:set_gradient_angle(0)
-cpuwidget:set_gradient_colors({ beautiful.fg_end_widget,
+cpugraph:set_width(50)
+cpugraph:set_height(14)
+cpugraph:set_max_value(100)
+cpugraph:set_background_color(beautiful.fg_off_widget)
+cpugraph:set_color(beautiful.fg_end_widget)
+cpugraph:set_gradient_angle(0)
+cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
     beautiful.fg_center_widget, beautiful.fg_widget })
 -- Register widgets
-vicious.register(cpuwidget,  vicious.widgets.cpu,     "$1")
-vicious.register(tempwidget, vicious.widgets.thermal, "$1°C", 19, "TZS0")
+vicious.register(cpugraph,  vicious.widgets.cpu,     "$1")
+vicious.register(cpuwidget, vicious.widgets.thermal, "$1°C", 19, "TZS0")
 -- }}}
 
 -- {{{ Battery state
@@ -119,19 +119,19 @@ vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT0")
 local memicon = widget({ type = "imagebox", name = "memicon" })
 memicon.image = image(beautiful.widget_mem)
 -- Initialize widget
-local memwidget = awful.widget.progressbar()
+local membar = awful.widget.progressbar()
 -- Pogressbar properties
-memwidget:set_width(8)
-memwidget:set_height(10)
-memwidget:set_vertical(true)
-memwidget:set_background_color(beautiful.fg_off_widget)
-memwidget:set_border_color(nil)
-memwidget:set_color(beautiful.fg_widget)
-memwidget:set_gradient_colors({ beautiful.fg_widget,
+membar:set_width(8)
+membar:set_height(10)
+membar:set_vertical(true)
+membar:set_background_color(beautiful.fg_off_widget)
+membar:set_border_color(nil)
+membar:set_color(beautiful.fg_widget)
+membar:set_gradient_colors({ beautiful.fg_widget,
     beautiful.fg_center_widget, beautiful.fg_end_widget })
-awful.widget.layout.margins[memwidget.widget] = { top = 2, bottom = 2 }
+awful.widget.layout.margins[membar.widget] = { top = 2, bottom = 2 }
 -- Register widget
-vicious.register(memwidget, vicious.widgets.mem, "$1", 13)
+vicious.register(membar, vicious.widgets.mem, "$1", 13)
 -- }}}
 
 -- {{{ File system usage
@@ -139,47 +139,42 @@ local fsicon = widget({ type = "imagebox", name = "fsicon" })
 fsicon.image = image(beautiful.widget_fs)
 -- Initialize widgets
 local fs = {
-  root    = awful.widget.progressbar(), home   = awful.widget.progressbar(),
-  storage = awful.widget.progressbar(), backup = awful.widget.progressbar()
+  r = awful.widget.progressbar(),  h = awful.widget.progressbar(),
+  s = awful.widget.progressbar(),  b = awful.widget.progressbar()
 }
--- Configure widgets
-fs.margins  = { top   = 1, bottom = 1 }
-fs.settings = { width = 5, height = 12, vertical = true }
 -- Progressbar properties
 for _, w in pairs(fs) do
-  if w.widget ~= nil then
-    w:set_width(fs.settings.width)
-    w:set_height(fs.settings.height)
-    w:set_vertical(fs.settings.vertical)
-    w:set_background_color(beautiful.fg_off_widget)
-    w:set_border_color(beautiful.border_widget)
-    w:set_color(beautiful.fg_widget)
-    w:set_gradient_colors({ beautiful.fg_widget,
-      beautiful.fg_center_widget, beautiful.fg_end_widget })
-    awful.widget.layout.margins[w.widget] = fs.margins
-    -- Register buttons
-    w.widget:buttons(awful.util.table.join(
-      awful.button({ }, 1, function () exec("rox", false) end)
-    ))
-  end
+  w:set_width(5)
+  w:set_height(12)
+  w:set_vertical(true)
+  w:set_background_color(beautiful.fg_off_widget)
+  w:set_border_color(beautiful.border_widget)
+  w:set_color(beautiful.fg_widget)
+  w:set_gradient_colors({ beautiful.fg_widget,
+    beautiful.fg_center_widget, beautiful.fg_end_widget })
+  awful.widget.layout.margins[w.widget] = { top = 1, bottom = 1 }
+  -- Register buttons
+  w.widget:buttons(awful.util.table.join(
+    awful.button({ }, 1, function () exec("rox", false) end)
+  ))
 end
 -- Enable caching
 vicious.enable_caching(vicious.widgets.fs)
 -- Register widgets
-vicious.register(fs.root,    vicious.widgets.fs, "${/ usep}",            599)
-vicious.register(fs.home,    vicious.widgets.fs, "${/home usep}",        599)
-vicious.register(fs.storage, vicious.widgets.fs, "${/mnt/storage usep}", 599)
-vicious.register(fs.backup,  vicious.widgets.fs, "${/mnt/backup usep}",  599)
+vicious.register(fs.r, vicious.widgets.fs, "${/ usep}",            599)
+vicious.register(fs.h, vicious.widgets.fs, "${/home usep}",        599)
+vicious.register(fs.s, vicious.widgets.fs, "${/mnt/storage usep}", 599)
+vicious.register(fs.b, vicious.widgets.fs, "${/mnt/backup usep}",  599)
 -- }}}
 
 -- {{{ Network usage
-local neticon   = widget({ type = "imagebox", name = "neticon" })
-local neticonup = widget({ type = "imagebox", name = "neticonup" })
-neticon.image   = image(beautiful.widget_net)
-neticonup.image = image(beautiful.widget_netup)
+local dnicon = widget({ type = "imagebox", name = "dnicon" })
+local upicon = widget({ type = "imagebox", name = "upicon" })
+dnicon.image = image(beautiful.widget_net)
+upicon.image = image(beautiful.widget_netup)
 -- Initialize widgets
-local netwidget   = widget({ type = "textbox", name = "netwidget" })
-local netfiwidget = widget({ type = "textbox", name = "netfiwidget" })
+local netwidget = widget({ type = "textbox", name = "netwidget" })
+local wetwidget = widget({ type = "textbox", name = "wetwidget" })
 -- Enable caching
 vicious.enable_caching(vicious.widgets.net)
 -- Register ethernet widget
@@ -187,7 +182,7 @@ vicious.register(netwidget, vicious.widgets.net, '<span color="'
   .. beautiful.fg_netdn_widget ..'">${eth0 down_kb}</span> <span color="'
   .. beautiful.fg_netup_widget ..'">${eth0 up_kb}</span>', 3)
 -- Register wireless widget
-vicious.register(netfiwidget, vicious.widgets.net, '<span color="'
+vicious.register(wetwidget, vicious.widgets.net, '<span color="'
   .. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
   .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 3)
 -- }}}
@@ -196,11 +191,11 @@ vicious.register(netfiwidget, vicious.widgets.net, '<span color="'
 local mailicon = widget({ type = "imagebox", name = "mailicon" })
 mailicon.image = image(beautiful.widget_mail)
 -- Initialize widget
-local mboxwidget = widget({ type = "textbox", name = "mboxwidget" })
+local mailwidget = widget({ type = "textbox", name = "mailwidget" })
 -- Register widget
-vicious.register(mboxwidget, vicious.widgets.mbox, "$1", 181, "/home/anrxc/mail/Inbox")
+vicious.register(mailwidget, vicious.widgets.mbox, "$1", 181, "/home/anrxc/mail/Inbox")
 -- Register buttons
-mboxwidget:buttons(awful.util.table.join(
+mailwidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () exec("urxvt -title Alpine -e alpine_exp") end)
 ))
 -- }}}
@@ -216,7 +211,7 @@ local orgmode = {
     "/home/anrxc/.org/work.org",     "/home/anrxc/.org/index.org",
     "/home/anrxc/.org/personal.org", "/home/anrxc/.org/computers.org"
   },
-  colors = {
+  color = {
     past   = '<span color="'..beautiful.fg_urgent..'">',
     today  = '<span color="'..beautiful.fg_normal..'">',
     soon   = '<span color="'..beautiful.fg_widget..'">',
@@ -224,8 +219,8 @@ local orgmode = {
 }}
 -- Register widget
 vicious.register(orgwidget, vicious.widgets.org,
-  orgmode.colors.past .. '$1</span>|' .. orgmode.colors.today  .. '$2</span>|' ..
-  orgmode.colors.soon .. '$3</span>|' .. orgmode.colors.future .. '$4</span>',
+  orgmode.color.past .. '$1</span>|' .. orgmode.color.today  .. '$2</span>|' ..
+  orgmode.color.soon .. '$3</span>|' .. orgmode.color.future .. '$4</span>',
   601, orgmode.files)
 -- Register buttons
 orgwidget:buttons(awful.util.table.join(
@@ -238,30 +233,30 @@ orgwidget:buttons(awful.util.table.join(
 local volicon = widget({ type = "imagebox", name = "volicon" })
 volicon.image = image(beautiful.widget_vol)
 -- Initialize widgets
-local volwidget    = widget({ type = "textbox", name = "volwidget" })
-local volbarwidget = awful.widget.progressbar()
+local volwidget = widget({ type = "textbox", name = "volwidget" })
+local volbar    = awful.widget.progressbar()
 -- Progressbar properties
-volbarwidget:set_width(8)
-volbarwidget:set_height(10)
-volbarwidget:set_vertical(true)
-volbarwidget:set_background_color(beautiful.fg_off_widget)
-volbarwidget:set_border_color(nil)
-volbarwidget:set_color(beautiful.fg_widget)
-volbarwidget:set_gradient_colors({ beautiful.fg_widget,
+volbar:set_width(8)
+volbar:set_height(10)
+volbar:set_vertical(true)
+volbar:set_background_color(beautiful.fg_off_widget)
+volbar:set_border_color(nil)
+volbar:set_color(beautiful.fg_widget)
+volbar:set_gradient_colors({ beautiful.fg_widget,
     beautiful.fg_center_widget, beautiful.fg_end_widget })
-awful.widget.layout.margins[volbarwidget.widget] = { top = 2, bottom = 2 }
+awful.widget.layout.margins[volbar.widget] = { top = 2, bottom = 2 }
 -- Enable caching
 vicious.enable_caching(vicious.widgets.volume)
 -- Register widgets
-vicious.register(volwidget,    vicious.widgets.volume, "$1%", 2, "PCM")
-vicious.register(volbarwidget, vicious.widgets.volume, "$1",  2, "PCM")
+vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
+vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "PCM")
 -- Register buttons
-volbarwidget.widget:buttons(awful.util.table.join(
+volbar.widget:buttons(awful.util.table.join(
    awful.button({ }, 1, function () exec("kmix") end),
    awful.button({ }, 2, function () exec("amixer -q sset Master toggle") end),
    awful.button({ }, 4, function () exec("amixer -q sset PCM 2dB+") end),
    awful.button({ }, 5, function () exec("amixer -q sset PCM 2dB-") end)
-)) volwidget:buttons( volbarwidget.widget:buttons() )
+)) volwidget:buttons( volbar.widget:buttons() )
 -- }}}
 
 -- {{{ Date and time
@@ -324,15 +319,15 @@ for s = 1, screen.count() do
         },
         s == screen.count() and systray or nil,
         separator, datewidget, dateicon,
-        separator, volwidget, spacer, volbarwidget.widget, volicon,
+        separator, volwidget, spacer, volbar.widget, volicon,
         separator, spacer, orgwidget, orgicon,
-        separator, mboxwidget, mailicon,
-        separator, neticonup, netfiwidget, neticon,
-        separator, neticonup, netwidget, neticon,
-        separator, fs.backup.widget, fs.storage.widget, fs.home.widget, fs.root.widget, fsicon,
-        separator, spacer, memwidget.widget, spacer, memicon,
+        separator, mailwidget, mailicon,
+        separator, upicon, wetwidget, dnicon,
+        separator, upicon, netwidget, dnicon,
+        separator, fs.b.widget, fs.s.widget, fs.h.widget, fs.r.widget, fsicon,
+        separator, spacer, membar.widget, spacer, memicon,
         separator, spacer, batwidget, baticon,
-        separator, cpuwidget.widget, spacer, tempwidget, cpuicon,
+        separator, cpugraph.widget, spacer, cpuwidget, cpuicon,
         layout = awful.widget.layout.horizontal.rightleft
     }
 end
@@ -501,6 +496,7 @@ local clientkeys = awful.util.table.join(
         wibox[mouse.screen].visible = not wibox[mouse.screen].visible
     end),
     awful.key({ modkey }, "c", function (c) c:kill() end),
+    awful.key({ modkey }, "d", function (c) scratchpad.set(c, 0.60, 0.60, true) end),
     awful.key({ modkey }, "f", function (c) awful.titlebar.remove(c)
         c.fullscreen = not c.fullscreen; c.above = not c.fullscreen
     end),
@@ -515,7 +511,6 @@ local clientkeys = awful.util.table.join(
     awful.key({ modkey }, "Up",    function () awful.client.moveresize(0, -20, 0, 0) end),
     awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20, 0, 0, 0) end),
     awful.key({ modkey }, "Right", function () awful.client.moveresize(20, 0, 0, 0) end),
-    awful.key({ modkey },          "d", function (c) scratchpad.set(c, 0.60, 0.60, true) end),
     awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
     awful.key({ modkey, "Shift" }, "o", function (c) c.ontop = not c.ontop end),
     awful.key({ modkey, "Shift" }, "t", function (c)
