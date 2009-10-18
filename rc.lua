@@ -172,19 +172,12 @@ local dnicon = widget({ type = "imagebox" })
 local upicon = widget({ type = "imagebox" })
 dnicon.image = image(beautiful.widget_net)
 upicon.image = image(beautiful.widget_netup)
--- Initialize widgets
+-- Initialize widget
 local netwidget = widget({ type = "textbox" })
-local wetwidget = widget({ type = "textbox" })
--- Enable caching
-vicious.enable_caching(vicious.widgets.net)
--- Register ethernet widget
+-- Register widget
 vicious.register(netwidget, vicious.widgets.net, '<span color="'
   .. beautiful.fg_netdn_widget ..'">${eth0 down_kb}</span> <span color="'
   .. beautiful.fg_netup_widget ..'">${eth0 up_kb}</span>', 3)
--- Register wireless widget
-vicious.register(wetwidget, vicious.widgets.net, '<span color="'
-  .. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
-  .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 3)
 -- }}}
 
 -- {{{ Mail subject
@@ -322,7 +315,6 @@ for s = 1, screen.count() do
         separator, volwidget, spacer, volbar.widget, volicon,
         separator, spacer, orgwidget, orgicon,
         separator, mailwidget, mailicon,
-        separator, upicon, wetwidget, dnicon,
         separator, upicon, netwidget, dnicon,
         separator, fs.b.widget, fs.s.widget, fs.h.widget, fs.r.widget, fsicon,
         separator, spacer, membar.widget, spacer, memicon,
