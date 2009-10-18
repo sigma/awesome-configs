@@ -357,11 +357,9 @@ local globalkeys = awful.util.table.join(
     -- {{{ Applications
     awful.key({ modkey }, "e", function () exec("emacsclient -n -c") end),
     awful.key({ modkey }, "r", function () exec("rox", false) end),
-    awful.key({ modkey }, "u", function () exec("utorrent") end),
     awful.key({ modkey }, "w", function () exec("firefox") end),
     awful.key({ altkey }, "F1",  function () exec("urxvt") end),
     awful.key({ altkey }, "#49", function () teardrop("urxvt", "bottom") end),
-    awful.key({ modkey }, "F2",  function () teardrop("gmrun", nil, nil, nil, 0.08) end),
     awful.key({ modkey }, "a", function () exec("urxvt -title Alpine -e alpine_exp") end),
     awful.key({ modkey }, "g", function () sexec("GTK2_RC_FILES=~/.gtkrc-gajim gajim") end),
     awful.key({ modkey }, "q", function () exec("emacsclient --eval '(make-remember-frame)'") end),
@@ -369,7 +367,6 @@ local globalkeys = awful.util.table.join(
 
     -- {{{ Multimedia keys
     awful.key({}, "#160", function () exec("kscreenlocker --forcelock") end),
-    awful.key({}, "#146", function () exec("khelpcenter") end),
     awful.key({}, "#121", function () exec("pvol.py -m") end),
     awful.key({}, "#122", function () exec("pvol.py -p -c -2") end),
     awful.key({}, "#123", function () exec("pvol.py -p -c 2") end),
@@ -377,13 +374,7 @@ local globalkeys = awful.util.table.join(
     awful.key({}, "#233", function () exec("plight.py -s -a") end),
     awful.key({}, "#244", function () exec("sudo /usr/sbin/pm-hibernate") end),
     awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend") end),
-    awful.key({}, "#156", function () exec("emacsclient -n -c") end),
     awful.key({}, "#225", function () exec("pypres.py") end),
-    awful.key({}, "#181", function () exec("xrefresh") end),
-    awful.key({}, "#180", function () exec("firefox -browser") end),
-    awful.key({}, "#163", function () exec("urxvt -title Alpine -e alpine") end),
-    awful.key({}, "#157", function () exec("geeqie") end),
-    awful.key({}, "Print",function () exec("ksnapshot") end),
     -- }}}
 
     -- {{{ Prompt menus
@@ -395,41 +386,16 @@ local globalkeys = awful.util.table.join(
     awful.key({ altkey }, "F3", function ()
         awful.prompt.run({ prompt = "Dictionary: " }, promptbox[mouse.screen].widget,
             function (words)
-                local xmessage = "xmessage -timeout 10 -file -"
-                sexec("crodict " .. words .. " | " .. xmessage)
+                sexec("crodict "..words.." | ".."xmessage -timeout 10 -file -")
             end)
     end),
     awful.key({ altkey }, "F4", function ()
-        awful.prompt.run({ prompt = "Manual: " }, promptbox[mouse.screen].widget,
-            function (page) exec("urxvt -e man " .. page) end)
-    end),
-    awful.key({ altkey }, "F5", function ()
         awful.prompt.run({ prompt = "Run Lua code: " }, promptbox[mouse.screen].widget,
         awful.util.eval, nil, awful.util.getdir("cache") .. "/history_eval")
-    end),
-    awful.key({ altkey }, "F10", function ()
-        awful.prompt.run({ prompt = "Connect: " }, promptbox[mouse.screen].widget,
-            function (host) exec("urxvt -e ssh " .. host) end)
-    end),
-    awful.key({ altkey }, "F11", function ()
-        awful.prompt.run({ prompt = "Calculate: " }, promptbox[mouse.screen].widget,
-            function (expr)
-                local xmessage = "xmessage -timeout 10 -file -"
-                sexec("echo '" .. expr .. ' = ' ..
-                  awful.util.eval("return (" .. expr .. ")") .. "' | " .. xmessage)
-            end)
-    end),
-    awful.key({ altkey }, "F12", function ()
-        awful.prompt.run({ prompt = "Web search: " }, promptbox[mouse.screen].widget,
-            function (command)
-                exec("firefox 'http://yubnub.org/parser/parse?command="..command.."'")
-                if tags[mouse.screen][3] then awful.tag.viewonly(tags[mouse.screen][3]) end
-            end)
     end),
     -- }}}
 
     -- {{{ Awesome controls
-    awful.key({ modkey, "Shift" }, "m", function () awful.mouse.finder():find() end),
     awful.key({ modkey, "Shift" }, "q", awesome.quit),
     awful.key({ modkey, "Shift" }, "r", function ()
         promptbox[mouse.screen].text = awful.util.escape(awful.util.restart())
@@ -447,45 +413,28 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey }, "h",          function () awful.tag.incmwfact(-0.05) end),
     awful.key({ modkey, "Shift" }, "l", function () awful.client.incwfact(-0.05) end),
     awful.key({ modkey, "Shift" }, "h", function () awful.client.incwfact(0.05) end),
-    awful.key({ modkey }, "space",          function () awful.layout.inc(layouts, 1) end),
+    awful.key({ modkey },          "space", function () awful.layout.inc(layouts, 1) end),
     awful.key({ modkey, "Shift" }, "space", function () awful.layout.inc(layouts, -1) end),
-    awful.key({ altkey, "Shift" }, "l",     function () awful.tag.incnmaster(-1) end),
-    awful.key({ altkey, "Shift" }, "h",     function () awful.tag.incnmaster(1) end),
-    awful.key({ modkey, "Control" }, "l",   function () awful.tag.incncol(-1) end),
-    awful.key({ modkey, "Control" }, "h",   function () awful.tag.incncol(1) end),
     -- }}}
 
     -- {{{ Focus controls
-    awful.key({ modkey }, "p",      function () awful.screen.focus_relative(1) end),
-    awful.key({ modkey }, "s",      function () scratchpad.toggle() end),
-    awful.key({ altkey }, "Escape", awful.client.urgent.jumpto),
-    awful.key({ modkey }, "Tab", function () awful.client.focus.history.previous()
+    awful.key({ modkey }, "p", function () awful.screen.focus_relative(1) end),
+    awful.key({ modkey }, "s", function () scratchpad.toggle() end),
+    awful.key({ modkey }, "u", awful.client.urgent.jumpto),
+    awful.key({ modkey }, "j", function ()
+        awful.client.focus.byidx(1)
         if client.focus then client.focus:raise() end
     end),
-    awful.key({ modkey }, "j",   function () awful.client.focus.byidx(1)
+    awful.key({ modkey }, "k", function ()
+        awful.client.focus.byidx(-1)
         if client.focus then client.focus:raise() end
     end),
-    awful.key({ modkey }, "k",   function () awful.client.focus.byidx(-1)
+    awful.key({ modkey }, "Tab", function ()
+        awful.client.focus.history.previous()
         if client.focus then client.focus:raise() end
     end),
-    awful.key({ modkey }, "#48", function () awful.client.focus.bydirection("down")
-        if client.focus then client.focus:raise() end
-    end),
-    awful.key({ modkey }, "#34", function () awful.client.focus.bydirection("up")
-        if client.focus then client.focus:raise() end
-    end),
-    awful.key({ modkey }, "#47", function () awful.client.focus.bydirection("left")
-        if client.focus then client.focus:raise() end
-    end),
-    awful.key({ modkey }, "#51", function () awful.client.focus.bydirection("right")
-        if client.focus then client.focus:raise() end
-    end),
-    awful.key({ modkey, "Shift" }, "j",   function () awful.client.swap.byidx(1) end),
-    awful.key({ modkey, "Shift" }, "k",   function () awful.client.swap.byidx(-1) end),
-    awful.key({ modkey, "Shift" }, "#48", function () awful.client.swap.bydirection("down") end),
-    awful.key({ modkey, "Shift" }, "#34", function () awful.client.swap.bydirection("up") end),
-    awful.key({ modkey, "Shift" }, "#47", function () awful.client.swap.bydirection("left") end),
-    awful.key({ modkey, "Shift" }, "#51", function () awful.client.swap.bydirection("right") end)
+    awful.key({ modkey, "Shift" }, "j", function () awful.client.swap.byidx(1) end),
+    awful.key({ modkey, "Shift" }, "k", function () awful.client.swap.byidx(-1) end)
     -- }}}
 )
 -- }}}
@@ -511,21 +460,18 @@ local clientkeys = awful.util.table.join(
     awful.key({ modkey }, "Up",    function () awful.client.moveresize(0, -20, 0, 0) end),
     awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20, 0, 0, 0) end),
     awful.key({ modkey }, "Right", function () awful.client.moveresize(20, 0, 0, 0) end),
-    awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
-    awful.key({ modkey, "Shift" }, "o", function (c) c.ontop = not c.ontop end),
+    awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
+    awful.key({ modkey, "Shift" }, "c", function (c) exec("kill -CONT " .. c.pid) end),
+    awful.key({ modkey, "Shift" }, "s", function (c) exec("kill -STOP " .. c.pid) end),
     awful.key({ modkey, "Shift" }, "t", function (c)
         if   c.titlebar then awful.titlebar.remove(c)
         else awful.titlebar.add(c, { modkey = modkey }) end
     end),
-    awful.key({ modkey, "Control" }, "r",     function (c) c:redraw() end),
-    awful.key({ modkey, "Control" }, "space", function (c) awful.client.floating.toggle(c)
+    awful.key({ modkey, "Shift" }, "f", function (c) awful.client.floating.toggle(c)
         if   awful.client.floating.get(c)
         then c.above = true; awful.titlebar.add(c); awful.placement.no_offscreen(c)
         else c.above = false; awful.titlebar.remove(c) end
-    end),
-    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey, "Shift" }, "c", function (c) exec("kill -CONT "..c.pid) end),
-    awful.key({ modkey, "Shift" }, "s", function (c) exec("kill -STOP "..c.pid) end)
+    end)
 )
 -- }}}
 
@@ -583,8 +529,6 @@ awful.rules.rules = {
       properties = { tag = tags[1][4] } },
     { rule = { class = "Gajim.py" },
       properties = { tag = tags[1][5] } },
-    { rule = { class = "Knode" },
-      properties = { tag = tags[1][8] } },
     { rule = { class = "Akregator" },
       properties = { tag = tags[1][8] } },
     { rule = { class = "Firefox", instance = "Navigator" },
