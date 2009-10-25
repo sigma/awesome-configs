@@ -95,7 +95,6 @@ local cpugraph  = awful.widget.graph()
 -- Graph properties
 cpugraph:set_width(50)
 cpugraph:set_height(14)
-cpugraph:set_max_value(100)
 cpugraph:set_background_color(beautiful.fg_off_widget)
 cpugraph:set_color(beautiful.fg_end_widget)
 cpugraph:set_gradient_angle(0)
