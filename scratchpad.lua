@@ -1,7 +1,7 @@
 ---------------------------------------------------------------
 -- Basic scratchpad manager for the awesome window manager
 ---------------------------------------------------------------
--- Adrian C. <anrxc.sysphere.org>
+-- Blame: Adrian C. <anrxc@sysphere.org>
 -- Licensed under the WTFPL version 2
 --   * http://sam.zoy.org/wtfpl/COPYING
 ---------------------------------------------------------------
