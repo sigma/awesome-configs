@@ -185,7 +185,7 @@ mailicon.image = image(beautiful.widget_mail)
 -- Initialize widget
 local mailwidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(mailwidget, vicious.widgets.mbox, "$1", 181, "/home/anrxc/mail/Inbox")
+vicious.register(mailwidget, vicious.widgets.mbox, "$1", 181, {"/home/anrxc/mail/Inbox", 22})
 -- Register buttons
 mailwidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () exec("urxvt -title Alpine -e alpine_exp") end)
@@ -579,6 +579,9 @@ client.add_signal("manage", function (c, startup)
 
     -- Honor size hints
     c.size_hints_honor = false
+
+    -- Focus the client
+    client.focus = c
 end)
 -- }}}
 
