@@ -1,6 +1,6 @@
 -- {{{ License
 --
--- Awesome configuration, using awesome 3.4 on Arch GNU/Linux
+-- Awesome configuration, using awesome 3.4.1 on Arch GNU/Linux
 --   * Adrian C. <anrxc@sysphere.org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
@@ -36,41 +36,33 @@ local sexec = awful.util.spawn_with_shell
 
 -- Window management layouts
 layouts = {
-    awful.layout.suit.tile,        -- 1
-    awful.layout.suit.tile.left,   -- 2
-    awful.layout.suit.tile.bottom, -- 3
-    awful.layout.suit.tile.top,    -- 4
-    awful.layout.suit.max,         -- 5
-    awful.layout.suit.magnifier,   -- 6
-    awful.layout.suit.floating     -- 7
+  awful.layout.suit.tile,        -- 1
+  awful.layout.suit.tile.left,   -- 2
+  awful.layout.suit.tile.bottom, -- 3
+  awful.layout.suit.tile.top,    -- 4
+  awful.layout.suit.max,         -- 5
+  awful.layout.suit.magnifier,   -- 6
+  awful.layout.suit.floating     -- 7
 }
 -- }}}
 
 
 -- {{{ Tags
-tags = {}
-tags.setup = {
-    { name = "term",  layout = layouts[3]  },
-    { name = "emacs", layout = layouts[1]  },
-    { name = "web",   layout = layouts[1]  },
-    { name = "mail",  layout = layouts[5]  },
-    { name = "im",    layout = layouts[1], mwfact = 0.13 },
-    { name = "6",     layout = layouts[7], hide   = true },
-    { name = "7",     layout = layouts[7], hide   = true },
-    { name = "rss",   layout = layouts[6]  },
-    { name = "media", layout = layouts[7]  }
-}
+tags = {
+  names = { "term", "emacs", "web", "mail",
+    "im", "float", "float", "rss", "media",
+  },
+  layout = {
+    layouts[3], layouts[1], layouts[1],
+    layouts[5], layouts[1], layouts[7],
+    layouts[7], layouts[6], layouts[7],
+}}
 
 for s = 1, screen.count() do
-    tags[s] = {}
-    for i, t in ipairs(tags.setup) do
-        tags[s][i] = tag({ name = t.name })
-        tags[s][i].screen = s
-        awful.tag.setproperty(tags[s][i], "layout", t.layout)
-        awful.tag.setproperty(tags[s][i], "mwfact", t.mwfact)
-        awful.tag.setproperty(tags[s][i], "hide",   t.hide)
-    end
-    tags[s][1].selected = true
+    tags[s] = awful.tag(tags.names, s, tags.layout)
+    awful.tag.setproperty(tags[s][5], "mwfact", 0.13)
+    awful.tag.setproperty(tags[s][6], "hide",   true)
+    awful.tag.setproperty(tags[s][7], "hide",   true)
 end
 -- }}}
 
