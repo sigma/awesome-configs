@@ -27,15 +27,15 @@ require("scratchpad")
 beautiful.init(awful.util.getdir("config") .. "/zenburn.lua")
 
 -- Modifier keys
-local altkey = "Mod1" -- Alt_L
-local modkey = "Mod4" -- Super_L
+altkey = "Mod1" -- Alt_L
+modkey = "Mod4" -- Super_L
 
 -- Function aliases
 local exec  = awful.util.spawn
 local sexec = awful.util.spawn_with_shell
 
 -- Window management layouts
-local layouts = {
+layouts = {
     awful.layout.suit.tile,        -- 1
     awful.layout.suit.tile.left,   -- 2
     awful.layout.suit.tile.bottom, -- 3
@@ -48,7 +48,7 @@ local layouts = {
 
 
 -- {{{ Tags
-local tags = {}
+tags = {}
 tags.setup = {
     { name = "term",  layout = layouts[3]  },
     { name = "emacs", layout = layouts[1]  },
@@ -80,18 +80,18 @@ end
 -- {{{ Widgets configuration
 --
 -- {{{ Reusable separators
-local spacer    = widget({ type = "textbox" })
-local separator = widget({ type = "textbox" })
+spacer    = widget({ type = "textbox" })
+separator = widget({ type = "textbox" })
 spacer.text     = " "
 separator.text  = "|"
 -- }}}
 
 -- {{{ CPU usage and temperature
-local cpuicon = widget({ type = "imagebox" })
+cpuicon = widget({ type = "imagebox" })
 cpuicon.image = image(beautiful.widget_cpu)
 -- Initialize widgets
-local tzswidget = widget({ type = "textbox" })
-local cpugraph  = awful.widget.graph()
+cpugraph  = awful.widget.graph()
+tzswidget = widget({ type = "textbox" })
 -- Graph properties
 cpugraph:set_width(50)
 cpugraph:set_height(14)
@@ -106,7 +106,7 @@ vicious.register(tzswidget, vicious.widgets.thermal, "$1°C", 19, "TZS0")
 -- }}}
 
 -- {{{ Battery state
-local baticon = widget({ type = "imagebox" })
+baticon = widget({ type = "imagebox" })
 baticon.image = image(beautiful.widget_bat)
 -- Initialize widget
 batwidget = widget({ type = "textbox" })
@@ -115,10 +115,10 @@ vicious.register(batwidget, vicious.widgets.bat, "$1$2%", 61, "BAT0")
 -- }}}
 
 -- {{{ Memory usage
-local memicon = widget({ type = "imagebox" })
+memicon = widget({ type = "imagebox" })
 memicon.image = image(beautiful.widget_mem)
 -- Initialize widget
-local membar = awful.widget.progressbar()
+membar = awful.widget.progressbar()
 -- Pogressbar properties
 membar:set_width(8)
 membar:set_height(10)
@@ -134,10 +134,10 @@ vicious.register(membar, vicious.widgets.mem, "$1", 13)
 -- }}}
 
 -- {{{ File system usage
-local fsicon = widget({ type = "imagebox" })
+fsicon = widget({ type = "imagebox" })
 fsicon.image = image(beautiful.widget_fs)
 -- Initialize widgets
-local fs = {
+fs = {
   r = awful.widget.progressbar(),  h = awful.widget.progressbar(),
   s = awful.widget.progressbar(),  b = awful.widget.progressbar()
 }
@@ -167,12 +167,12 @@ vicious.register(fs.b, vicious.widgets.fs, "${/mnt/backup usep}",  599)
 -- }}}
 
 -- {{{ Network usage
-local dnicon = widget({ type = "imagebox" })
-local upicon = widget({ type = "imagebox" })
+dnicon = widget({ type = "imagebox" })
+upicon = widget({ type = "imagebox" })
 dnicon.image = image(beautiful.widget_net)
 upicon.image = image(beautiful.widget_netup)
 -- Initialize widget
-local netwidget = widget({ type = "textbox" })
+netwidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(netwidget, vicious.widgets.net, '<span color="'
   .. beautiful.fg_netdn_widget ..'">${eth0 down_kb}</span> <span color="'
@@ -180,10 +180,10 @@ vicious.register(netwidget, vicious.widgets.net, '<span color="'
 -- }}}
 
 -- {{{ Mail subject
-local mailicon = widget({ type = "imagebox" })
+mailicon = widget({ type = "imagebox" })
 mailicon.image = image(beautiful.widget_mail)
 -- Initialize widget
-local mailwidget = widget({ type = "textbox" })
+mailwidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(mailwidget, vicious.widgets.mbox, "$1", 181, {"/home/anrxc/mail/Inbox", 22})
 -- Register buttons
@@ -193,10 +193,10 @@ mailwidget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Org-mode agenda
-local orgicon = widget({ type = "imagebox" })
+orgicon = widget({ type = "imagebox" })
 orgicon.image = image(beautiful.widget_org)
 -- Initialize widget
-local orgwidget = widget({ type = "textbox" })
+orgwidget = widget({ type = "textbox" })
 -- Configure widget
 local orgmode = {
   files = {
@@ -222,11 +222,11 @@ orgwidget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Volume level
-local volicon = widget({ type = "imagebox" })
+volicon = widget({ type = "imagebox" })
 volicon.image = image(beautiful.widget_vol)
 -- Initialize widgets
-local volwidget = widget({ type = "textbox" })
-local volbar    = awful.widget.progressbar()
+volbar    = awful.widget.progressbar()
+volwidget = widget({ type = "textbox" })
 -- Progressbar properties
 volbar:set_width(8)
 volbar:set_height(10)
@@ -240,8 +240,8 @@ awful.widget.layout.margins[volbar.widget] = { top = 2, bottom = 2 }
 -- Enable caching
 vicious.enable_caching(vicious.widgets.volume)
 -- Register widgets
-vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
 vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "PCM")
+vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
 -- Register buttons
 volbar.widget:buttons(awful.util.table.join(
    awful.button({ }, 1, function () exec("kmix") end),
@@ -252,7 +252,7 @@ volbar.widget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Date and time
-local dateicon = widget({ type = "imagebox" })
+dateicon = widget({ type = "imagebox" })
 dateicon.image = image(beautiful.widget_date)
 -- Initialize widget
 datewidget = widget({ type = "textbox" })
@@ -265,15 +265,15 @@ datewidget:buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ System tray
-local systray = widget({ type = "systray" })
+systray = widget({ type = "systray" })
 -- }}}
 -- }}}
 
 -- {{{ Wibox initialisation
-local wibox     = {}
-local promptbox = {}
-local layoutbox = {}
-local taglist   = {}
+wibox     = {}
+promptbox = {}
+layoutbox = {}
+taglist   = {}
 taglist.buttons = awful.util.table.join(
     awful.button({ }, 1, awful.tag.viewonly),
     awful.button({ modkey }, 1, awful.client.movetotag),
@@ -333,7 +333,7 @@ root.buttons(awful.util.table.join(
 ))
 
 -- Client bindings
-local clientbuttons = awful.util.table.join(
+clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize)
@@ -344,7 +344,7 @@ local clientbuttons = awful.util.table.join(
 -- {{{ Key bindings
 --
 -- {{{ Global keys
-local globalkeys = awful.util.table.join(
+globalkeys = awful.util.table.join(
     -- {{{ Applications
     awful.key({ modkey }, "e", function () exec("emacsclient -n -c") end),
     awful.key({ modkey }, "r", function () exec("rox", false) end),
@@ -431,7 +431,7 @@ local globalkeys = awful.util.table.join(
 -- }}}
 
 -- {{{ Client manipulation
-local clientkeys = awful.util.table.join(
+clientkeys = awful.util.table.join(
     awful.key({ modkey }, "b", function ()
         wibox[mouse.screen].visible = not wibox[mouse.screen].visible
     end),
@@ -580,7 +580,7 @@ client.add_signal("manage", function (c, startup)
     -- Honor size hints
     c.size_hints_honor = false
 
-    -- Focus the client
+    -- Fix for pre_manage rules patch
     client.focus = c
 end)
 -- }}}
