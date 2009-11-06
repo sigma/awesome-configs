@@ -476,24 +476,24 @@ end
 -- {{{ Tag controls
 for i = 1, keynumber do
     globalkeys = awful.util.table.join( globalkeys,
-        awful.key({ modkey }, i, function ()
+        awful.key({ modkey }, "#" .. i + 9, function ()
             local screen = mouse.screen
             if tags[screen][i] then
                 awful.tag.viewonly(tags[screen][i])
             end
         end),
-        awful.key({ modkey, "Control" }, i, function ()
+        awful.key({ modkey, "Control" }, "#" .. i + 9, function ()
             local screen = mouse.screen
             if tags[screen][i] then
                 awful.tag.viewtoggle(tags[screen][i])
             end
         end),
-        awful.key({ modkey, "Shift" }, i, function ()
+        awful.key({ modkey, "Shift" }, "#" .. i + 9, function ()
             if client.focus and tags[client.focus.screen][i] then
                 awful.client.movetotag(tags[client.focus.screen][i])
             end
         end),
-        awful.key({ modkey, "Control", "Shift" }, i, function ()
+        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9, function ()
             if client.focus and tags[client.focus.screen][i] then
                 awful.client.toggletag(tags[client.focus.screen][i])
             end
