@@ -73,34 +73,34 @@ function set(c, width, height, sticky, screen)
     end
 
     -- Prepare a table for storing clients,
-    if not scratch["pad"] then scratch["pad"] = {}
+    if not scratch.pad then scratch.pad = {}
         -- add unmanage signal for scratchpad clients
         capi.client.add_signal("unmanage", function (c)
-            local oc = scratch["pad"][screen]
+            local oc = scratch.pad[screen]
             if oc == c then
-                scratch["pad"][screen] = nil
+                scratch.pad[screen] = nil
             end
         end)
     end
 
     -- If the scratcphad is emtpy, store the client,
-    if not scratch["pad"][screen] then
-        scratch["pad"][screen] = c
+    if not scratch.pad[screen] then
+        scratch.pad[screen] = c
         -- then apply geometry and properties
         setscratch(c)
     else -- If a client is already scratched,
-        local oc = scratch["pad"][screen]
+        local oc = scratch.pad[screen]
         -- compare it with the focused client
         if oc == c then
             -- If it matches then unscratch and clear the table
             awful.client.floating.toggle(oc); oc.sticky = false
             oc.ontop = false; oc.above = false
-            scratch["pad"][screen] = nil
+            scratch.pad[screen] = nil
         else -- If they don't match, unscratch and replace it
             oc.hidden = false; oc.sticky = false
             oc.ontop = false; oc.above = false
             awful.client.floating.toggle(oc)
-            scratch["pad"][screen] = c
+            scratch.pad[screen] = c
             setscratch(c)
         end
     end
@@ -112,10 +112,10 @@ function toggle(screen)
     local screen = screen or capi.mouse.screen
 
     -- Check if we have a client on storage,
-    if scratch["pad"] and
-       scratch["pad"][screen] ~= nil
+    if scratch.pad and
+       scratch.pad[screen] ~= nil
     then -- and get it out, to play
-        local c = scratch["pad"][screen]
+        local c = scratch.pad[screen]
 
         -- If it's visible on another tag hide it,
         if c:isvisible() == false then c.hidden = true;
