@@ -353,8 +353,8 @@ globalkeys = awful.util.table.join(
     awful.key({}, "#121", function () exec("pvol.py -m") end),
     awful.key({}, "#122", function () exec("pvol.py -p -c -2") end),
     awful.key({}, "#123", function () exec("pvol.py -p -c 2") end),
-    awful.key({}, "#232", function () exec("plight.py -s -a") end),
-    awful.key({}, "#233", function () exec("plight.py -s -a") end),
+    awful.key({}, "#232", function () exec("plight.py -s") end),
+    awful.key({}, "#233", function () exec("plight.py -s") end),
     awful.key({}, "#244", function () exec("sudo /usr/sbin/pm-hibernate") end),
     awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend") end),
     awful.key({}, "#225", function () exec("pypres.py") end),
@@ -396,8 +396,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "h",          function () awful.tag.incmwfact(-0.05) end),
     awful.key({ modkey, "Shift" }, "l", function () awful.client.incwfact(-0.05) end),
     awful.key({ modkey, "Shift" }, "h", function () awful.client.incwfact(0.05) end),
-    awful.key({ modkey },          "space", function () awful.layout.inc(layouts, 1) end),
     awful.key({ modkey, "Shift" }, "space", function () awful.layout.inc(layouts, -1) end),
+    awful.key({ modkey },          "space", function () awful.layout.inc(layouts, 1) end),
     -- }}}
 
     -- {{{ Focus controls
@@ -443,6 +443,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey }, "Up",    function () awful.client.moveresize(0, -20, 0, 0) end),
     awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20, 0, 0, 0) end),
     awful.key({ modkey }, "Right", function () awful.client.moveresize(20, 0, 0, 0) end),
+    awful.key({ modkey, "Control"},"r", function (c) c:redraw() end),
     awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey, "Shift" }, "c", function (c) exec("kill -CONT " .. c.pid) end),
     awful.key({ modkey, "Shift" }, "s", function (c) exec("kill -STOP " .. c.pid) end),
@@ -538,7 +539,7 @@ awful.rules.rules = {
 
 -- {{{ Signals
 --
--- {{{ Signal function to execute when a new client appears
+-- {{{ Manage signal handler
 client.add_signal("manage", function (c, startup)
     -- Add a titlebar to each floating client
     if awful.client.floating.get(c)
@@ -577,7 +578,7 @@ client.add_signal("manage", function (c, startup)
 end)
 -- }}}
 
--- {{{ Focus signal functions
+-- {{{ Focus signal handlers
 client.add_signal("focus",   function (c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function (c) c.border_color = beautiful.border_normal end)
 -- }}}
