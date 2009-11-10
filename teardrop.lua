@@ -15,9 +15,9 @@
 --   vert   - Vertical; "bottom", "center" or "top" (default)
 --   horiz  - Horizontal; "left", "right" or "center" (default)
 --   width  - Width in absolute pixels, or width percentage
---            when < 1 (0.9999 (99.9% of the screen) by default)
+--            when <= 1 (1 (100% of the screen) by default)
 --   height - Height in absolute pixels, or height percentage
---            when < 1 (0.25 (25% of the screen) by default)
+--            when <= 1 (0.25 (25% of the screen) by default)
 --   sticky - Visible on all tags, false by default
 --   screen - Screen (optional), mouse.screen by default
 ----------------------------------------------------------------
@@ -42,7 +42,7 @@ local dropdown = {}
 function toggle(prog, vert, horiz, width, height, sticky, screen)
     local vert   = vert   or "top"
     local horiz  = horiz  or "center"
-    local width  = width  or 0.9999
+    local width  = width  or 1
     local height = height or 0.25
     local sticky = sticky or false
     local screen = screen or capi.mouse.screen
@@ -70,8 +70,8 @@ function toggle(prog, vert, horiz, width, height, sticky, screen)
             -- Client geometry and placement
             local screengeom = capi.screen[screen].workarea
 
-            if width  < 1 then width  = screengeom.width  * width  end
-            if height < 1 then height = screengeom.height * height end
+            if width  <= 1 then width  = screengeom.width  * width  end
+            if height <= 1 then height = screengeom.height * height end
 
             if     horiz == "left"  then x = screengeom.x
             elseif horiz == "right" then x = screengeom.width - width
@@ -117,7 +117,7 @@ function toggle(prog, vert, horiz, width, height, sticky, screen)
         else -- Hide and detach tags if not
             c.hidden = true
             local ctags = c:tags()
-            for i, v in pairs(ctags) do
+            for i, t in pairs(ctags) do
                 ctags[i] = nil
             end
             c:tags(ctags)
