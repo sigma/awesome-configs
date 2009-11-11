@@ -94,7 +94,7 @@ cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
     beautiful.fg_center_widget, beautiful.fg_widget })
 -- Register widgets
 vicious.register(cpugraph,  vicious.widgets.cpu,     "$1")
-vicious.register(tzswidget, vicious.widgets.thermal, "$1°C", 19, "TZS0")
+vicious.register(tzswidget, vicious.widgets.thermal, "$1°C", 19, "thermal_zone0")
 -- }}}
 
 -- {{{ Battery state
@@ -180,7 +180,7 @@ mailwidget = widget({ type = "textbox" })
 vicious.register(mailwidget, vicious.widgets.mbox, "$1", 181, {"/home/anrxc/mail/Inbox", 22})
 -- Register buttons
 mailwidget:buttons(awful.util.table.join(
-  awful.button({ }, 1, function () exec("urxvt -title Alpine -e alpine_exp") end)
+  awful.button({ }, 1, function () exec("urxvt -T Alpine -e alpine_exp") end)
 ))
 -- }}}
 
@@ -343,7 +343,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "w", function () exec("firefox") end),
     awful.key({ altkey }, "F1",  function () exec("urxvt") end),
     awful.key({ altkey }, "#49", function () teardrop("urxvt", "bottom") end),
-    awful.key({ modkey }, "a", function () exec("urxvt -title Alpine -e alpine_exp") end),
+    awful.key({ modkey }, "a", function () exec("urxvt -T Alpine -e alpine_exp") end),
     awful.key({ modkey }, "g", function () sexec("GTK2_RC_FILES=~/.gtkrc-gajim gajim") end),
     awful.key({ modkey }, "q", function () exec("emacsclient --eval '(make-remember-frame)'") end),
     -- }}}
