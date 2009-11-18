@@ -152,10 +152,10 @@ end
 -- Enable caching
 vicious.enable_caching(vicious.widgets.fs)
 -- Register widgets
-vicious.register(fs.r, vicious.widgets.fs, "${/ usep}",            599)
-vicious.register(fs.h, vicious.widgets.fs, "${/home usep}",        599)
-vicious.register(fs.s, vicious.widgets.fs, "${/mnt/storage usep}", 599)
-vicious.register(fs.b, vicious.widgets.fs, "${/mnt/backup usep}",  599)
+vicious.register(fs.r, vicious.widgets.fs, "${/ used_p}",            599)
+vicious.register(fs.h, vicious.widgets.fs, "${/home used_p}",        599)
+vicious.register(fs.s, vicious.widgets.fs, "${/mnt/storage used_p}", 599)
+vicious.register(fs.b, vicious.widgets.fs, "${/mnt/backup used_p}",  599)
 -- }}}
 
 -- {{{ Network usage
