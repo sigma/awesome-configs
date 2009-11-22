@@ -49,13 +49,9 @@ layouts = {
 
 -- {{{ Tags
 tags = {
-  names = { "term", "emacs", "web", "mail",
-    "im", "float", "float", "rss", "media",
-  },
-  layout = {
-    layouts[3], layouts[1], layouts[1],
-    layouts[5], layouts[1], layouts[7],
-    layouts[7], layouts[6], layouts[7],
+  names  = { "term", "emacs", "web", "mail", "im", "float", "float", "rss", "media" },
+  layout = { layouts[3], layouts[1], layouts[1], layouts[5], layouts[1], layouts[7],
+             layouts[7], layouts[6], layouts[7], -- Tags: 1, 2, 3, 4, 5, 6, 7, 8, 9
 }}
 
 for s = 1, screen.count() do
@@ -559,6 +555,9 @@ client.add_signal("manage", function (c, startup)
         end
     end)
 
+    -- Honor size hints
+    c.size_hints_honor = false
+
     -- Client placement
     if not startup then
         awful.client.setslave(c)
@@ -568,13 +567,10 @@ client.add_signal("manage", function (c, startup)
             awful.placement.no_overlap(c)
             awful.placement.no_offscreen(c)
         end
+
+        -- Fix for pre_manage rules patch
+        client.focus = c
     end
-
-    -- Honor size hints
-    c.size_hints_honor = false
-
-    -- Fix for pre_manage rules patch
-    client.focus = c
 end)
 -- }}}
 
