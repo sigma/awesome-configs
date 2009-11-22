@@ -1,6 +1,7 @@
 -------------------------------
 --  "Zenburn" awesome theme  --
 --    By Adrian C. (anrxc)   --
+--    License:  GNU GPL v2   --
 -------------------------------
 
 
