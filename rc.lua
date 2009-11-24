@@ -15,6 +15,7 @@ require("awful")
 require("awful.rules")
 require("awful.autofocus")
 -- User libraries
+require("osk")
 require("vicious")
 require("teardrop")
 require("scratchpad")
@@ -345,6 +346,7 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Multimedia keys
+
     awful.key({}, "#160", function () exec("kscreenlocker --forcelock") end),
     awful.key({}, "#121", function () exec("pvol.py -m") end),
     awful.key({}, "#122", function () exec("pvol.py -p -c -2") end),
@@ -354,6 +356,7 @@ globalkeys = awful.util.table.join(
     awful.key({}, "#244", function () exec("sudo /usr/sbin/pm-hibernate") end),
     awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend") end),
     awful.key({}, "#225", function () exec("pypres.py") end),
+    awful.key({}, "#157", function () osk() end),
     -- }}}
 
     -- {{{ Prompt menus
