@@ -35,8 +35,8 @@ local capi     = {
 module("osk")
 
 -- Variable definitions
-local initied  = false
-local keycodes = {
+local kbd = {}
+kbd.codes = {
     q=24,    w=25, e=26, r=27, t=28, z=52, u=30, i=31, o=32,   p=33,   ["."]=60,
     a=38,    s=39, d=40, f=41, g=42, h=43, j=44, k=45, l=46,
     Caps=66, y=29, x=53, c=54, v=55, b=56, n=57, m=58, Spc=65, Ret=36, Del=22,
@@ -55,8 +55,8 @@ local function create_button_row(...)
         w.text = util.escape(tostring(i))
         w:buttons(util.table.join(
             button({ }, 1, nil, function ()
-                capi.fake_input("key_press",   keycodes[i])
-                capi.fake_input("key_release", keycodes[i])
+                capi.fake_input("key_press",   kbd.codes[i])
+                capi.fake_input("key_release", kbd.codes[i])
             end)
         ))
 
@@ -68,8 +68,8 @@ end
 
 -- Create a wibox holding OSK rows and toggle its visibility
 setmetatable(_M, { __call = function (_, pos, scr)
-    if not inited then
-        kbd = wibox({
+    if not kbd.init then
+        kbd.box = wibox({
             height   = 100,
             position = pos or "bottom",
             screen   = scr or capi.screen.count(),
@@ -82,9 +82,9 @@ setmetatable(_M, { __call = function (_, pos, scr)
                 layout = layout.vertical.flex
             }
         })
-        inited = true
-        kbd.visible = false
+        kbd.init = true
+        kbd.box.visible = false
     end
 
-    kbd.visible = not kbd.visible
+    kbd.box.visible = not kbd.box.visible
 end })

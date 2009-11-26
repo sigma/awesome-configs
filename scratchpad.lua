@@ -16,9 +16,9 @@
 -- Parameters:
 --     c      - Client to scratch or un-scratch
 --     width  - Width in absolute pixels, or width percentage
---              when < 1 (0.50 (50% of the screen) by default)
+--              when <= 1 (0.50 (50% of the screen) by default)
 --     height - Height in absolute pixels, or height percentage
---              when < 1 (0.50 (50% of the screen) by default)
+--              when <= 1 (0.50 (50% of the screen) by default)
 --     sticky - Visible on all tags, false by default
 --     screen - Screen (optional), mouse.screen by default
 ---------------------------------------------------------------
@@ -51,8 +51,8 @@ function set(c, width, height, sticky, screen)
         -- Scratchpad geometry and placement
         local screengeom = capi.screen[screen].workarea
 
-        if width  < 1 then width  = screengeom.width  * width  end
-        if height < 1 then height = screengeom.height * height end
+        if width  <= 1 then width  = screengeom.width  * width  end
+        if height <= 1 then height = screengeom.height * height end
 
         c:geometry({ -- Client is always centered on screen
             x = screengeom.x + (screengeom.width  - width)  / 2,
