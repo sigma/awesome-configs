@@ -234,9 +234,9 @@ vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
 -- Register buttons
 volbar.widget:buttons(awful.util.table.join(
    awful.button({ }, 1, function () exec("kmix") end),
-   awful.button({ }, 2, function () exec("amixer -q sset Master toggle") end),
-   awful.button({ }, 4, function () exec("amixer -q sset PCM 2dB+") end),
-   awful.button({ }, 5, function () exec("amixer -q sset PCM 2dB-") end)
+   awful.button({ }, 2, function () exec("amixer -q sset Master toggle")   end),
+   awful.button({ }, 4, function () exec("amixer -q sset PCM 2dB+", false) end),
+   awful.button({ }, 5, function () exec("amixer -q sset PCM 2dB-", false) end)
 )) volwidget:buttons( volbar.widget:buttons() )
 -- }}}
 
@@ -278,10 +278,13 @@ for s = 1, screen.count() do
     -- Create a layoutbox
     layoutbox[s] = awful.widget.layoutbox(s)
     layoutbox[s]:buttons(awful.util.table.join(
-        awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
+        awful.button({ }, 1, function () awful.layout.inc(layouts, 1)  end),
         awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
-        awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
-        awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)
+        awful.button({ }, 4, function () awful.layout.inc(layouts, 1)  end),
+        awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end),
+        awful.button({ }, 2, function () if cmenu then cmenu:hide(); cmenu = nil
+            else cmenu = awful.menu.clients({ width = 215 }, true) end
+        end)
     ))
 
     -- Create the taglist
