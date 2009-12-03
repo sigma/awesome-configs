@@ -472,15 +472,11 @@ for i = 1, keynumber do
     globalkeys = awful.util.table.join( globalkeys,
         awful.key({ modkey }, "#" .. i + 9, function ()
             local screen = mouse.screen
-            if tags[screen][i] then
-                awful.tag.viewonly(tags[screen][i])
-            end
+            if tags[screen][i] then awful.tag.viewonly(tags[screen][i]) end
         end),
         awful.key({ modkey, "Control" }, "#" .. i + 9, function ()
             local screen = mouse.screen
-            if tags[screen][i] then
-                awful.tag.viewtoggle(tags[screen][i])
-            end
+            if tags[screen][i] then awful.tag.viewtoggle(tags[screen][i]) end
         end),
         awful.key({ modkey, "Shift" }, "#" .. i + 9, function ()
             if client.focus and tags[client.focus.screen][i] then
@@ -523,7 +519,8 @@ awful.rules.rules = {
     { rule = { class = "Emacs", instance = "_Remember_" },
       properties = { floating = true } },
     { rule = { class = "Xmessage", instance = "xmessage" },
-      properties = { floating = true } },
+      properties = { floating = true },
+      callback = awful.titlebar.add  },
     { rule = { class = "ROX-Filer" },
       properties = { floating = true } },
     { rule = { class = "Ark" },
@@ -533,7 +530,8 @@ awful.rules.rules = {
     { rule = { class = "Pinentry-gtk-2" },
       properties = { floating = true } },
     { rule = { instance = "firefox-bin" },
-      properties = { floating = true } },
+      properties = { floating = true },
+      callback = awful.titlebar.add  },
 }
 -- }}}
 
@@ -542,12 +540,11 @@ awful.rules.rules = {
 --
 -- {{{ Manage signal handler
 client.add_signal("manage", function (c, startup)
-    -- Add a titlebar to each new floater
-    if awful.client.floating.get(c)
+    -- Add a titlebar to each floater, and
+    if awful.client.floating.get(c) -- remove those in rule callback
     or awful.layout.get(c.screen) == awful.layout.suit.floating then
-        if not c.titlebar and c.class ~= "Xmessage" then
-            awful.titlebar.add(c, { modkey = modkey })
-        end
+        if   c.titlebar then awful.titlebar.remove(c)
+        else awful.titlebar.add(c, {modkey = modkey}) end
     end
 
     -- Enable sloppy focus
@@ -589,8 +586,8 @@ for s = 1, screen.count() do screen[s]:add_signal("arrange", function ()
 
     for _, c in pairs(clients) do -- Floaters are always on top
         if   awful.client.floating.get(c) or layout == "floating"
-        then if not c.fullscreen then c.above = true  end
-        else                          c.above = false end
+        then if not c.fullscreen then c.above       =  true  end
+        else                          c.above       =  false end
     end
   end)
 end
