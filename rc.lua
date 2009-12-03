@@ -432,7 +432,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey }, "c", function (c) c:kill() end),
     awful.key({ modkey }, "d", function (c) scratchpad.set(c, 0.60, 0.60, true) end),
     awful.key({ modkey }, "f", function (c) awful.titlebar.remove(c)
-        c.fullscreen = not c.fullscreen; c.above = not c.fullscreen
+        c.fullscreen           = not c.fullscreen
     end),
     awful.key({ modkey }, "m", function (c)
         c.maximized_horizontal = not c.maximized_horizontal
@@ -453,10 +453,9 @@ clientkeys = awful.util.table.join(
         if   c.titlebar then awful.titlebar.remove(c)
         else awful.titlebar.add(c, { modkey = modkey }) end
     end),
-    awful.key({ modkey, "Shift" }, "f", function (c) awful.client.floating.toggle(c)
-        if   awful.client.floating.get(c)
-        then c.above = true; awful.titlebar.add(c); awful.placement.no_offscreen(c)
-        else c.above = false; awful.titlebar.remove(c) end
+    awful.key({ modkey, "Shift" }, "f", function (c) if awful.client.floating.get(c)
+        then awful.client.floating.delete(c);    awful.titlebar.remove(c)
+        else awful.client.floating.set(c, true); awful.titlebar.add(c) end
     end)
 )
 -- }}}
@@ -543,14 +542,12 @@ awful.rules.rules = {
 --
 -- {{{ Manage signal handler
 client.add_signal("manage", function (c, startup)
-    -- Add a titlebar to each floating client
+    -- Add a titlebar to each new floater
     if awful.client.floating.get(c)
     or awful.layout.get(c.screen) == awful.layout.suit.floating then
         if not c.titlebar and c.class ~= "Xmessage" then
             awful.titlebar.add(c, { modkey = modkey })
         end
-        -- Floating clients are always on top
-        c.above = true
     end
 
     -- Enable sloppy focus
@@ -583,5 +580,19 @@ end)
 -- {{{ Focus signal handlers
 client.add_signal("focus",   function (c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function (c) c.border_color = beautiful.border_normal end)
+-- }}}
+
+-- {{{ Arrange signal handler
+for s = 1, screen.count() do screen[s]:add_signal("arrange", function ()
+    local clients = awful.client.visible(s)
+    local layout = awful.layout.getname(awful.layout.get(s))
+
+    for _, c in pairs(clients) do -- Floaters are always on top
+        if   awful.client.floating.get(c) or layout == "floating"
+        then if not c.fullscreen then c.above = true  end
+        else                          c.above = false end
+    end
+  end)
+end
 -- }}}
 -- }}}
