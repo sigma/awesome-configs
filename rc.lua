@@ -15,7 +15,6 @@ require("awful")
 require("awful.rules")
 require("awful.autofocus")
 -- User libraries
-require("osk")
 require("vicious")
 require("teardrop")
 require("scratchpad")
@@ -359,7 +358,9 @@ globalkeys = awful.util.table.join(
     awful.key({}, "#244", function () exec("sudo /usr/sbin/pm-hibernate") end),
     awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend") end),
     awful.key({}, "#225", function () exec("pypres.py") end),
-    awful.key({}, "#157", function () osk() end),
+    awful.key({}, "#157", function () if boosk then osk()
+        else boosk, osk = pcall(require, "osk") end
+    end),
     -- }}}
 
     -- {{{ Prompt menus
@@ -517,7 +518,8 @@ awful.rules.rules = {
     { rule = { class = "Emacs", instance = "emacs" },
       properties = { tag = tags[screen.count()][2] } },
     { rule = { class = "Emacs", instance = "_Remember_" },
-      properties = { floating = true } },
+      properties = { floating = true },
+      callback = awful.titlebar.add  },
     { rule = { class = "Xmessage", instance = "xmessage" },
       properties = { floating = true },
       callback = awful.titlebar.add  },
@@ -562,8 +564,8 @@ client.add_signal("manage", function (c, startup)
     if not startup then
         awful.client.setslave(c)
 
-        if  not c.size_hints.user_position
-        and not c.size_hints.program_position then
+        if  not c.size_hints.program_position
+        and not c.size_hints.user_position then
             awful.placement.no_overlap(c)
             awful.placement.no_offscreen(c)
         end
