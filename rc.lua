@@ -70,8 +70,7 @@ end
 -- {{{ Reusable separators
 spacer    = widget({ type = "textbox" })
 separator = widget({ type = "textbox" })
-spacer.text     = " "
-separator.text  = "|"
+separator.text, spacer.text = "|", " "
 -- }}}
 
 -- {{{ CPU usage and temperature
@@ -87,8 +86,8 @@ cpugraph:set_background_color(beautiful.fg_off_widget)
 cpugraph:set_color(beautiful.fg_end_widget)
 cpugraph:set_gradient_angle(0)
 cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
-    beautiful.fg_center_widget, beautiful.fg_widget })
--- Register widgets
+   beautiful.fg_center_widget, beautiful.fg_widget
+}) -- Register widgets
 vicious.register(cpugraph,  vicious.widgets.cpu,     "$1")
 vicious.register(tzswidget, vicious.widgets.thermal, "$1°C", 19, "thermal_zone0")
 -- }}}
@@ -108,16 +107,15 @@ memicon.image = image(beautiful.widget_mem)
 -- Initialize widget
 membar = awful.widget.progressbar()
 -- Pogressbar properties
-membar:set_width(8)
-membar:set_height(10)
+membar:set_width(10)
+membar:set_height(12)
 membar:set_vertical(true)
 membar:set_background_color(beautiful.fg_off_widget)
-membar:set_border_color(nil)
+membar:set_border_color(beautiful.border_widget)
 membar:set_color(beautiful.fg_widget)
 membar:set_gradient_colors({ beautiful.fg_widget,
-    beautiful.fg_center_widget, beautiful.fg_end_widget })
-awful.widget.layout.margins[membar.widget] = { top = 1, bottom = 1 }
--- Register widget
+   beautiful.fg_center_widget, beautiful.fg_end_widget
+}) -- Register widget
 vicious.register(membar, vicious.widgets.mem, "$1", 13)
 -- }}}
 
@@ -138,13 +136,12 @@ for _, w in pairs(fs) do
   w:set_border_color(beautiful.border_widget)
   w:set_color(beautiful.fg_widget)
   w:set_gradient_colors({ beautiful.fg_widget,
-    beautiful.fg_center_widget, beautiful.fg_end_widget
+     beautiful.fg_center_widget, beautiful.fg_end_widget
   }) -- Register buttons
   w.widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function () exec("rox", false) end)
   ))
-end
--- Enable caching
+end -- Enable caching
 vicious.enable_caching(vicious.widgets.fs)
 -- Register widgets
 vicious.register(fs.r, vicious.widgets.fs, "${/ used_p}",            599)
@@ -195,13 +192,12 @@ local orgmode = {
     today  = '<span color="'..beautiful.fg_normal..'">',
     soon   = '<span color="'..beautiful.fg_widget..'">',
     future = '<span color="'..beautiful.fg_netup_widget..'">'
-}}
--- Register widget
+}} -- Register widget
 vicious.register(orgwidget, vicious.widgets.org,
-  orgmode.color.past .. '$1</span>|' .. orgmode.color.today  .. '$2</span>|' ..
-  orgmode.color.soon .. '$3</span>|' .. orgmode.color.future .. '$4</span>',
-  601, orgmode.files)
--- Register buttons
+  orgmode.color.past..'$1</span>|'..orgmode.color.today .. '$2</span>|' ..
+  orgmode.color.soon..'$3</span>|'..orgmode.color.future.. '$4</span>', 601,
+  orgmode.files
+) -- Register buttons
 orgwidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () exec("emacsclient --eval '(org-agenda-list)'") end),
   awful.button({ }, 3, function () exec("emacsclient --eval '(make-remember-frame)'") end)
@@ -215,16 +211,15 @@ volicon.image = image(beautiful.widget_vol)
 volbar    = awful.widget.progressbar()
 volwidget = widget({ type = "textbox" })
 -- Progressbar properties
-volbar:set_width(8)
-volbar:set_height(10)
+volbar:set_width(10)
+volbar:set_height(12)
 volbar:set_vertical(true)
 volbar:set_background_color(beautiful.fg_off_widget)
-volbar:set_border_color(nil)
+volbar:set_border_color(beautiful.border_widget)
 volbar:set_color(beautiful.fg_widget)
 volbar:set_gradient_colors({ beautiful.fg_widget,
-    beautiful.fg_center_widget, beautiful.fg_end_widget })
-awful.widget.layout.margins[volbar.widget] = { top = 1, bottom = 1 }
--- Enable caching
+   beautiful.fg_center_widget, beautiful.fg_end_widget
+}) -- Enable caching
 vicious.enable_caching(vicious.widgets.volume)
 -- Register widgets
 vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "PCM")
@@ -235,7 +230,8 @@ volbar.widget:buttons(awful.util.table.join(
    awful.button({ }, 2, function () exec("amixer -q sset Master toggle")   end),
    awful.button({ }, 4, function () exec("amixer -q sset PCM 2dB+", false) end),
    awful.button({ }, 5, function () exec("amixer -q sset PCM 2dB-", false) end)
-)) volwidget:buttons( volbar.widget:buttons() )
+)) -- Register assigned buttons
+volwidget:buttons(volbar.widget:buttons())
 -- }}}
 
 -- {{{ Date and time
@@ -497,14 +493,13 @@ root.keys(globalkeys)
 
 -- {{{ Rules
 awful.rules.rules = {
-    { rule = { },
-      properties = {
-          border_width = beautiful.border_width,
-          border_color = beautiful.border_normal,
-          focus = true,
-          keys = clientkeys,
-          buttons = clientbuttons
-    }},
+    { rule = { }, properties = {
+      focus = true,
+      keys  = clientkeys,
+      buttons = clientbuttons,
+      border_width = beautiful.border_width,
+      border_color = beautiful.border_normal }
+    },
     { rule = { name = "Alpine" },
       properties = { tag = tags[1][4] } },
     { rule = { class = "Gajim.py" },
