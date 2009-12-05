@@ -116,7 +116,7 @@ membar:set_border_color(nil)
 membar:set_color(beautiful.fg_widget)
 membar:set_gradient_colors({ beautiful.fg_widget,
     beautiful.fg_center_widget, beautiful.fg_end_widget })
-awful.widget.layout.margins[membar.widget] = { top = 2, bottom = 2 }
+awful.widget.layout.margins[membar.widget] = { top = 1, bottom = 1 }
 -- Register widget
 vicious.register(membar, vicious.widgets.mem, "$1", 13)
 -- }}}
@@ -138,9 +138,8 @@ for _, w in pairs(fs) do
   w:set_border_color(beautiful.border_widget)
   w:set_color(beautiful.fg_widget)
   w:set_gradient_colors({ beautiful.fg_widget,
-    beautiful.fg_center_widget, beautiful.fg_end_widget })
-  awful.widget.layout.margins[w.widget] = { top = 1, bottom = 1 }
-  -- Register buttons
+    beautiful.fg_center_widget, beautiful.fg_end_widget
+  }) -- Register buttons
   w.widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function () exec("rox", false) end)
   ))
@@ -224,7 +223,7 @@ volbar:set_border_color(nil)
 volbar:set_color(beautiful.fg_widget)
 volbar:set_gradient_colors({ beautiful.fg_widget,
     beautiful.fg_center_widget, beautiful.fg_end_widget })
-awful.widget.layout.margins[volbar.widget] = { top = 2, bottom = 2 }
+awful.widget.layout.margins[volbar.widget] = { top = 1, bottom = 1 }
 -- Enable caching
 vicious.enable_caching(vicious.widgets.volume)
 -- Register widgets
@@ -290,7 +289,7 @@ for s = 1, screen.count() do
     taglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, taglist.buttons)
     -- Create the wibox
     wibox[s] = awful.wibox({      screen = s,
-        fg = beautiful.fg_normal, height = 14,
+        fg = beautiful.fg_normal, height = 12,
         bg = beautiful.bg_normal, position = "top"
     })
     -- Add widgets to the wibox
@@ -298,7 +297,7 @@ for s = 1, screen.count() do
         {   taglist[s],
             layoutbox[s],
             promptbox[s],
-            layout = awful.widget.layout.horizontal.leftright
+            ["layout"] = awful.widget.layout.horizontal.leftright
         },
         s == screen.count() and systray or nil,
         separator, datewidget, dateicon,
@@ -310,7 +309,7 @@ for s = 1, screen.count() do
         separator, spacer, membar.widget, spacer, memicon,
         separator, spacer, batwidget, baticon,
         separator, cpugraph.widget, spacer, tzswidget, cpuicon,
-        layout = awful.widget.layout.horizontal.rightleft
+        ["layout"] = awful.widget.layout.horizontal.rightleft
     }
 end
 -- }}}
@@ -348,7 +347,6 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Multimedia keys
-
     awful.key({}, "#160", function () exec("kscreenlocker --forcelock") end),
     awful.key({}, "#121", function () exec("pvol.py -m") end),
     awful.key({}, "#122", function () exec("pvol.py -p -c -2") end),
