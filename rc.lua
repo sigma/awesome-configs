@@ -562,9 +562,6 @@ client.add_signal("manage", function (c, startup)
             awful.placement.no_overlap(c)
             awful.placement.no_offscreen(c)
         end
-
-        -- Fix for pre_manage rules patch
-        client.focus = c
     end
 end)
 -- }}}
