@@ -522,7 +522,7 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "Geeqie" },
       properties = { floating = true } },
-    { rule = { class = "Pinentry-gtk-2" },
+    { rule = { class = "Pinentry.*" },
       properties = { floating = true } },
     { rule = { instance = "firefox-bin" },
       properties = { floating = true },
