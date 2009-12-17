@@ -286,7 +286,9 @@ for s = 1, screen.count() do
     -- Create the wibox
     wibox[s] = awful.wibox({      screen = s,
         fg = beautiful.fg_normal, height = 12,
-        bg = beautiful.bg_normal, position = "top"
+        bg = beautiful.bg_normal, position = "top",
+        border_color = beautiful.border_focus,
+        border_width = beautiful.border_width
     })
     -- Add widgets to the wibox
     wibox[s].widgets = {
@@ -441,6 +443,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20, 0, 0, 0) end),
     awful.key({ modkey }, "Right", function () awful.client.moveresize(20, 0, 0, 0) end),
     awful.key({ modkey, "Control"},"r", function (c) c:redraw() end),
+    awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
     awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey, "Shift" }, "c", function (c) exec("kill -CONT " .. c.pid) end),
     awful.key({ modkey, "Shift" }, "s", function (c) exec("kill -STOP " .. c.pid) end),
