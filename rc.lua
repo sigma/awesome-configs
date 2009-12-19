@@ -275,10 +275,7 @@ for s = 1, screen.count() do
         awful.button({ }, 1, function () awful.layout.inc(layouts, 1)  end),
         awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
         awful.button({ }, 4, function () awful.layout.inc(layouts, 1)  end),
-        awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end),
-        awful.button({ }, 2, function () if cmenu then cmenu:hide(); cmenu = nil
-            else cmenu = awful.menu.clients({ width = 215 }, true) end
-        end)
+        awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)
     ))
 
     -- Create the taglist
@@ -414,6 +411,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "Tab", function ()
         awful.client.focus.history.previous()
         if client.focus then client.focus:raise() end
+    end),
+    awful.key({ altkey }, "Escape", function ()
+        local cmenu = awful.menu.clients({ width = 215 }, true)
     end),
     awful.key({ modkey, "Shift" }, "j", function () awful.client.swap.byidx(1) end),
     awful.key({ modkey, "Shift" }, "k", function () awful.client.swap.byidx(-1) end)
