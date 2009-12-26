@@ -290,9 +290,7 @@ for s = 1, screen.count() do
     })
     -- Add widgets to the wibox
     wibox[s].widgets = {
-        {   taglist[s],
-            layoutbox[s],
-            promptbox[s],
+        {   taglist[s], layoutbox[s], separator, promptbox[s],
             ["layout"] = awful.widget.layout.horizontal.leftright
         },
         s == screen.count() and systray or nil,
