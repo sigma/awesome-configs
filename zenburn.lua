@@ -111,6 +111,7 @@ theme.widget_vol    = theme.confdir .. "/icons/vol.png"
 theme.widget_org    = theme.confdir .. "/icons/cal.png"
 theme.widget_date   = theme.confdir .. "/icons/time.png"
 theme.widget_crypto = theme.confdir .. "/icons/crypto.png"
+theme.widget_sep    = theme.confdir .. "/icons/separator.png"
 -- }}}
 
 -- {{{ Titlebar icons

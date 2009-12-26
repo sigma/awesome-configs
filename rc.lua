@@ -1,6 +1,6 @@
 -- {{{ License
 --
--- Awesome configuration, using awesome 3.4.2 on Arch GNU/Linux
+-- Awesome configuration, using awesome 3.4.3 on Arch GNU/Linux
 --   * Adrian C. <anrxc@sysphere.org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
@@ -68,9 +68,10 @@ end
 -- {{{ Widgets configuration
 --
 -- {{{ Reusable separators
-spacer    = widget({ type = "textbox" })
-separator = widget({ type = "textbox" })
-separator.text, spacer.text = "|", " "
+spacer    = widget({ type = "textbox"  })
+separator = widget({ type = "imagebox" })
+spacer.text     = " "
+separator.image = image(beautiful.widget_sep)
 -- }}}
 
 -- {{{ CPU usage and temperature
@@ -297,14 +298,14 @@ for s = 1, screen.count() do
         s == screen.count() and systray or nil,
         separator, datewidget, dateicon,
         separator, volwidget, spacer, volbar.widget, volicon,
-        separator, spacer, orgwidget, orgicon,
+        separator, orgwidget, orgicon,
         separator, mailwidget, mailicon,
         separator, upicon, netwidget, dnicon,
         separator, fs.b.widget, fs.s.widget, fs.h.widget, fs.r.widget, fsicon,
-        separator, spacer, membar.widget, spacer, memicon,
-        separator, spacer, batwidget, baticon,
-        separator, cpugraph.widget, spacer, tzswidget, cpuicon,
-        ["layout"] = awful.widget.layout.horizontal.rightleft
+        separator, membar.widget, spacer, memicon,
+        separator, batwidget, baticon,
+        separator, cpugraph.widget, separator, tzswidget, cpuicon,
+        separator, ["layout"] = awful.widget.layout.horizontal.rightleft
     }
 end
 -- }}}
