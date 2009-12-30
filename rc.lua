@@ -374,6 +374,9 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Awesome controls
+    awful.key({ modkey }, "b", function ()
+        wibox[mouse.screen].visible = not wibox[mouse.screen].visible
+    end),
     awful.key({ modkey, "Shift" }, "q", awesome.quit),
     awful.key({ modkey, "Shift" }, "r", function ()
         promptbox[mouse.screen].text = awful.util.escape(awful.util.restart())
@@ -422,9 +425,6 @@ globalkeys = awful.util.table.join(
 
 -- {{{ Client manipulation
 clientkeys = awful.util.table.join(
-    awful.key({ modkey }, "b", function ()
-        wibox[mouse.screen].visible = not wibox[mouse.screen].visible
-    end),
     awful.key({ modkey }, "c", function (c) c:kill() end),
     awful.key({ modkey }, "d", function (c) scratchpad.set(c, 0.60, 0.60, true) end),
     awful.key({ modkey }, "f", function (c) awful.titlebar.remove(c)
