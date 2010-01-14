@@ -435,8 +435,8 @@ clientkeys = awful.util.table.join(
         c.maximized_vertical   = not c.maximized_vertical
     end),
     awful.key({ modkey }, "o",     awful.client.movetoscreen),
-    awful.key({ modkey }, "Next",  function () awful.client.moveresize(20, 20, -20, -20) end),
-    awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20, 20, 20) end),
+    awful.key({ modkey }, "Next",  function () awful.client.moveresize(20, 20, -40, -40) end),
+    awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20, 40, 40) end),
     awful.key({ modkey }, "Down",  function () awful.client.moveresize(0, 20, 0, 0) end),
     awful.key({ modkey }, "Up",    function () awful.client.moveresize(0, -20, 0, 0) end),
     awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20, 0, 0, 0) end),
