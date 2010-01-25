@@ -496,9 +496,8 @@ root.keys(globalkeys)
 -- {{{ Rules
 awful.rules.rules = {
     { rule = { }, properties = {
-      focus = true,
-      keys  = clientkeys,
-      buttons = clientbuttons,
+      focus = true,      size_hints_honor = false,
+      keys = clientkeys, buttons = clientbuttons,
       border_width = beautiful.border_width,
       border_color = beautiful.border_normal }
     },
@@ -537,8 +536,8 @@ awful.rules.rules = {
 --
 -- {{{ Manage signal handler
 client.add_signal("manage", function (c, startup)
-    -- Add a titlebar to each floater, and
-    if awful.client.floating.get(c) -- remove those in rule callback
+    -- Add titlebar to floaters, but remove those from rule callback
+    if awful.client.floating.get(c)
     or awful.layout.get(c.screen) == awful.layout.suit.floating then
         if   c.titlebar then awful.titlebar.remove(c)
         else awful.titlebar.add(c, {modkey = modkey}) end
@@ -551,9 +550,6 @@ client.add_signal("manage", function (c, startup)
             client.focus = c
         end
     end)
-
-    -- Honor size hints
-    c.size_hints_honor = false
 
     -- Client placement
     if not startup then
