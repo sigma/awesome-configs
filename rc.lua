@@ -81,7 +81,7 @@ cpuicon.image = image(beautiful.widget_cpu)
 cpugraph  = awful.widget.graph()
 tzswidget = widget({ type = "textbox" })
 -- Graph properties
-cpugraph:set_width(50)
+cpugraph:set_width(40)
 cpugraph:set_height(14)
 cpugraph:set_background_color(beautiful.fg_off_widget)
 cpugraph:set_color(beautiful.fg_end_widget)
@@ -90,7 +90,7 @@ cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
    beautiful.fg_center_widget, beautiful.fg_widget
 }) -- Register widgets
 vicious.register(cpugraph,  vicious.widgets.cpu,     "$1")
-vicious.register(tzswidget, vicious.widgets.thermal, "$1°C", 19, "thermal_zone0")
+vicious.register(tzswidget, vicious.widgets.thermal, "$1C", 19, "thermal_zone0")
 -- }}}
 
 -- {{{ Battery state
@@ -170,7 +170,7 @@ mailicon.image = image(beautiful.widget_mail)
 -- Initialize widget
 mailwidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(mailwidget, vicious.widgets.mbox, "$1", 181, {"/home/anrxc/mail/Inbox", 22})
+vicious.register(mailwidget, vicious.widgets.mbox, "$1", 181, {"/home/anrxc/mail/Inbox", 15})
 -- Register buttons
 mailwidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () exec("urxvt -T Alpine -e alpine_exp") end)
@@ -195,8 +195,8 @@ local orgmode = {
     future = '<span color="'..beautiful.fg_netup_widget..'">'
 }} -- Register widget
 vicious.register(orgwidget, vicious.widgets.org,
-  orgmode.color.past..'$1</span>|'..orgmode.color.today .. '$2</span>|' ..
-  orgmode.color.soon..'$3</span>|'..orgmode.color.future.. '$4</span>', 601,
+  orgmode.color.past..'$1</span>-'..orgmode.color.today .. '$2</span>-' ..
+  orgmode.color.soon..'$3</span>-'..orgmode.color.future.. '$4</span>', 601,
   orgmode.files
 ) -- Register buttons
 orgwidget:buttons(awful.util.table.join(
@@ -241,7 +241,7 @@ dateicon.image = image(beautiful.widget_date)
 -- Initialize widget
 datewidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(datewidget, vicious.widgets.date, "%b %d, %R", 61)
+vicious.register(datewidget, vicious.widgets.date, "%R", 61)
 -- Register buttons
 datewidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () exec("pylendar.py") end)
@@ -300,9 +300,9 @@ for s = 1, screen.count() do
         separator, mailwidget, mailicon,
         separator, upicon, netwidget, dnicon,
         separator, fs.b.widget, fs.s.widget, fs.h.widget, fs.r.widget, fsicon,
-        separator, membar.widget, spacer, memicon,
+        separator, membar.widget, memicon,
         separator, batwidget, baticon,
-        separator, cpugraph.widget, separator, tzswidget, cpuicon,
+        separator, tzswidget, spacer, cpugraph.widget, cpuicon,
         separator, ["layout"] = awful.widget.layout.horizontal.rightleft
     }
 end
