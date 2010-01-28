@@ -415,6 +415,7 @@ globalkeys = awful.util.table.join(
         if client.focus then client.focus:raise() end
     end),
     awful.key({ altkey }, "Escape", function () mouse.coords({x=525, y=330}, true)
+        awful.menu.menu_keys.down = { "Down", "Alt_L" }
         local cmenu = awful.menu.clients({ width = 230 }, true)
     end),
     awful.key({ modkey, "Shift" }, "j", function () awful.client.swap.byidx(1) end),
