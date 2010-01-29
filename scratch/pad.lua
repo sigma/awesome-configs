@@ -1,16 +1,16 @@
 ---------------------------------------------------------------
 -- Basic scratchpad manager for the awesome window manager
 ---------------------------------------------------------------
--- Coded by: Adrian C. <anrxc@sysphere.org>
+-- Coded by: * Adrian C. (anrxc) <anrxc@sysphere.org>
 -- Licensed under the WTFPL version 2
 --   * http://sam.zoy.org/wtfpl/COPYING
 ---------------------------------------------------------------
 -- To use this module add:
---     require("scratchpad")
+--     require("scratch")
 -- to the top of your rc.lua, and call:
---     scratchpad.set(c, width, height, sticky, screen)
+--     scratch.pad.set(c, width, height, sticky, screen)
 -- from a clientkeys binding, and:
---     scratchpad.toggle(screen)
+--     scratch.pad.toggle(screen)
 -- from a globalkeys binding.
 --
 -- Parameters:
@@ -31,10 +31,10 @@ local capi = {
     screen = screen
 }
 
--- Scratchpad: Basic scratchpad manager for the awesome window manager
-module("scratchpad")
+-- Scratchpad: basic scratchpad manager for the awesome window manager
+module("scratch.pad")
 
-local scratch = {}
+local scratchpad = {}
 
 -- Toggle a set of properties on a client.
 local function toggleprop(c, prop)
@@ -76,27 +76,27 @@ function set(c, width, height, sticky, screen)
     end
 
     -- Prepare a table for storing clients,
-    if not scratch.pad then scratch.pad = {}
+    if not scratchpad.pad then scratchpad.pad = {}
         -- add unmanage signal for scratchpad clients
         capi.client.add_signal("unmanage", function (c)
-            if scratch.pad[screen] == c then
-                scratch.pad[screen] = nil
+            if scratchpad.pad[screen] == c then
+                scratchpad.pad[screen] = nil
             end
         end)
     end
 
     -- If the scratcphad is emtpy, store the client,
-    if not scratch.pad[screen] then
-        scratch.pad[screen] = c
+    if not scratchpad.pad[screen] then
+        scratchpad.pad[screen] = c
         -- then apply geometry and properties
         setscratch(c)
     else -- If a client is already scratched,
-        local oc = scratch.pad[screen]
+        local oc = scratchpad.pad[screen]
         -- unscratch, and compare it with the focused client
         awful.client.floating.toggle(oc); toggleprop(oc, {})
         -- If it matches clear the table, if not replace it
-        if   oc == c then scratch.pad[screen] =     nil
-        else scratch.pad[screen] = c; setscratch(c) end
+        if   oc == c then scratchpad.pad[screen] =     nil
+        else scratchpad.pad[screen] = c; setscratch(c) end
     end
 end
 
@@ -106,10 +106,10 @@ function toggle(screen)
     local screen = screen or capi.mouse.screen
 
     -- Check if we have a client on storage,
-    if scratch.pad and
-       scratch.pad[screen] ~= nil
+    if scratchpad.pad and
+       scratchpad.pad[screen] ~= nil
     then -- and get it out, to play
-        local c = scratch.pad[screen]
+        local c = scratchpad.pad[screen]
 
         -- If it's visible on another tag hide it,
         if c:isvisible() == false then c.hidden = true

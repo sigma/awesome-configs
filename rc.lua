@@ -16,8 +16,7 @@ require("awful.rules")
 require("awful.autofocus")
 -- User libraries
 require("vicious")
-require("teardrop")
-require("scratchpad")
+require("scratch")
 -- }}}
 
 
@@ -334,7 +333,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "r", function () exec("rox", false) end),
     awful.key({ modkey }, "w", function () exec("firefox") end),
     awful.key({ altkey }, "F1",  function () exec("urxvt") end),
-    awful.key({ altkey }, "#49", function () teardrop("urxvt", "bottom") end),
+    awful.key({ altkey }, "#49", function () scratch.drop("urxvt", "bottom") end),
     awful.key({ modkey }, "a", function () exec("urxvt -T Alpine -e alpine_exp") end),
     awful.key({ modkey }, "g", function () sexec("GTK2_RC_FILES=~/.gtkrc-gajim gajim") end),
     awful.key({ modkey }, "q", function () exec("emacsclient --eval '(make-remember-frame)'") end),
@@ -400,7 +399,7 @@ globalkeys = awful.util.table.join(
 
     -- {{{ Focus controls
     awful.key({ modkey }, "p", function () awful.screen.focus_relative(1) end),
-    awful.key({ modkey }, "s", function () scratchpad.toggle() end),
+    awful.key({ modkey }, "s", function () scratch.pad.toggle() end),
     awful.key({ modkey }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey }, "j", function ()
         awful.client.focus.byidx(1)
@@ -427,7 +426,7 @@ globalkeys = awful.util.table.join(
 -- {{{ Client manipulation
 clientkeys = awful.util.table.join(
     awful.key({ modkey }, "c", function (c) c:kill() end),
-    awful.key({ modkey }, "d", function (c) scratchpad.set(c, 0.60, 0.60, true) end),
+    awful.key({ modkey }, "d", function (c) scratch.pad.set(c, 0.60, 0.60, true) end),
     awful.key({ modkey }, "f", function (c) awful.titlebar.remove(c)
         c.fullscreen           = not c.fullscreen
     end),

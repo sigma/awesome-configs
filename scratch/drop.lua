@@ -1,15 +1,15 @@
-----------------------------------------------------------------
+-------------------------------------------------------------------
 -- Drop-down applications manager for the awesome window manager
-----------------------------------------------------------------
--- Coded  by: Lucas de Vries <lucas@glacicle.com>
--- Hacked by: Adrian C. <anrxc@sysphere.org>
+-------------------------------------------------------------------
+-- Coded by: * Adrian C. (anrxc) <anrxc@sysphere.org>
+--           * Lucas de Vries <lucas@glacicle.com>
 -- Licensed under the WTFPL version 2
 --   * http://sam.zoy.org/wtfpl/COPYING
-----------------------------------------------------------------
+-------------------------------------------------------------------
 -- To use this module add:
---   require("teardrop")
+--   require("scratch")
 -- to the top of your rc.lua, and call it from a keybinding:
---   teardrop(prog, vert, horiz, width, height, sticky, screen)
+--   scratch.drop(prog, vert, horiz, width, height, sticky, screen)
 --
 -- Parameters:
 --   prog   - Program to run; "urxvt", "gmrun", "thunderbird"
@@ -21,7 +21,7 @@
 --            when <= 1 (0.25 (25% of the screen) by default)
 --   sticky - Visible on all tags, false by default
 --   screen - Screen (optional), mouse.screen by default
-----------------------------------------------------------------
+-------------------------------------------------------------------
 
 -- Grab environment
 local pairs = pairs
@@ -33,8 +33,8 @@ local capi = {
     screen = screen
 }
 
--- Teardrop: Drop-down applications manager for the awesome window manager
-module("teardrop")
+-- Scratchdrop: drop-down applications manager for the awesome window manager
+module("scratch.drop")
 
 local dropdown = {}
 
@@ -51,7 +51,7 @@ function toggle(prog, vert, horiz, width, height, sticky, screen)
     if not dropdown[prog] then
         dropdown[prog] = {}
 
-        -- Add unmanage signal for teardrop programs
+        -- Add unmanage signal for scratchdrop programs
         capi.client.add_signal("unmanage", function (c)
             for scr, cl in pairs(dropdown[prog]) do
                 if cl == c then
@@ -65,7 +65,7 @@ function toggle(prog, vert, horiz, width, height, sticky, screen)
         spawnw = function (c)
             dropdown[prog][screen] = c
 
-            -- Teardrop clients are floaters
+            -- Scratchdrop clients are floaters
             awful.client.floating.set(c, true)
 
             -- Client geometry and placement
