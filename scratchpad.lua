@@ -93,12 +93,12 @@ function set(c, width, height, sticky, screen)
         -- compare it with the focused client
         if oc == c then
             -- If it matches then unscratch and clear the table
-            awful.client.floating.toggle(oc); oc.sticky = false
-            oc.ontop = false; oc.above = false
+            awful.client.floating.toggle(oc)
+            oc.sticky, oc.ontop, oc.above = false, false, false
             scratch.pad[screen] = nil
         else -- If they don't match, unscratch and replace it
-            oc.hidden = false; oc.sticky = false
-            oc.ontop = false; oc.above = false
+            oc.hidden, oc.sticky = false, false
+            oc.ontop,  oc.above  = false, false
             awful.client.floating.toggle(oc)
             scratch.pad[screen] = c
             setscratch(c)
@@ -118,7 +118,7 @@ function toggle(screen)
         local c = scratch.pad[screen]
 
         -- If it's visible on another tag hide it,
-        if c:isvisible() == false then c.hidden = true;
+        if c:isvisible() == false then c.hidden = true
             -- and move it to the current worskpace
             awful.client.movetotag(awful.tag.selected(screen), c)
         end
