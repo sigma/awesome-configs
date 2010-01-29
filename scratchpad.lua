@@ -36,6 +36,15 @@ module("scratchpad")
 
 local scratch = {}
 
+-- Toggle a set of properties on a client.
+local function toggleprop(c, prop)
+    c.ontop  = prop.ontop  or false
+    c.above  = prop.above  or false
+    c.hidden = prop.hidden or false
+    c.sticky = prop.stick  or false
+    c.skip_taskbar = prop.task or false
+end
+
 -- Scratch the focused client, or un-scratch and tile it. If another
 -- client is already scratched, replace it with the focused client.
 function set(c, width, height, sticky, screen)
@@ -45,39 +54,32 @@ function set(c, width, height, sticky, screen)
     local screen = screen or capi.mouse.screen
 
     local function setscratch(c)
-        -- Scratchpad is floating
-        awful.client.floating.set(c, true)
+        -- Scratchpad is floating and has no titlebar
+        awful.client.floating.set(c, true); awful.titlebar.remove(c)
+
+        -- Scratchpad client properties
+        toggleprop(c, {ontop=true, above=true, task=true, stick=sticky})
 
         -- Scratchpad geometry and placement
         local screengeom = capi.screen[screen].workarea
-
         if width  <= 1 then width  = screengeom.width  * width  end
         if height <= 1 then height = screengeom.height * height end
 
-        c:geometry({ -- Client is always centered on screen
+        c:geometry({ -- Scratchpad is always centered on screen
             x = screengeom.x + (screengeom.width  - width)  / 2,
             y = screengeom.y + (screengeom.height - height) / 2,
             width = width,      height = height
         })
 
-        -- Scratchpad properties
-        c.ontop = true
-        c.above = true
-        c.skip_taskbar = true
-        if sticky then c.sticky = true end
-        if c.titlebar then awful.titlebar.remove(c) end
-
         -- Scratchpad should not loose focus
-        c:raise()
-        capi.client.focus = c
+        c:raise(); capi.client.focus = c
     end
 
     -- Prepare a table for storing clients,
     if not scratch.pad then scratch.pad = {}
         -- add unmanage signal for scratchpad clients
         capi.client.add_signal("unmanage", function (c)
-            local oc = scratch.pad[screen]
-            if oc == c then
+            if scratch.pad[screen] == c then
                 scratch.pad[screen] = nil
             end
         end)
@@ -90,19 +92,11 @@ function set(c, width, height, sticky, screen)
         setscratch(c)
     else -- If a client is already scratched,
         local oc = scratch.pad[screen]
-        -- compare it with the focused client
-        if oc == c then
-            -- If it matches then unscratch and clear the table
-            awful.client.floating.toggle(oc)
-            oc.sticky, oc.ontop, oc.above = false, false, false
-            scratch.pad[screen] = nil
-        else -- If they don't match, unscratch and replace it
-            oc.hidden, oc.sticky = false, false
-            oc.ontop,  oc.above  = false, false
-            awful.client.floating.toggle(oc)
-            scratch.pad[screen] = c
-            setscratch(c)
-        end
+        -- unscratch, and compare it with the focused client
+        awful.client.floating.toggle(oc); toggleprop(oc, {})
+        -- If it matches clear the table, if not replace it
+        if   oc == c then scratch.pad[screen] =     nil
+        else scratch.pad[screen] = c; setscratch(c) end
     end
 end
 
@@ -127,8 +121,7 @@ function toggle(screen)
         if c.hidden then
             awful.placement.centered(c)
             c.hidden = false
-            c:raise()
-            capi.client.focus = c
+            c:raise(); capi.client.focus = c
         else -- hide it if it's not
             c.hidden = true
         end
