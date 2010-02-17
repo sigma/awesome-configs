@@ -36,12 +36,11 @@ local sexec = awful.util.spawn_with_shell
 -- Window management layouts
 layouts = {
   awful.layout.suit.tile,        -- 1
-  awful.layout.suit.tile.left,   -- 2
-  awful.layout.suit.tile.bottom, -- 3
-  awful.layout.suit.tile.top,    -- 4
-  awful.layout.suit.max,         -- 5
-  awful.layout.suit.magnifier,   -- 6
-  awful.layout.suit.floating     -- 7
+  awful.layout.suit.tile.bottom, -- 2
+  awful.layout.suit.fair,        -- 3
+  awful.layout.suit.max,         -- 4
+  awful.layout.suit.magnifier,   -- 5
+  awful.layout.suit.floating     -- 6
 }
 -- }}}
 
@@ -49,8 +48,8 @@ layouts = {
 -- {{{ Tags
 tags = {
   names  = { "term", "emacs", "web", "mail", "im", 6, 7, "rss", "media" },
-  layout = { layouts[3], layouts[1], layouts[1], layouts[5], layouts[1],
-             layouts[7], layouts[7], layouts[6], layouts[7]
+  layout = { layouts[2], layouts[1], layouts[1], layouts[4], layouts[1],
+             layouts[6], layouts[6], layouts[5], layouts[6]
 }}
 
 for s = 1, screen.count() do
