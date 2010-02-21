@@ -26,8 +26,8 @@ require("scratch")
 beautiful.init(awful.util.getdir("config") .. "/zenburn.lua")
 
 -- Modifier keys
-altkey = "Mod1" -- Alt_L
-modkey = "Mod4" -- Super_L
+altkey = "Mod1"                  -- Alt_L
+modkey = "Mod4"                  -- Super_L
 
 -- Function aliases
 local exec  = awful.util.spawn
@@ -65,10 +65,8 @@ end
 --
 -- {{{ Widgets configuration
 --
--- {{{ Reusable separators
-spacer    = widget({ type = "textbox"  })
+-- {{{ Reusable separator
 separator = widget({ type = "imagebox" })
-spacer.text     = " "
 separator.image = image(beautiful.widget_sep)
 -- }}}
 
@@ -87,8 +85,8 @@ cpugraph:set_gradient_angle(0)
 cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
    beautiful.fg_center_widget, beautiful.fg_widget
 }) -- Register widgets
-vicious.register(cpugraph,  vicious.widgets.cpu,     "$1")
-vicious.register(tzswidget, vicious.widgets.thermal, "$1C", 19, "thermal_zone0")
+vicious.register(cpugraph,  vicious.widgets.cpu,      "$1")
+vicious.register(tzswidget, vicious.widgets.thermal, " $1C", 19, "thermal_zone0")
 -- }}}
 
 -- {{{ Battery state
@@ -221,14 +219,13 @@ volbar:set_gradient_colors({ beautiful.fg_widget,
 }) -- Enable caching
 vicious.enable_caching(vicious.widgets.volume)
 -- Register widgets
-vicious.register(volbar,    vicious.widgets.volume, "$1",  2, "PCM")
-vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "PCM")
+vicious.register(volbar,    vicious.widgets.volume,  "$1",  2, "PCM")
+vicious.register(volwidget, vicious.widgets.volume, " $1%", 2, "PCM")
 -- Register buttons
 volbar.widget:buttons(awful.util.table.join(
    awful.button({ }, 1, function () exec("kmix") end),
-   awful.button({ }, 2, function () exec("amixer -q sset Master toggle")   end),
-   awful.button({ }, 4, function () exec("amixer -q sset PCM 2dB+", false) end),
-   awful.button({ }, 5, function () exec("amixer -q sset PCM 2dB-", false) end)
+   awful.button({ }, 4, function () exec("amixer -q set PCM 2dB+", false) end),
+   awful.button({ }, 5, function () exec("amixer -q set PCM 2dB-", false) end)
 )) -- Register assigned buttons
 volwidget:buttons(volbar.widget:buttons())
 -- }}}
@@ -257,12 +254,12 @@ promptbox = {}
 layoutbox = {}
 taglist   = {}
 taglist.buttons = awful.util.table.join(
-    awful.button({ }, 1, awful.tag.viewonly),
+    awful.button({ },        1, awful.tag.viewonly),
     awful.button({ modkey }, 1, awful.client.movetotag),
-    awful.button({ }, 3, awful.tag.viewtoggle),
+    awful.button({ },        3, awful.tag.viewtoggle),
     awful.button({ modkey }, 3, awful.client.toggletag),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev
+    awful.button({ },        4, awful.tag.viewnext),
+    awful.button({ },        5, awful.tag.viewprev
 ))
 
 for s = 1, screen.count() do
@@ -271,9 +268,9 @@ for s = 1, screen.count() do
     -- Create a layoutbox
     layoutbox[s] = awful.widget.layoutbox(s)
     layoutbox[s]:buttons(awful.util.table.join(
-        awful.button({ }, 1, function () awful.layout.inc(layouts, 1)  end),
+        awful.button({ }, 1, function () awful.layout.inc(layouts,  1) end),
         awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
-        awful.button({ }, 4, function () awful.layout.inc(layouts, 1)  end),
+        awful.button({ }, 4, function () awful.layout.inc(layouts,  1) end),
         awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)
     ))
 
@@ -293,14 +290,14 @@ for s = 1, screen.count() do
         },
         s == screen.count() and systray or nil,
         separator, datewidget, dateicon,
-        separator, volwidget, spacer, volbar.widget, volicon,
-        separator, orgwidget, orgicon,
+        separator, volwidget,  volbar.widget, volicon,
+        separator, orgwidget,  orgicon,
         separator, mailwidget, mailicon,
-        separator, upicon, netwidget, dnicon,
+        separator, upicon,     netwidget, dnicon,
         separator, fs.b.widget, fs.s.widget, fs.h.widget, fs.r.widget, fsicon,
         separator, membar.widget, memicon,
         separator, batwidget, baticon,
-        separator, tzswidget, spacer, cpugraph.widget, cpuicon,
+        separator, tzswidget, cpugraph.widget, cpuicon,
         separator, ["layout"] = awful.widget.layout.horizontal.rightleft
     }
 end
@@ -316,7 +313,7 @@ root.buttons(awful.util.table.join(
 
 -- Client bindings
 clientbuttons = awful.util.table.join(
-    awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+    awful.button({ },        1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize)
 )
@@ -342,11 +339,11 @@ globalkeys = awful.util.table.join(
     awful.key({}, "#160", function () exec("kscreenlocker --forcelock") end),
     awful.key({}, "#121", function () exec("pvol.py -m") end),
     awful.key({}, "#122", function () exec("pvol.py -p -c -2") end),
-    awful.key({}, "#123", function () exec("pvol.py -p -c 2") end),
+    awful.key({}, "#123", function () exec("pvol.py -p -c 2")  end),
     awful.key({}, "#232", function () exec("plight.py -s") end),
     awful.key({}, "#233", function () exec("plight.py -s") end),
     awful.key({}, "#244", function () exec("sudo /usr/sbin/pm-hibernate") end),
-    awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend") end),
+    awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend")   end),
     awful.key({}, "#225", function () exec("pypres.py") end),
     awful.key({}, "#157", function () if boosk then osk()
         else boosk, osk = pcall(require, "osk") end
@@ -388,12 +385,12 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Layout manipulation
-    awful.key({ modkey }, "l",          function () awful.tag.incmwfact(0.05) end),
+    awful.key({ modkey }, "l",          function () awful.tag.incmwfact( 0.05) end),
     awful.key({ modkey }, "h",          function () awful.tag.incmwfact(-0.05) end),
     awful.key({ modkey, "Shift" }, "l", function () awful.client.incwfact(-0.05) end),
-    awful.key({ modkey, "Shift" }, "h", function () awful.client.incwfact(0.05) end),
+    awful.key({ modkey, "Shift" }, "h", function () awful.client.incwfact( 0.05) end),
     awful.key({ modkey, "Shift" }, "space", function () awful.layout.inc(layouts, -1) end),
-    awful.key({ modkey },          "space", function () awful.layout.inc(layouts, 1) end),
+    awful.key({ modkey },          "space", function () awful.layout.inc(layouts,  1) end),
     -- }}}
 
     -- {{{ Focus controls
@@ -416,7 +413,7 @@ globalkeys = awful.util.table.join(
         awful.menu.menu_keys.down = { "Down", "Alt_L" }
         local cmenu = awful.menu.clients({ width = 230 }, true)
     end),
-    awful.key({ modkey, "Shift" }, "j", function () awful.client.swap.byidx(1) end),
+    awful.key({ modkey, "Shift" }, "j", function () awful.client.swap.byidx(1)  end),
     awful.key({ modkey, "Shift" }, "k", function () awful.client.swap.byidx(-1) end)
     -- }}}
 )
@@ -434,12 +431,12 @@ clientkeys = awful.util.table.join(
         c.maximized_vertical   = not c.maximized_vertical
     end),
     awful.key({ modkey }, "o",     awful.client.movetoscreen),
-    awful.key({ modkey }, "Next",  function () awful.client.moveresize(20, 20, -40, -40) end),
-    awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20, 40, 40) end),
-    awful.key({ modkey }, "Down",  function () awful.client.moveresize(0, 20, 0, 0) end),
-    awful.key({ modkey }, "Up",    function () awful.client.moveresize(0, -20, 0, 0) end),
-    awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20, 0, 0, 0) end),
-    awful.key({ modkey }, "Right", function () awful.client.moveresize(20, 0, 0, 0) end),
+    awful.key({ modkey }, "Next",  function () awful.client.moveresize( 20,  20, -40, -40) end),
+    awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20,  40,  40) end),
+    awful.key({ modkey }, "Down",  function () awful.client.moveresize(  0,  20,   0,   0) end),
+    awful.key({ modkey }, "Up",    function () awful.client.moveresize(  0, -20,   0,   0) end),
+    awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20,   0,   0,   0) end),
+    awful.key({ modkey }, "Right", function () awful.client.moveresize( 20,   0,   0,   0) end),
     awful.key({ modkey, "Control"},"r", function (c) c:redraw() end),
     awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
     awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
@@ -564,7 +561,7 @@ end)
 -- }}}
 
 -- {{{ Focus signal handlers
-client.add_signal("focus",   function (c) c.border_color = beautiful.border_focus end)
+client.add_signal("focus",   function (c) c.border_color = beautiful.border_focus  end)
 client.add_signal("unfocus", function (c) c.border_color = beautiful.border_normal end)
 -- }}}
 
