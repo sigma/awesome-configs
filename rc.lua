@@ -77,13 +77,11 @@ cpuicon.image = image(beautiful.widget_cpu)
 cpugraph  = awful.widget.graph()
 tzswidget = widget({ type = "textbox" })
 -- Graph properties
-cpugraph:set_width(40)
-cpugraph:set_height(14)
+cpugraph:set_width(40):set_height(14)
 cpugraph:set_background_color(beautiful.fg_off_widget)
 cpugraph:set_color(beautiful.fg_end_widget)
-cpugraph:set_gradient_angle(0)
-cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
-   beautiful.fg_center_widget, beautiful.fg_widget
+cpugraph:set_gradient_angle(0):set_gradient_colors({
+   beautiful.fg_end_widget, beautiful.fg_center_widget, beautiful.fg_widget
 }) -- Register widgets
 vicious.register(cpugraph,  vicious.widgets.cpu,      "$1")
 vicious.register(tzswidget, vicious.widgets.thermal, " $1C", 19, "thermal_zone0")
@@ -104,12 +102,10 @@ memicon.image = image(beautiful.widget_mem)
 -- Initialize widget
 membar = awful.widget.progressbar()
 -- Pogressbar properties
-membar:set_width(10)
-membar:set_height(12)
-membar:set_vertical(true)
-membar:set_background_color(beautiful.fg_off_widget)
-membar:set_border_color(beautiful.border_widget)
+membar:set_width(10):set_height(12):set_vertical(true)
 membar:set_color(beautiful.fg_widget)
+membar:set_border_color(beautiful.border_widget)
+membar:set_background_color(beautiful.fg_off_widget)
 membar:set_gradient_colors({ beautiful.fg_widget,
    beautiful.fg_center_widget, beautiful.fg_end_widget
 }) -- Register widget
@@ -121,17 +117,15 @@ fsicon = widget({ type = "imagebox" })
 fsicon.image = image(beautiful.widget_fs)
 -- Initialize widgets
 fs = {
-  r = awful.widget.progressbar(),  h = awful.widget.progressbar(),
-  s = awful.widget.progressbar(),  b = awful.widget.progressbar()
+  r = awful.widget.progressbar(), h = awful.widget.progressbar(),
+  s = awful.widget.progressbar(), b = awful.widget.progressbar()
 }
 -- Progressbar properties
 for _, w in pairs(fs) do
-  w:set_width(5)
-  w:set_height(12)
-  w:set_vertical(true)
-  w:set_background_color(beautiful.fg_off_widget)
-  w:set_border_color(beautiful.border_widget)
+  w:set_width(5):set_height(12):set_vertical(true)
   w:set_color(beautiful.fg_widget)
+  w:set_border_color(beautiful.border_widget)
+  w:set_background_color(beautiful.fg_off_widget)
   w:set_gradient_colors({ beautiful.fg_widget,
      beautiful.fg_center_widget, beautiful.fg_end_widget
   }) -- Register buttons
@@ -208,12 +202,10 @@ volicon.image = image(beautiful.widget_vol)
 volbar    = awful.widget.progressbar()
 volwidget = widget({ type = "textbox" })
 -- Progressbar properties
-volbar:set_width(10)
-volbar:set_height(12)
-volbar:set_vertical(true)
-volbar:set_background_color(beautiful.fg_off_widget)
-volbar:set_border_color(beautiful.border_widget)
+volbar:set_width(10):set_height(12):set_vertical(true)
 volbar:set_color(beautiful.fg_widget)
+volbar:set_border_color(beautiful.border_widget)
+volbar:set_background_color(beautiful.fg_off_widget)
 volbar:set_gradient_colors({ beautiful.fg_widget,
    beautiful.fg_center_widget, beautiful.fg_end_widget
 }) -- Enable caching
