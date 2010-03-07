@@ -1,7 +1,7 @@
 ----------------------------------------------------
 -- On Screen Keyboard for the awesome window manager
 ----------------------------------------------------
--- Coded  by: farhaven  <gbe@intepi.net>
+-- Coded  by: Farhaven  <gbe@ring0.de>
 -- Hacked by: Adrian C. <anrxc@sysphere.org>
 -- Licensed under the WTFPL version 2
 --   * http://sam.zoy.org/wtfpl/COPYING

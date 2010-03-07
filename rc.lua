@@ -130,7 +130,7 @@ for _, w in pairs(fs) do
     awful.button({ }, 1, function () exec("rox", false) end)
   ))
 end -- Enable caching
-vicious.enable_caching(vicious.widgets.fs)
+vicious.cache(vicious.widgets.fs)
 -- Register widgets
 vicious.register(fs.r, vicious.widgets.fs, "${/ used_p}",            599)
 vicious.register(fs.h, vicious.widgets.fs, "${/home used_p}",        599)
@@ -205,7 +205,7 @@ volbar:set_background_color(beautiful.fg_off_widget)
 volbar:set_gradient_colors({ beautiful.fg_widget,
    beautiful.fg_center_widget, beautiful.fg_end_widget
 }) -- Enable caching
-vicious.enable_caching(vicious.widgets.volume)
+vicious.cache(vicious.widgets.volume)
 -- Register widgets
 vicious.register(volbar,    vicious.widgets.volume,  "$1",  2, "PCM")
 vicious.register(volwidget, vicious.widgets.volume, " $1%", 2, "PCM")
