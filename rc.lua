@@ -351,7 +351,14 @@ globalkeys = awful.util.table.join(
             end)
     end),
     awful.key({ altkey }, "F4", function ()
-        awful.prompt.run({ prompt = "Run Lua code: " }, promptbox[mouse.screen].widget,
+        awful.prompt.run({ prompt = "Web: " }, promptbox[mouse.screen].widget,
+            function (command)
+                sexec("firefox 'http://yubnub.org/parser/parse?command="..command.."'")
+                awful.tag.viewonly(tags[screen.count()][3])
+            end)
+    end),
+    awful.key({ altkey }, "F5", function ()
+        awful.prompt.run({ prompt = "Lua: " }, promptbox[mouse.screen].widget,
         awful.util.eval, nil, awful.util.getdir("cache") .. "/history_eval")
     end),
     -- }}}
