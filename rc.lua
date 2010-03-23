@@ -1,6 +1,6 @@
 -- {{{ License
 --
--- Awesome configuration, using awesome 3.4.4 on Arch GNU/Linux
+-- Awesome configuration, using awesome 3.4-git on Arch GNU/Linux
 --   * Adrian C. <anrxc@sysphere.org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
@@ -101,8 +101,8 @@ memicon.image = image(beautiful.widget_mem)
 -- Initialize widget
 membar = awful.widget.progressbar()
 -- Pogressbar properties
-membar:set_width(10):set_height(12):set_vertical(true)
-membar:set_border_color(beautiful.border_widget)
+membar:set_vertical(true):set_ticks(true)
+membar:set_height(12):set_width(8):set_ticks_size(2)
 membar:set_background_color(beautiful.fg_off_widget)
 membar:set_gradient_colors({ beautiful.fg_widget,
    beautiful.fg_center_widget, beautiful.fg_end_widget
@@ -120,7 +120,8 @@ fs = {
 }
 -- Progressbar properties
 for _, w in pairs(fs) do
-  w:set_width(5):set_height(12):set_vertical(true)
+  w:set_vertical(true):set_ticks(true)
+  w:set_height(14):set_width(5):set_ticks_size(2)
   w:set_border_color(beautiful.border_widget)
   w:set_background_color(beautiful.fg_off_widget)
   w:set_gradient_colors({ beautiful.fg_widget,
@@ -199,8 +200,8 @@ volicon.image = image(beautiful.widget_vol)
 volbar    = awful.widget.progressbar()
 volwidget = widget({ type = "textbox" })
 -- Progressbar properties
-volbar:set_width(10):set_height(12):set_vertical(true)
-volbar:set_border_color(beautiful.border_widget)
+volbar:set_vertical(true):set_ticks(true)
+volbar:set_height(12):set_width(8):set_ticks_size(2)
 volbar:set_background_color(beautiful.fg_off_widget)
 volbar:set_gradient_colors({ beautiful.fg_widget,
    beautiful.fg_center_widget, beautiful.fg_end_widget
