@@ -21,17 +21,14 @@ require("scratch")
 
 
 -- {{{ Variable definitions
---
+local altkey = "Mod1"
+local modkey = "Mod4"
+local home   = os.getenv("HOME")
+local exec   = awful.util.spawn
+local sexec  = awful.util.spawn_with_shell
+
 -- Beautiful theme
-beautiful.init(awful.util.getdir("config") .. "/zenburn.lua")
-
--- Modifier keys
-altkey = "Mod1"                  -- Alt_L
-modkey = "Mod4"                  -- Super_L
-
--- Function aliases
-local exec  = awful.util.spawn
-local sexec = awful.util.spawn_with_shell
+beautiful.init(home .. "/.config/awesome/zenburn.lua")
 
 -- Window management layouts
 layouts = {
@@ -158,7 +155,7 @@ mailicon.image = image(beautiful.widget_mail)
 -- Initialize widget
 mailwidget = widget({ type = "textbox" })
 -- Register widget
-vicious.register(mailwidget, vicious.widgets.mbox, "$1", 181, {"/home/anrxc/mail/Inbox", 15})
+vicious.register(mailwidget, vicious.widgets.mbox, "$1", 181, {home .. "/mail/Inbox", 15})
 -- Register buttons
 mailwidget:buttons(awful.util.table.join(
   awful.button({ }, 1, function () exec("urxvt -T Alpine -e alpine_exp") end)
@@ -172,9 +169,8 @@ orgicon.image = image(beautiful.widget_org)
 orgwidget = widget({ type = "textbox" })
 -- Configure widget
 local orgmode = {
-  files = {
-    "/home/anrxc/.org/work.org",     "/home/anrxc/.org/index.org",
-    "/home/anrxc/.org/personal.org", "/home/anrxc/.org/computers.org"
+  files = { home.."/.org/computers.org",
+    home.."/.org/index.org", home.."/.org/personal.org",
   },
   color = {
     past   = '<span color="'..beautiful.fg_urgent..'">',
