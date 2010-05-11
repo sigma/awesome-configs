@@ -402,9 +402,9 @@ globalkeys = awful.util.table.join(
         awful.client.focus.history.previous()
         if client.focus then client.focus:raise() end
     end),
-    awful.key({ altkey }, "Escape", function () mouse.coords({x=525, y=330}, true)
+    awful.key({ altkey }, "Escape", function ()
         awful.menu.menu_keys.down = { "Down", "Alt_L" }
-        local cmenu = awful.menu.clients({ width=230 }, {keygrabber=true })
+        local cmenu = awful.menu.clients({width=230}, { keygrabber=true, coords={x=525, y=330} })
     end),
     awful.key({ modkey, "Shift" }, "j", function () awful.client.swap.byidx(1)  end),
     awful.key({ modkey, "Shift" }, "k", function () awful.client.swap.byidx(-1) end)
