@@ -1,6 +1,6 @@
 -- {{{ License
 --
--- Awesome configuration, using awesome 3.4-git on Arch GNU/Linux
+-- Awesome configuration, using awesome 3.4.5 on Arch GNU/Linux
 --   * Adrian C. <anrxc@sysphere.org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
@@ -23,6 +23,7 @@ require("scratch")
 -- {{{ Variable definitions
 local altkey = "Mod1"
 local modkey = "Mod4"
+
 local home   = os.getenv("HOME")
 local exec   = awful.util.spawn
 local sexec  = awful.util.spawn_with_shell
@@ -403,7 +404,7 @@ globalkeys = awful.util.table.join(
     end),
     awful.key({ altkey }, "Escape", function () mouse.coords({x=525, y=330}, true)
         awful.menu.menu_keys.down = { "Down", "Alt_L" }
-        local cmenu = awful.menu.clients({ width = 230 }, true)
+        local cmenu = awful.menu.clients({ width=230 }, {keygrabber=true })
     end),
     awful.key({ modkey, "Shift" }, "j", function () awful.client.swap.byidx(1)  end),
     awful.key({ modkey, "Shift" }, "k", function () awful.client.swap.byidx(-1) end)
