@@ -416,9 +416,7 @@ globalkeys = awful.util.table.join(
 clientkeys = awful.util.table.join(
     awful.key({ modkey }, "c", function (c) c:kill() end),
     awful.key({ modkey }, "d", function (c) scratch.pad.set(c, 0.60, 0.60, true) end),
-    awful.key({ modkey }, "f", function (c) awful.titlebar.remove(c)
-        c.fullscreen           = not c.fullscreen
-    end),
+    awful.key({ modkey }, "f", function (c) c.fullscreen = not c.fullscreen end),
     awful.key({ modkey }, "m", function (c)
         c.maximized_horizontal = not c.maximized_horizontal
         c.maximized_vertical   = not c.maximized_vertical
