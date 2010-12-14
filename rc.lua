@@ -159,7 +159,7 @@ mailwidget = widget({ type = "textbox" })
 vicious.register(mailwidget, vicious.widgets.mbox, "$1", 181, {home .. "/mail/Inbox", 15})
 -- Register buttons
 mailwidget:buttons(awful.util.table.join(
-  awful.button({ }, 1, function () exec("urxvt -T Alpine -e alpine_exp") end)
+  awful.button({ }, 1, function () exec("urxvt -T Alpine -e alpine.exp") end)
 ))
 -- }}}
 
@@ -316,7 +316,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "w", function () exec("firefox") end),
     awful.key({ altkey }, "F1",  function () exec("urxvt") end),
     awful.key({ altkey }, "#49", function () scratch.drop("urxvt", "bottom") end),
-    awful.key({ modkey }, "a", function () exec("urxvt -T Alpine -e alpine_exp") end),
+    awful.key({ modkey }, "a", function () exec("urxvt -T Alpine -e alpine.exp") end),
     awful.key({ modkey }, "g", function () sexec("GTK2_RC_FILES=~/.gtkrc-gajim gajim") end),
     awful.key({ modkey }, "q", function () exec("emacsclient --eval '(make-remember-frame)'") end),
     -- }}}
