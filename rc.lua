@@ -352,7 +352,7 @@ globalkeys = awful.util.table.join(
         awful.prompt.run({ prompt = "Web: " }, promptbox[mouse.screen].widget,
             function (command)
                 sexec("firefox 'http://yubnub.org/parser/parse?command="..command.."'")
-                awful.tag.viewonly(tags[screen.count()][3])
+                awful.tag.viewonly(tags[1][3])
             end)
     end),
     awful.key({ altkey }, "F5", function ()
@@ -489,9 +489,9 @@ awful.rules.rules = {
       border_color = beautiful.border_normal }
     },
     { rule = { class = "Firefox",  instance = "Navigator" },
-      properties = { tag = tags[screen.count()][3] } },
+      properties = { tag = tags[1][3] } },
     { rule = { class = "Emacs",    instance = "emacs" },
-      properties = { tag = tags[screen.count()][2] } },
+      properties = { tag = tags[1][2] } },
     { rule = { class = "Emacs",    instance = "_Remember_" },
       properties = { floating = true }, callback = awful.titlebar.add  },
     { rule = { class = "Xmessage", instance = "xmessage" },
