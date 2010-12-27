@@ -72,8 +72,8 @@ theme.mouse_finder_color = theme.fg_urgent
 -- {{{ Icons
 --
 -- {{{ Taglist icons
-theme.taglist_squares_sel   = theme.confdir .. "/icons/taglist/squarefz.png"
-theme.taglist_squares_unsel = theme.confdir .. "/icons/taglist/squareza.png"
+theme.taglist_squares_sel   = theme.confdir .. "/icons/taglist/sel.png"
+theme.taglist_squares_unsel = theme.confdir .. "/icons/taglist/unsel.png"
 --theme.taglist_squares_resize = "false"
 -- }}}
 
