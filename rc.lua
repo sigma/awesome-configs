@@ -114,8 +114,8 @@ fsicon = widget({ type = "imagebox" })
 fsicon.image = image(beautiful.widget_fs)
 -- Initialize widgets
 fs = {
-  r = awful.widget.progressbar(), h = awful.widget.progressbar(),
-  s = awful.widget.progressbar(), b = awful.widget.progressbar()
+  b = awful.widget.progressbar(), r = awful.widget.progressbar(),
+  h = awful.widget.progressbar(), s = awful.widget.progressbar()
 }
 -- Progressbar properties
 for _, w in pairs(fs) do
@@ -132,10 +132,10 @@ for _, w in pairs(fs) do
 end -- Enable caching
 vicious.cache(vicious.widgets.fs)
 -- Register widgets
-vicious.register(fs.r, vicious.widgets.fs, "${/ used_p}",            599)
-vicious.register(fs.h, vicious.widgets.fs, "${/home used_p}",        599)
+vicious.register(fs.b, vicious.widgets.fs, "${/boot used_p}", 599)
+vicious.register(fs.r, vicious.widgets.fs, "${/ used_p}",     599)
+vicious.register(fs.h, vicious.widgets.fs, "${/home used_p}", 599)
 vicious.register(fs.s, vicious.widgets.fs, "${/mnt/storage used_p}", 599)
-vicious.register(fs.b, vicious.widgets.fs, "${/mnt/backup used_p}",  599)
 -- }}}
 
 -- {{{ Network usage
@@ -281,7 +281,7 @@ for s = 1, screen.count() do
         separator, orgwidget,  orgicon,
         separator, mailwidget, mailicon,
         separator, upicon,     netwidget, dnicon,
-        separator, fs.b.widget, fs.s.widget, fs.h.widget, fs.r.widget, fsicon,
+        separator, fs.s.widget, fs.h.widget, fs.r.widget, fs.b.widget, fsicon,
         separator, membar.widget, memicon,
         separator, batwidget, baticon,
         separator, tzswidget, cpugraph.widget, cpuicon,
@@ -316,23 +316,23 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "r", function () exec("rox", false) end),
     awful.key({ modkey }, "w", function () exec("firefox") end),
     awful.key({ altkey }, "F1",  function () exec("urxvt") end),
-    awful.key({ altkey }, "#49", function () scratch.drop("urxvt", "bottom") end),
+    awful.key({ altkey }, "#49", function () scratch.drop("urxvt", "bottom", nil, nil, 0.30) end),
     awful.key({ modkey }, "a", function () exec("urxvt -T Alpine -e alpine.exp") end),
     awful.key({ modkey }, "g", function () sexec("GTK2_RC_FILES=~/.gtkrc-gajim gajim") end),
     awful.key({ modkey }, "q", function () exec("emacsclient --eval '(make-remember-frame)'") end),
     -- }}}
 
     -- {{{ Multimedia keys
-    awful.key({}, "#160", function () exec("kscreenlocker --forcelock") end),
+    awful.key({}, "#235", function () exec("kscreenlocker --forcelock") end),
     awful.key({}, "#121", function () exec("pvol.py -m") end),
     awful.key({}, "#122", function () exec("pvol.py -p -c -2") end),
-    awful.key({}, "#123", function () exec("pvol.py -p -c 2")  end),
-    awful.key({}, "#232", function () exec("plight.py -s") end),
-    awful.key({}, "#233", function () exec("plight.py -s") end),
-    awful.key({}, "#244", function () exec("sudo /usr/sbin/pm-hibernate") end),
+    awful.key({}, "#123", function () exec("pvol.py -p -c  2")  end),
+    awful.key({}, "#232", function () exec("plight.py -c -10") end),
+    awful.key({}, "#233", function () exec("plight.py -c  10") end),
+    awful.key({}, "#165", function () exec("sudo /usr/sbin/pm-hibernate") end),
     awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend")   end),
-    awful.key({}, "#225", function () exec("pypres.py") end),
-    awful.key({}, "#157", function () if boosk then osk()
+    awful.key({}, "#163", function () exec("pypres.py") end),
+    awful.key({}, "#51",  function () if boosk then osk()
         else boosk, osk = pcall(require, "osk") end
     end),
     -- }}}
