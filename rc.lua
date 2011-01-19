@@ -1,6 +1,6 @@
 -- {{{ License
 --
--- Awesome configuration, using awesome 3.4.8 on Arch GNU/Linux
+-- Awesome configuration, using awesome 3.4.9 on Arch GNU/Linux
 --   * Adrian C. <anrxc@sysphere.org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
@@ -326,7 +326,7 @@ globalkeys = awful.util.table.join(
     awful.key({}, "#235", function () exec("kscreenlocker --forcelock") end),
     awful.key({}, "#121", function () exec("pvol.py -m") end),
     awful.key({}, "#122", function () exec("pvol.py -p -c -2") end),
-    awful.key({}, "#123", function () exec("pvol.py -p -c  2")  end),
+    awful.key({}, "#123", function () exec("pvol.py -p -c  2") end),
     awful.key({}, "#232", function () exec("plight.py -c -10") end),
     awful.key({}, "#233", function () exec("plight.py -c  10") end),
     awful.key({}, "#165", function () exec("sudo /usr/sbin/pm-hibernate") end),
