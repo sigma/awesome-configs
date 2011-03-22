@@ -27,6 +27,7 @@ local modkey = "Mod4"
 local home   = os.getenv("HOME")
 local exec   = awful.util.spawn
 local sexec  = awful.util.spawn_with_shell
+local scount = screen.count()
 
 -- Beautiful theme
 beautiful.init(home .. "/.config/awesome/zenburn.lua")
@@ -50,7 +51,7 @@ tags = {
              layouts[6], layouts[6], layouts[5], layouts[6]
 }}
 
-for s = 1, screen.count() do
+for s = 1, scount do
   tags[s] = awful.tag(tags.names, s, tags.layout)
   for i, t in ipairs(tags[s]) do
       awful.tag.setproperty(t, "mwfact", i==5 and 0.13  or  0.5)
@@ -249,7 +250,7 @@ taglist.buttons = awful.util.table.join(
     awful.button({ },        5, awful.tag.viewprev
 ))
 
-for s = 1, screen.count() do
+for s = 1, scount do
     -- Create a promptbox
     promptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
     -- Create a layoutbox
@@ -275,7 +276,7 @@ for s = 1, screen.count() do
         {   taglist[s], layoutbox[s], separator, promptbox[s],
             ["layout"] = awful.widget.layout.horizontal.leftright
         },
-        s == screen.count() and systray or nil,
+        s == 1 and systray or nil,
         separator, datewidget, dateicon,
         separator, volwidget,  volbar.widget, volicon,
         separator, orgwidget,  orgicon,
@@ -320,6 +321,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "a", function () exec("urxvt -T Alpine -e alpine.exp") end),
     awful.key({ modkey }, "g", function () sexec("GTK2_RC_FILES=~/.gtkrc-gajim gajim") end),
     awful.key({ modkey }, "q", function () exec("emacsclient --eval '(make-remember-frame)'") end),
+    awful.key({ altkey }, "#51", function () if boosk then osk(nil, mouse.screen)
+        else boosk, osk = pcall(require, "osk") end
+    end),
     -- }}}
 
     -- {{{ Multimedia keys
@@ -332,9 +336,6 @@ globalkeys = awful.util.table.join(
     awful.key({}, "#165", function () exec("sudo /usr/sbin/pm-hibernate") end),
     awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend")   end),
     awful.key({}, "#163", function () exec("pypres.py") end),
-    awful.key({}, "#51",  function () if boosk then osk()
-        else boosk, osk = pcall(require, "osk") end
-    end),
     -- }}}
 
     -- {{{ Prompt menus
@@ -353,7 +354,7 @@ globalkeys = awful.util.table.join(
         awful.prompt.run({ prompt = "Web: " }, promptbox[mouse.screen].widget,
             function (command)
                 sexec("firefox 'http://yubnub.org/parser/parse?command="..command.."'")
-                awful.tag.viewonly(tags[1][3])
+                awful.tag.viewonly(tags[scount][3])
             end)
     end),
     awful.key({ altkey }, "F5", function ()
@@ -447,7 +448,7 @@ clientkeys = awful.util.table.join(
 
 -- {{{ Keyboard digits
 local keynumber = 0
-for s = 1, screen.count() do
+for s = 1, scount do
    keynumber = math.min(9, math.max(#tags[s], keynumber));
 end
 -- }}}
@@ -490,7 +491,7 @@ awful.rules.rules = {
       border_color = beautiful.border_normal }
     },
     { rule = { class = "Firefox",  instance = "Navigator" },
-      properties = { tag = tags[1][3] } },
+      properties = { tag = tags[scount][3] } },
     { rule = { class = "Emacs",    instance = "emacs" },
       properties = { tag = tags[1][2] } },
     { rule = { class = "Emacs",    instance = "_Remember_" },
@@ -499,9 +500,9 @@ awful.rules.rules = {
       properties = { floating = true }, callback = awful.titlebar.add  },
     { rule = { instance = "firefox-bin" },
       properties = { floating = true }, callback = awful.titlebar.add  },
+    { rule = { class = "Akregator" },   properties = { tag = tags[scount][8]}},
     { rule = { name  = "Alpine" },      properties = { tag = tags[1][4]} },
     { rule = { class = "Gajim.py" },    properties = { tag = tags[1][5]} },
-    { rule = { class = "Akregator" },   properties = { tag = tags[1][8]} },
     { rule = { class = "Ark" },         properties = { floating = true } },
     { rule = { class = "Geeqie" },      properties = { floating = true } },
     { rule = { class = "ROX-Filer" },   properties = { floating = true } },
@@ -548,7 +549,7 @@ client.add_signal("unfocus", function (c) c.border_color = beautiful.border_norm
 -- }}}
 
 -- {{{ Arrange signal handler
-for s = 1, screen.count() do screen[s]:add_signal("arrange", function ()
+for s = 1, scount do screen[s]:add_signal("arrange", function ()
     local clients = awful.client.visible(s)
     local layout = awful.layout.getname(awful.layout.get(s))
 
