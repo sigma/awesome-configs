@@ -498,7 +498,7 @@ awful.rules.rules = {
       properties = { floating = true }, callback = awful.titlebar.add  },
     { rule = { class = "Xmessage", instance = "xmessage" },
       properties = { floating = true }, callback = awful.titlebar.add  },
-    { rule = { instance = "firefox-bin" },
+    { rule = { instance = "plugin-container" },
       properties = { floating = true }, callback = awful.titlebar.add  },
     { rule = { class = "Akregator" },   properties = { tag = tags[scount][8]}},
     { rule = { name  = "Alpine" },      properties = { tag = tags[1][4]} },
