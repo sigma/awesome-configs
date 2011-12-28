@@ -502,7 +502,7 @@ awful.rules.rules = {
       properties = { floating = true }, callback = awful.titlebar.add  },
     { rule = { class = "Akregator" },   properties = { tag = tags[scount][8]}},
     { rule = { name  = "Alpine" },      properties = { tag = tags[1][4]} },
-    { rule = { class = "Gajim.py" },    properties = { tag = tags[1][5]} },
+    { rule = { class = "Gajim" },       properties = { tag = tags[1][5]} },
     { rule = { class = "Ark" },         properties = { floating = true } },
     { rule = { class = "Geeqie" },      properties = { floating = true } },
     { rule = { class = "ROX-Filer" },   properties = { floating = true } },
