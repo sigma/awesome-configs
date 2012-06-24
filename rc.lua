@@ -1,6 +1,6 @@
 -- {{{ License
 --
--- Awesome configuration, using awesome 3.4.10 on Arch GNU/Linux
+-- Awesome configuration, using awesome 3.4.12 on Arch GNU/Linux
 --   * Adrian C. <anrxc@sysphere.org>
 
 -- Screenshot: http://sysphere.org/gallery/snapshots
