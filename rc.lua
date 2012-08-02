@@ -15,8 +15,8 @@ require("awful")
 require("awful.rules")
 require("awful.autofocus")
 -- User libraries
-local vicious = require("vicious")
-local scratch = require("scratch")
+vicious = require("vicious")
+scratch = require("scratch")
 -- }}}
 
 
