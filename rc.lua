@@ -327,15 +327,17 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Multimedia keys
-    awful.key({}, "#235", function () exec("kscreenlocker --forcelock") end),
-    awful.key({}, "#121", function () exec("pvol.py -m") end),
+    awful.key({}, "#160", function () exec("kscreenlocker --forcelock") end),
+  --awful.key({}, "#121", function () exec("pvol.py -m") end),
     awful.key({}, "#122", function () exec("pvol.py -p -c -2") end),
     awful.key({}, "#123", function () exec("pvol.py -p -c  2") end),
-    awful.key({}, "#232", function () exec("plight.py -c -10") end),
-    awful.key({}, "#233", function () exec("plight.py -c  10") end),
-    awful.key({}, "#165", function () exec("sudo /usr/sbin/pm-hibernate") end),
-    awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend")   end),
-    awful.key({}, "#163", function () exec("pypres.py") end),
+    awful.key({}, "#232", function () exec("plight.py -c -1") end),
+    awful.key({}, "#233", function () exec("plight.py -c  1") end),
+  --awful.key({}, "#150", function () exec("sudo /usr/sbin/pm-suspend")   end),
+    awful.key({}, "#213", function () exec("sudo /usr/sbin/pm-hibernate") end),
+  --awful.key({}, "#235", function () exec("xset dpms force off") end),
+    awful.key({}, "#235", function () exec("pypres.py") end),
+    awful.key({}, "#244", function () sexec("acpitool -b | xmessage -timeout 10 -file -")   end),
     -- }}}
 
     -- {{{ Prompt menus
