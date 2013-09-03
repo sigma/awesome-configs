@@ -59,7 +59,7 @@ tags = {
              layouts[1], layouts[1], layouts[6], layouts[6]
 }}
 
-for s = 1, scount() do
+for s = 1, scount do
     tags[s] = awful.tag(tags.names, s, tags.layout)
     -- awful.tag.setproperty(tags[s][5], "mwfact", 0.13)
     -- awful.tag.setproperty(tags[s][6], "hide",   true)
